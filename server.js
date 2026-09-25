@@ -77,7 +77,7 @@ app.post('/api/admin/importar-clientes', async (req, res) => {
         let atualizados = 0;
         let ignorados = 0;
 
-        await db.run('BEGIN TRANSACTION');
+        //await db.run('BEGIN TRANSACTION');
 
         const stmt = await db.prepare(`
             INSERT INTO clientes_cj (codigo_cli, nome_cli, vendedor)
@@ -139,7 +139,7 @@ app.post('/api/admin/importar-produtos', async (req, res) => {
         let atualizados = 0;
         let ignorados = 0;
 
-        await db.run('BEGIN TRANSACTION');
+        //await db.run('BEGIN TRANSACTION');
 
         const stmt = await db.prepare(`
             INSERT INTO produtos_cj (codigo, codigo_cj, descricao)

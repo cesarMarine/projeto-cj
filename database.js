@@ -34,7 +34,7 @@ export async function openDb() {
     }
 
     // Cria o wrapper e ARMAZENA ELE em cache
-    dbWrapper = {
+        dbWrapper = {
         all: async (sql, params = []) => {
             const result = await pool.query(sql, params);
             return result.rows;
@@ -60,6 +60,19 @@ export async function openDb() {
         query: async (sql, params = []) => {
             const result = await pool.query(sql, params);
             return result.rows;
+        },
+
+        prepare: async (sql) => {
+            return {
+                run: async (params = []) => {
+                    const result = await pool.query(sql, params);
+                    return {
+                        changes: result.rowCount,
+                        lastID: result.rows[0]?.id
+                    };
+                },
+                finalize: async () => {}
+            };
         },
 
         close: async () => {
