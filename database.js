@@ -6,7 +6,14 @@ dotenv.config();
 
 const { Pool } = pg;
 
-let dbWrapper = null;  // ← Agora é o WRAPPER que fica em cache, não o pool
+let dbWrapper = null;
+
+// Converte "SELECT * FROM t WHERE a = ? AND b = ?"
+// em      "SELECT * FROM t WHERE a = $1 AND b = $2"
+function converterPlaceholders(sql) {
+    let i = 0;
+    return sql.replace(/\?/g, () => `$${++i}`);
+}
 
 export async function openDb() {
     if (dbWrapper) return dbWrapper;
@@ -24,7 +31,6 @@ export async function openDb() {
         connectionTimeoutMillis: 10000
     });
 
-    // Testa a conexão uma vez
     const client = await pool.connect();
     try {
         await client.query('SELECT NOW()');
@@ -33,20 +39,19 @@ export async function openDb() {
         client.release();
     }
 
-    // Cria o wrapper e ARMAZENA ELE em cache
-        dbWrapper = {
+    dbWrapper = {
         all: async (sql, params = []) => {
-            const result = await pool.query(sql, params);
+            const result = await pool.query(converterPlaceholders(sql), params);
             return result.rows;
         },
 
         get: async (sql, params = []) => {
-            const result = await pool.query(sql, params);
+            const result = await pool.query(converterPlaceholders(sql), params);
             return result.rows[0];
         },
 
         run: async (sql, params = []) => {
-            const result = await pool.query(sql, params);
+            const result = await pool.query(converterPlaceholders(sql), params);
             return {
                 changes: result.rowCount,
                 lastID: result.rows[0]?.id
@@ -58,14 +63,15 @@ export async function openDb() {
         },
 
         query: async (sql, params = []) => {
-            const result = await pool.query(sql, params);
+            const result = await pool.query(converterPlaceholders(sql), params);
             return result.rows;
         },
 
         prepare: async (sql) => {
+            const pgSql = converterPlaceholders(sql);
             return {
                 run: async (params = []) => {
-                    const result = await pool.query(sql, params);
+                    const result = await pool.query(pgSql, params);
                     return {
                         changes: result.rowCount,
                         lastID: result.rows[0]?.id
