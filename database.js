@@ -6,12 +6,17 @@ dotenv.config();
 
 const { Pool } = pg;
 
-let pool = null;
+let dbWrapper = null;  // ← Agora é o WRAPPER que fica em cache, não o pool
 
 export async function openDb() {
-    if (pool) return pool;
+    if (dbWrapper) return dbWrapper;
 
-    pool = new Pool({
+    if (!process.env.DATABASE_URL) {
+        console.error('❌ DATABASE_URL não definida no .env');
+        process.exit(1);
+    }
+
+    const pool = new Pool({
         connectionString: process.env.DATABASE_URL,
         ssl: { rejectUnauthorized: false },
         max: 5,
@@ -19,7 +24,7 @@ export async function openDb() {
         connectionTimeoutMillis: 10000
     });
 
-    // Testa a conexão
+    // Testa a conexão uma vez
     const client = await pool.connect();
     try {
         await client.query('SELECT NOW()');
@@ -28,21 +33,18 @@ export async function openDb() {
         client.release();
     }
 
-    // Wrapper pra manter compatibilidade com o código existente (db.run, db.get, db.all)
-    return {
-        // Executa uma query e retorna todas as linhas
+    // Cria o wrapper e ARMAZENA ELE em cache
+    dbWrapper = {
         all: async (sql, params = []) => {
             const result = await pool.query(sql, params);
             return result.rows;
         },
 
-        // Executa uma query e retorna uma linha
         get: async (sql, params = []) => {
             const result = await pool.query(sql, params);
             return result.rows[0];
         },
 
-        // Executa uma query (INSERT/UPDATE/DELETE) e retorna info
         run: async (sql, params = []) => {
             const result = await pool.query(sql, params);
             return {
@@ -51,23 +53,22 @@ export async function openDb() {
             };
         },
 
-        // Executa múltiplas queries (transações, etc)
         exec: async (sql) => {
             return await pool.query(sql);
         },
 
-        // Acesso ao pool bruto (caso precise)
         query: async (sql, params = []) => {
             const result = await pool.query(sql, params);
             return result.rows;
         },
 
-        // Fecha o pool
         close: async () => {
             await pool.end();
-            pool = null;
+            dbWrapper = null;
         }
     };
+
+    return dbWrapper;
 }
 
 export default openDb;
