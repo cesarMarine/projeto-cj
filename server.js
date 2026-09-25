@@ -44,8 +44,12 @@ app.get('/garantia', (req, res) => {
 });
 
 // Técnico
+// Técnico
+app.get('/tecnico', (req, res) => {
+    res.sendFile(path.join(__dirname, 'tecnico.html'));
+});
 app.get('/angelo', (req, res) => {
-    res.sendFile(path.join(__dirname, 'angelo.html'));
+    res.sendFile(path.join(__dirname, 'tecnico.html'));
 });
 
 // Healthcheck
@@ -407,7 +411,7 @@ app.get('/api/garantia/vendedor/:vendedor', async (req, res) => {
                 id, protocolo, vendedor, id_cliente, cliente_nome, vendedor_cliente,
                 produto, codigo_produto, descricao_produto, nota_marine,
                 status,
-                datetime(data_criacao, 'localtime') as data_criacao,
+                data_criacao,
                 decisao_tecnico
             FROM chamados_cj
             WHERE vendedor = ?
@@ -429,7 +433,7 @@ app.get('/api/garantia/todos', async (req, res) => {
             SELECT 
                 id, protocolo, vendedor, id_cliente, cliente_nome, vendedor_cliente,
                 produto, codigo_produto, nota_marine, status,
-                datetime(data_criacao, 'localtime') as data_criacao,
+                data_criacao,
                 decisao_tecnico, conversa,
                 reaberto, reaberto_em, motivo_reabertura
             FROM chamados_cj
