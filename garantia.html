@@ -1,0 +1,3706 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Marine Assistência Técnica | Garantia - Vendedor</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        /* ============================================================
+                   ESTILOS COMPLETOS - Garantia Vendedor
+                   ============================================================ */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f0f4f8;
+            color: #1a2a3a;
+            min-height: 100vh;
+        }
+
+        .main-header {
+            background: linear-gradient(135deg, #0a2a4a 0%, #0d3b66 100%);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            padding: 0;
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 14px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+        }
+
+        .logo-img {
+            height: 65px;
+            width: auto;
+            object-fit: contain;
+            border-radius: 10px;
+            background: white;
+            padding: 6px 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+            transition: transform 0.3s ease;
+        }
+
+        .logo-img:hover {
+            transform: scale(1.03);
+        }
+
+        .brand-sub {
+            color: #ffffff;
+            font-size: 0.85rem;
+            font-weight: 400;
+            display: block;
+            margin-top: 2px;
+            letter-spacing: 0.5px;
+            opacity: 0.9;
+        }
+
+        .brand-sub i {
+            color: #f8b81f;
+            margin-right: 4px;
+        }
+
+        .header-badge {
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(10px);
+            padding: 8px 20px;
+            border-radius: 40px;
+            color: white;
+            font-size: 0.8rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .header-badge i {
+            color: #f8b81f;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 32px auto;
+            padding: 0 24px;
+        }
+
+        .progress-section {
+            background: white;
+            border-radius: 60px;
+            padding: 6px;
+            margin-bottom: 32px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+            border: 1px solid rgba(0, 0, 0, 0.04);
+        }
+
+        .progress-steps {
+            display: flex;
+            justify-content: space-between;
+            position: relative;
+        }
+
+        .step {
+            flex: 1;
+            text-align: center;
+            padding: 10px 5px;
+            position: relative;
+            z-index: 2;
+            background: transparent;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 0.7rem;
+            color: #94a3b8;
+            transition: all 0.4s ease;
+            cursor: default;
+        }
+
+        .step.active {
+            background: #f8b81f;
+            color: #0d3b66;
+            box-shadow: 0 4px 12px rgba(248, 184, 31, 0.3);
+        }
+
+        .step.completed {
+            background: #0d3b66;
+            color: white;
+            box-shadow: 0 4px 12px rgba(13, 59, 102, 0.2);
+        }
+
+        .products-section,
+        .form-section {
+            display: none;
+        }
+
+        .active-section {
+            display: block;
+            animation: fadeSlideIn 0.5s ease;
+        }
+
+        @keyframes fadeSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 24px;
+            color: #0d3b66;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding-left: 18px;
+            border-left: 5px solid #f8b81f;
+        }
+
+        .section-title i {
+            color: #f8b81f;
+            font-size: 1.2rem;
+        }
+
+        .section-title .badge-step {
+            background: #0d3b66;
+            color: white;
+            font-size: 0.7rem;
+            padding: 2px 12px;
+            border-radius: 20px;
+            margin-left: auto;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 16px;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            border: 2px solid transparent;
+            text-align: center;
+            position: relative;
+        }
+
+        .product-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.10);
+        }
+
+        .product-card.selected {
+            border-color: #f8b81f;
+            background: #fffcf0;
+            box-shadow: 0 8px 24px rgba(248, 184, 31, 0.15);
+        }
+
+        .product-img {
+            padding: 16px;
+            height: 140px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #fafcff;
+        }
+
+        .product-img img {
+            max-width: 100%;
+            max-height: 100px;
+            object-fit: contain;
+            transition: transform 0.3s ease;
+        }
+
+        .product-card:hover .product-img img {
+            transform: scale(1.05);
+        }
+
+        .product-info {
+            padding: 12px 14px 16px;
+            background: white;
+            border-top: 1px solid #f0f2f5;
+        }
+
+        .product-info h3 {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: #0d3b66;
+        }
+
+        .product-check {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: #f8b81f;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            opacity: 0;
+            transform: scale(0.5);
+            transition: all 0.3s ease;
+            z-index: 5;
+            box-shadow: 0 2px 8px rgba(248, 184, 31, 0.3);
+        }
+
+        .product-card.selected .product-check {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .form-section {
+            background: white;
+            border-radius: 24px;
+            padding: 30px 32px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.06);
+            margin-bottom: 32px;
+            border: 1px solid rgba(0, 0, 0, 0.04);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: #0d3b66;
+            font-size: 0.85rem;
+        }
+
+        .form-group label .required {
+            color: #e74c3c;
+            margin-left: 3px;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e8edf3;
+            border-radius: 14px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95rem;
+            transition: all 0.25s ease;
+            background: #fafcff;
+            color: #1a2a3a;
+            appearance: auto;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #f8b81f;
+            box-shadow: 0 0 0 4px rgba(248, 184, 31, 0.12);
+            background: white;
+        }
+
+        .form-group select {
+            cursor: pointer;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 70px;
+        }
+
+        /* ===== BUSCA PRODUTO ===== */
+        .produto-wrapper {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .produto-wrapper input {
+            flex: 1;
+        }
+
+        .btn-busca-produto {
+            background: #0d3b66;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.85rem;
+        }
+
+        .btn-busca-produto:hover {
+            background: #1a5276;
+            transform: translateY(-2px);
+        }
+
+        .btn-busca-produto:active {
+            transform: scale(0.95);
+        }
+
+        .resultado-produto {
+            margin-top: 10px;
+            background: #f0f7ff;
+            border-radius: 12px;
+            padding: 14px 18px;
+            border-left: 4px solid #f8b81f;
+            display: none;
+            animation: fadeSlideIn 0.3s ease;
+        }
+
+        .resultado-produto.show {
+            display: block;
+        }
+
+        .resultado-produto .produto-info {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6px 20px;
+        }
+
+        .resultado-produto .produto-info .label {
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            color: #6b7a8a;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+        }
+
+        .resultado-produto .produto-info .value {
+            font-weight: 600;
+            color: #0d3b66;
+            font-size: 0.9rem;
+        }
+
+        .resultado-produto .produto-info .value-destaque {
+            font-weight: 700;
+            color: #0d3b66;
+            font-size: 1rem;
+            background: #e8edf3;
+            padding: 2px 10px;
+            border-radius: 6px;
+            display: inline-block;
+        }
+
+        .resultado-produto .badge-encontrado {
+            background: #10b981;
+            color: white;
+            padding: 2px 12px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 0.7rem;
+            display: inline-block;
+            margin-top: 6px;
+        }
+
+        /* ===== NOTA FISCAL ===== */
+        .nota-cards {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .nota-card {
+            background: #f8fafc;
+            border: 2px solid #e8edf3;
+            border-radius: 16px;
+            padding: 16px 18px;
+            transition: all 0.3s ease;
+        }
+
+        .nota-card:focus-within {
+            border-color: #f8b81f;
+            box-shadow: 0 0 0 4px rgba(248, 184, 31, 0.1);
+            background: white;
+        }
+
+        .nota-card label {
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: #6b7a8a;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .nota-card input {
+            width: 100%;
+            padding: 10px 0;
+            border: none;
+            background: transparent;
+            font-size: 0.95rem;
+            font-family: 'Inter', sans-serif;
+            color: #1a2a3a;
+        }
+
+        .nota-card input:focus {
+            outline: none;
+        }
+
+        .nota-card .upload-area-mini {
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 0;
+            color: #0d3b66;
+        }
+
+        .nota-card .upload-area-mini i {
+            font-size: 1.2rem;
+            color: #f8b81f;
+        }
+
+        .nota-card .upload-area-mini .file-name-mini {
+            font-size: 0.8rem;
+            color: #6b7a8a;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .nota-card .upload-area-mini.has-file {
+            color: #10b981;
+        }
+
+        .nota-card .upload-area-mini.has-file i {
+            color: #10b981;
+        }
+
+        .nota-card .preview-mini {
+            margin-top: 8px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .nota-card .preview-mini .mini-item {
+            width: 50px;
+            height: 50px;
+            border-radius: 8px;
+            overflow: hidden;
+            background: #e8edf3;
+            position: relative;
+            border: 1px solid #d5dce6;
+        }
+
+        .nota-card .preview-mini .mini-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .nota-card .preview-mini .mini-item .remove-mini {
+            position: absolute;
+            top: -6px;
+            right: -6px;
+            background: #e74c3c;
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            cursor: pointer;
+            border: 2px solid white;
+        }
+
+        @media (max-width: 600px) {
+            .nota-cards {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* ===== BUSCA CLIENTE ===== */
+        .busca-cliente-wrapper {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .busca-cliente-wrapper input {
+            flex: 1;
+        }
+
+        .btn-busca {
+            background: #0d3b66;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.85rem;
+        }
+
+        .btn-busca:hover {
+            background: #1a5276;
+            transform: translateY(-2px);
+        }
+
+        .btn-busca:active {
+            transform: scale(0.95);
+        }
+
+        .resultado-cliente {
+            margin-top: 10px;
+            background: #f0f7ff;
+            border-radius: 12px;
+            padding: 14px 18px;
+            border-left: 4px solid #f8b81f;
+            display: none;
+            animation: fadeSlideIn 0.3s ease;
+        }
+
+        .resultado-cliente.show {
+            display: block;
+        }
+
+        .resultado-cliente .cliente-info {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 6px 20px;
+        }
+
+        .resultado-cliente .cliente-info .label {
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            color: #6b7a8a;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+        }
+
+        .resultado-cliente .cliente-info .value {
+            font-weight: 600;
+            color: #0d3b66;
+            font-size: 0.9rem;
+        }
+
+        .resultado-cliente .cliente-info .value-destaque {
+            font-weight: 700;
+            color: #0d3b66;
+            font-size: 1rem;
+            background: #e8edf3;
+            padding: 2px 10px;
+            border-radius: 6px;
+            display: inline-block;
+        }
+
+        .resultado-cliente .badge-encontrado {
+            background: #10b981;
+            color: white;
+            padding: 2px 12px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 0.7rem;
+            display: inline-block;
+            margin-top: 6px;
+        }
+
+        /* ===== UPLOAD ===== */
+        .upload-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+            gap: 12px;
+            margin-top: 8px;
+        }
+
+        .upload-item {
+            position: relative;
+            background: #f8fafc;
+            border: 2px dashed #d5dce6;
+            border-radius: 16px;
+            height: 120px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+
+        .upload-item:hover {
+            border-color: #f8b81f;
+            background: #fffcf0;
+        }
+
+        .upload-item.has-file {
+            border-color: #10b981;
+            background: #f0fdf4;
+        }
+
+        .upload-item i {
+            font-size: 28px;
+            color: #94a3b8;
+            margin-bottom: 4px;
+        }
+
+        .upload-item span {
+            font-size: 0.65rem;
+            color: #6b7a8a;
+            text-align: center;
+            padding: 0 4px;
+        }
+
+        .upload-item .file-preview {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        .upload-item .remove-upload {
+            position: absolute;
+            top: 4px;
+            right: 4px;
+            background: #e74c3c;
+            color: white;
+            border-radius: 50%;
+            width: 22px;
+            height: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            cursor: pointer;
+            border: 2px solid white;
+            z-index: 2;
+            transition: transform 0.2s;
+        }
+
+        .upload-item .remove-upload:hover {
+            transform: scale(1.15);
+        }
+
+        .upload-item .file-counter {
+            position: absolute;
+            bottom: 4px;
+            right: 4px;
+            background: rgba(0, 0, 0, 0.6);
+            color: white;
+            font-size: 0.55rem;
+            padding: 2px 8px;
+            border-radius: 10px;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 14px;
+            margin-top: 28px;
+            flex-wrap: wrap;
+        }
+
+        .btn-next,
+        .btn-submit {
+            background: linear-gradient(135deg, #0d3b66, #1a5276);
+            color: white;
+            padding: 14px 32px;
+            border-radius: 40px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            font-size: 0.95rem;
+            flex: 1;
+            min-width: 140px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            box-shadow: 0 4px 16px rgba(13, 59, 102, 0.2);
+        }
+
+        .btn-next:hover,
+        .btn-submit:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 24px rgba(13, 59, 102, 0.3);
+            background: linear-gradient(135deg, #1a5276, #0d3b66);
+        }
+
+        .btn-back {
+            background: #e8edf3;
+            color: #1a2a3a;
+            padding: 14px 28px;
+            border-radius: 40px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            min-width: 120px;
+        }
+
+        .btn-back:hover {
+            background: #d5dce6;
+            transform: translateY(-2px);
+        }
+
+        .btn-next:disabled,
+        .btn-submit:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        .alert {
+            padding: 14px 18px;
+            border-radius: 14px;
+            margin-bottom: 18px;
+            font-weight: 500;
+            display: none;
+        }
+
+        .alert-success {
+            display: block;
+            background: #d4edda;
+            border-left: 5px solid #28a745;
+            color: #155724;
+        }
+
+        .alert-error {
+            display: block;
+            background: #f8d7da;
+            border-left: 5px solid #dc3545;
+            color: #721c24;
+        }
+
+        .alert-info {
+            display: block;
+            background: #cce5ff;
+            border-left: 5px solid #007bff;
+            color: #004085;
+        }
+
+        .review-card {
+            background: #f8fafc;
+            padding: 18px 22px;
+            border-radius: 16px;
+            margin-bottom: 14px;
+            border-left: 5px solid #f8b81f;
+            transition: all 0.3s ease;
+        }
+
+        .review-card:hover {
+            background: #f0f4f8;
+        }
+
+        .review-card h3 {
+            color: #0d3b66;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.95rem;
+        }
+
+        .review-card h3 i {
+            color: #f8b81f;
+        }
+
+        .review-card p {
+            color: #2d3f4f;
+            font-size: 0.88rem;
+            line-height: 1.6;
+        }
+
+        .review-card strong {
+            color: #0d3b66;
+        }
+
+        .chamados-lista {
+            margin-top: 30px;
+            background: white;
+            border-radius: 24px;
+            padding: 24px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.06);
+        }
+
+        .chamados-lista .titulo {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #0d3b66;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .chamados-lista .titulo .badge-count {
+            background: #0d3b66;
+            color: white;
+            font-size: 0.7rem;
+            padding: 2px 10px;
+            border-radius: 20px;
+        }
+
+        .chamado-item {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 14px 18px;
+            margin-bottom: 10px;
+            border-left: 4px solid #f8b81f;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .chamado-item:hover {
+            background: #f0f4f8;
+        }
+
+        .chamado-item .top-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .chamado-item .info h4 {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #0d3b66;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .chamado-item .info p {
+            font-size: 0.75rem;
+            color: #6b7a8a;
+        }
+
+        .chamado-item .status {
+            font-size: 0.65rem;
+            font-weight: 700;
+            padding: 4px 12px;
+            border-radius: 20px;
+        }
+
+        .status-pendente {
+            background: #fef3c7;
+            color: #92400e;
+        }
+        .status-analise {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+        .status-aprovado {
+            background: #d1fae5;
+            color: #065f46;
+        }
+        .status-recusado {
+            background: #fecaca;
+            color: #991b1b;
+        }
+
+        .chamado-item .badge-msg {
+            background: #ef4444;
+            color: white;
+            border-radius: 50%;
+            width: 22px;
+            height: 22px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.6rem;
+            font-weight: 700;
+            animation: pulse-msg 1.5s infinite;
+        }
+
+        @keyframes pulse-msg {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .chamado-item .bottom-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 8px;
+            padding-top: 8px;
+            border-top: 1px solid #e8edf3;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .chamado-item .data {
+            font-size: 0.7rem;
+            color: #94a3b8;
+        }
+
+        .chamado-item .btn-ver {
+            background: #0d3b66;
+            color: white;
+            border: none;
+            padding: 4px 14px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .chamado-item .btn-ver:hover {
+            background: #1a5276;
+        }
+
+        .chamado-item .btn-reabrir {
+            background: #f8b81f;
+            color: #0d3b66;
+            border: none;
+            padding: 4px 14px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .chamado-item .btn-reabrir:hover {
+            background: #f59e0b;
+            transform: scale(1.05);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 30px;
+            color: #94a3b8;
+        }
+
+        .empty-state i {
+            font-size: 40px;
+            margin-bottom: 12px;
+            opacity: 0.3;
+        }
+
+        .loading-state {
+            text-align: center;
+            padding: 30px;
+            color: #0d3b66;
+        }
+
+        .loading-state i {
+            font-size: 30px;
+            margin-bottom: 12px;
+            color: #f8b81f;
+        }
+
+        /* ===== MODAL DO CHAT ===== */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(8px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 28px;
+            max-width: 600px;
+            width: 100%;
+            max-height: 90vh;
+            display: flex;
+            flex-direction: column;
+            padding: 0;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .modal-content.wide {
+            max-width: 750px;
+        }
+
+        .modal-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid #e8edf3;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-shrink: 0;
+            background: white;
+            position: sticky;
+            top: 0;
+            z-index: 5;
+        }
+
+        .modal-header .titulo {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #0d3b66;
+        }
+
+        .modal-header .titulo small {
+            font-weight: 400;
+            font-size: 0.8rem;
+            color: #6b7a8a;
+            display: block;
+        }
+
+        .btn-fechar-modal {
+            background: #e8edf3;
+            border: none;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-fechar-modal:hover {
+            background: #ef4444;
+            color: white;
+        }
+
+        .chat-container {
+            padding: 16px 24px;
+            overflow-y: auto;
+            flex: 1;
+            max-height: 400px;
+            min-height: 250px;
+            background: #f8fafc;
+        }
+
+        .chat-container .mensagem {
+            margin-bottom: 12px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-container .mensagem .bubble {
+            max-width: 80%;
+            padding: 10px 16px;
+            border-radius: 16px;
+            font-size: 0.9rem;
+            line-height: 1.4;
+            word-wrap: break-word;
+            position: relative;
+        }
+
+        .chat-container .mensagem.vendedor {
+            align-items: flex-end;
+        }
+
+        .chat-container .mensagem.vendedor .bubble {
+            background: #0d3b66;
+            color: white;
+            border-bottom-right-radius: 4px;
+        }
+
+        .chat-container .mensagem.tecnico {
+            align-items: flex-start;
+        }
+
+        .chat-container .mensagem.tecnico .bubble {
+            background: white;
+            color: #1a2a3a;
+            border: 1px solid #e8edf3;
+            border-bottom-left-radius: 4px;
+        }
+
+        .chat-container .mensagem .remetente {
+            font-size: 0.65rem;
+            font-weight: 600;
+            color: #6b7a8a;
+            margin-bottom: 2px;
+        }
+
+        .chat-container .mensagem .hora {
+            font-size: 0.55rem;
+            color: #94a3b8;
+            margin-top: 2px;
+        }
+
+        .chat-container .mensagem.vendedor .hora {
+            text-align: right;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .chat-container .mensagem .badge-nao-lida {
+            font-size: 0.55rem;
+            background: #ef4444;
+            color: white;
+            padding: 1px 8px;
+            border-radius: 10px;
+            margin-left: 6px;
+        }
+
+        .chat-input-area {
+            padding: 16px 24px;
+            border-top: 1px solid #e8edf3;
+            display: flex;
+            gap: 10px;
+            flex-shrink: 0;
+            background: white;
+        }
+
+        .chat-input-area textarea {
+            flex: 1;
+            padding: 10px 14px;
+            border: 2px solid #e8edf3;
+            border-radius: 14px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+            resize: none;
+            min-height: 44px;
+            max-height: 100px;
+            transition: all 0.2s;
+            background: #fafcff;
+        }
+
+        .chat-input-area textarea:focus {
+            outline: none;
+            border-color: #f8b81f;
+            box-shadow: 0 0 0 4px rgba(248, 184, 31, 0.12);
+        }
+
+        .chat-input-area .btn-enviar-msg {
+            background: linear-gradient(135deg, #0d3b66, #1a5276);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            height: 44px;
+        }
+
+        .chat-input-area .btn-enviar-msg:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(13, 59, 102, 0.3);
+        }
+
+        .chat-input-area .btn-enviar-msg:active {
+            transform: scale(0.95);
+        }
+
+        .chat-input-area .btn-enviar-msg:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        .decisao-container {
+            padding: 0 24px 16px 24px;
+            background: #f8fafc;
+            border-top: 1px solid #e8edf3;
+        }
+
+        .decisao-container .decisao-label {
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: #6b7a8a;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            margin-bottom: 4px;
+        }
+
+        /* ===== MODAL REABRIR ===== */
+        .modal-scroll {
+            padding: 20px 24px;
+            overflow-y: auto;
+            max-height: calc(90vh - 140px);
+        }
+
+        .modal-scroll .form-group:last-child {
+            margin-bottom: 0;
+        }
+
+        .alert-warning-box {
+            background: #fef3c7;
+            padding: 12px 16px;
+            border-radius: 12px;
+            border-left: 4px solid #f59e0b;
+            margin-bottom: 20px;
+        }
+
+        .alert-warning-box i {
+            color: #f59e0b;
+        }
+
+        .alert-warning-box small {
+            color: #92400e;
+        }
+
+        .arquivos-existentes {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .arquivo-existente {
+            background: #f0f7ff;
+            border-radius: 8px;
+            padding: 6px 12px;
+            font-size: 0.7rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            border: 1px solid #d5dce6;
+            max-width: 200px;
+        }
+
+        .arquivo-existente a {
+            color: #0d3b66;
+            text-decoration: none;
+        }
+
+        .arquivo-existente a:hover {
+            color: #f8b81f;
+        }
+
+        .arquivos-label {
+            width: 100%;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #0d3b66;
+            margin-bottom: 4px;
+        }
+
+        .notas-existentes {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .nota-existente {
+            background: #f0fdf4;
+            border-radius: 8px;
+            padding: 6px 12px;
+            font-size: 0.7rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            border: 1px solid #10b981;
+            max-width: 200px;
+        }
+
+        .nota-existente a {
+            color: #0d3b66;
+            text-decoration: none;
+        }
+
+        .nota-existente a:hover {
+            color: #f8b81f;
+        }
+
+        .nota-existente .badge-nota {
+            background: #10b981;
+            color: white;
+            font-size: 0.55rem;
+            padding: 1px 8px;
+            border-radius: 10px;
+        }
+
+        footer {
+            background: linear-gradient(135deg, #0a2a4a, #0d3b66);
+            color: white;
+            text-align: center;
+            padding: 28px;
+            margin-top: 48px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        footer p {
+            opacity: 0.85;
+            font-size: 0.9rem;
+        }
+
+        footer i {
+            color: #f8b81f;
+            margin: 0 4px;
+        }
+
+        @media (max-width: 768px) {
+            .header-container {
+                padding: 12px 16px;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
+            }
+
+            .logo-img {
+                height: 50px;
+                padding: 4px 10px;
+            }
+
+            .header-badge {
+                font-size: 0.7rem;
+                padding: 4px 14px;
+                align-self: flex-start;
+            }
+
+            .form-section {
+                padding: 20px 16px;
+            }
+
+            .products-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 12px;
+            }
+
+            .step {
+                font-size: 0.55rem;
+                padding: 6px 2px;
+            }
+
+            .section-title {
+                font-size: 1.1rem;
+                padding-left: 10px;
+            }
+
+            .form-actions {
+                flex-direction: column;
+            }
+
+            .btn-next, .btn-submit, .btn-back {
+                width: 100%;
+                min-width: unset;
+            }
+
+            .busca-cliente-wrapper {
+                flex-direction: column;
+            }
+
+            .btn-busca {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .resultado-cliente .cliente-info {
+                grid-template-columns: 1fr;
+            }
+
+            .produto-wrapper {
+                flex-direction: column;
+            }
+
+            .btn-busca-produto {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .resultado-produto .produto-info {
+                grid-template-columns: 1fr;
+            }
+
+            .upload-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .upload-item {
+                height: 100px;
+            }
+
+            .nota-cards {
+                grid-template-columns: 1fr;
+            }
+
+            .chamado-item .top-row {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .modal-content {
+                max-width: 100%;
+                margin: 10px;
+                max-height: 95vh;
+            }
+
+            .modal-content.wide {
+                max-width: 100%;
+            }
+
+            .chat-container {
+                min-height: 150px;
+                max-height: 300px;
+            }
+
+            .chat-input-area {
+                flex-direction: column;
+            }
+
+            .chat-input-area .btn-enviar-msg {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .modal-scroll {
+                padding: 16px;
+            }
+
+            .chamado-item .bottom-row {
+                flex-wrap: wrap;
+            }
+        }
+
+        @media (max-width: 420px) {
+            .products-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 10px;
+            }
+
+            .product-img {
+                height: 110px;
+                padding: 10px;
+            }
+
+            .product-img img {
+                max-height: 75px;
+            }
+
+            .product-info h3 {
+                font-size: 0.75rem;
+            }
+
+            .logo-img {
+                height: 42px;
+            }
+
+            .upload-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===== HEADER ===== -->
+    <div class="main-header">
+        <div class="header-container">
+            <div class="logo-area">
+                <img class="logo-img" src="https://drive.google.com/thumbnail?id=1gm3KfLFEXAfSmZyDNC0QXTq0Q7adSnT2" alt="Marine Fishing Logo" onerror="this.src='https://placehold.co/300x100?text=MARINE+FISHING'">
+                <div>
+                    <span class="brand-sub"><i class="fas fa-wrench"></i> Garantia - Vendedor</span>
+                </div>
+            </div>
+            <div class="header-badge" id="headerBadge">
+                <i class="fas fa-store"></i> Atendimento ao Cliente
+                <span id="notificacaoBadge" style="display:none; background:#ef4444; color:white; border-radius:50%; padding:2px 8px; font-size:0.65rem; font-weight:700; margin-left:6px;">0</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+
+        <!-- ===== PROGRESSO ===== -->
+        <div class="progress-section">
+            <div class="progress-steps">
+                <div class="step active" data-step="1">1️⃣ PRODUTO</div>
+                <div class="step" data-step="2">2️⃣ CLIENTE</div>
+                <div class="step" data-step="3">3️⃣ TESTE</div>
+                <div class="step" data-step="4">4️⃣ DEFEITO</div>
+                <div class="step" data-step="5">5️⃣ REVISÃO</div>
+            </div>
+        </div>
+
+        <div id="alertContainer"></div>
+
+        <!-- ===== STEP 1: PRODUTO ===== -->
+        <div id="step1" class="products-section active-section">
+            <div class="section-title">
+                <i class="fas fa-fish"></i> Selecione o grupo do produto
+                <span class="badge-step">Passo 1 de 5</span>
+            </div>
+            <div class="products-grid" id="productsGrid"></div>
+        </div>
+
+        <!-- ===== STEP 2: CLIENTE E PRODUTO ===== -->
+        <div id="step2" class="form-section">
+            <div class="section-title">
+                <i class="fas fa-user"></i> Identificar Cliente e Produto
+                <span class="badge-step">Passo 2 de 5</span>
+            </div>
+
+            <div class="form-group">
+                <label>Vendedor <span class="required">*</span></label>
+                <select id="selectVendedor">
+                    <option value="">-- Selecione --</option>
+                </select>
+            </div>
+
+            <!-- BUSCA CLIENTE -->
+            <div class="form-group">
+                <label>Buscar Cliente por ID <span class="required">*</span></label>
+                <div class="busca-cliente-wrapper">
+                    <input type="text" id="buscaCliente" placeholder="Digite o ID do cliente (ex: 7866)" inputmode="numeric" pattern="[0-9]*">
+                    <button class="btn-busca" onclick="buscarCliente()">
+                        <i class="fas fa-search"></i> Buscar
+                    </button>
+                </div>
+                <div class="resultado-cliente" id="resultadoCliente">
+                    <div class="cliente-info" id="clienteInfo"></div>
+                    <span class="badge-encontrado" id="clienteBadge">✅ Cliente encontrado</span>
+                </div>
+            </div>
+
+            <!-- BUSCA PRODUTO -->
+            <div class="form-group">
+                <label>Produto Específico (Código ou Descrição) <span class="required">*</span></label>
+                <div class="produto-wrapper">
+                    <input type="text" id="buscaProduto" placeholder="Digite o código ou parte da descrição (ex: ISCA ANIMAL)">
+                    <button class="btn-busca-produto" onclick="buscarProdutoEspecifico()">
+                        <i class="fas fa-box"></i> Buscar Produto
+                    </button>
+                </div>
+                <div class="resultado-produto" id="resultadoProduto">
+                    <div class="produto-info" id="produtoInfo"></div>
+                    <span class="badge-encontrado" id="produtoBadge">✅ Produto encontrado</span>
+                </div>
+            </div>
+
+            <!-- NOTA FISCAL -->
+            <div class="form-group">
+                <label>Nota Fiscal <span class="required">*</span></label>
+                <div class="nota-cards">
+                    <div class="nota-card">
+                        <label><i class="fas fa-file-invoice"></i> Nº Nota Marine</label>
+                        <input type="text" id="numeroNotaMarine" placeholder="Ex: 1010">
+                    </div>
+                    <div class="nota-card">
+                        <label><i class="fas fa-paperclip"></i> Anexar Nota do Cliente</label>
+                        <div class="upload-area-mini" onclick="document.getElementById('notaClienteInput').click()">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            <span class="file-name-mini" id="notaClienteFileName">Clique para anexar</span>
+                            <input type="file" id="notaClienteInput" accept="image/*,application/pdf" style="display:none" multiple>
+                        </div>
+                        <div class="preview-mini" id="previewNotaCliente"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button class="btn-back" onclick="prevStep(2)"><i class="fas fa-arrow-left"></i> Voltar</button>
+                <button class="btn-next" onclick="nextStep(2)">Continuar <i class="fas fa-arrow-right"></i></button>
+            </div>
+        </div>
+
+        <!-- ===== STEP 3: TESTE ===== -->
+        <div id="step3" class="form-section">
+            <div class="section-title">
+                <i class="fas fa-check-circle"></i> Teste do Produto
+                <span class="badge-step">Passo 3 de 5</span>
+            </div>
+
+            <div class="form-group">
+                <label>Testou ao receber? <span class="required">*</span></label>
+                <select id="testeReceber">
+                    <option value="">Selecione...</option>
+                    <option value="Sim">Sim</option>
+                    <option value="Não">Não</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Testado no momento da venda? <span class="required">*</span></label>
+                <select id="testeVenda">
+                    <option value="">Selecione...</option>
+                    <option value="Sim">Sim</option>
+                    <option value="Não">Não</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Tempo de uso até apresentar o problema <span class="required">*</span></label>
+                <select id="tempoUso">
+                    <option value="">Selecione...</option>
+                    <option value="Nunca usado">Nunca usado</option>
+                    <option value="De 1 a 6 meses">De 1 a 6 meses</option>
+                    <option value="Mais de 6 meses">Mais de 6 meses</option>
+                </select>
+            </div>
+
+            <div class="form-actions">
+                <button class="btn-back" onclick="prevStep(3)"><i class="fas fa-arrow-left"></i> Voltar</button>
+                <button class="btn-next" onclick="nextStep(3)">Continuar <i class="fas fa-arrow-right"></i></button>
+            </div>
+        </div>
+
+        <!-- ===== STEP 4: DEFEITO ===== -->
+        <div id="step4" class="form-section">
+            <div class="section-title">
+                <i class="fas fa-tools"></i> Defeito e Anexos
+                <span class="badge-step">Passo 4 de 5</span>
+            </div>
+
+            <div class="form-group">
+                <label>Como o defeito ocorreu?</label>
+                <p style="font-size:0.75rem; color:#6b7a8a; margin-bottom:6px;">
+                    <i class="fas fa-info-circle"></i> Se a explicação já constar no vídeo encaminhado pelo cliente, não há necessidade de descrever
+                </p>
+                <textarea id="descricaoDefeito" rows="3" placeholder="Descreva como o defeito ocorreu..."></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Fotos e Vídeos (até 5 arquivos)</label>
+                <div class="upload-grid" id="uploadGrid"></div>
+                <p style="font-size:0.7rem; color:#94a3b8; margin-top:6px;">
+                    <i class="fas fa-info-circle"></i> Clique em cada espaço para adicionar foto ou vídeo
+                </p>
+            </div>
+
+            <div class="form-group">
+                <label>Loja possui capacidade de arrumar o produto em caso de envio de peça? <span class="required">*</span></label>
+                <select id="capacidadeLoja">
+                    <option value="">Selecione...</option>
+                    <option value="Sim">Sim</option>
+                    <option value="Não">Não</option>
+                </select>
+            </div>
+
+            <div class="form-actions">
+                <button class="btn-back" onclick="prevStep(4)"><i class="fas fa-arrow-left"></i> Voltar</button>
+                <button class="btn-next" onclick="nextStep(4)">Revisar <i class="fas fa-arrow-right"></i></button>
+            </div>
+        </div>
+
+        <!-- ===== STEP 5: REVISÃO ===== -->
+        <div id="step5" class="form-section">
+            <div class="section-title">
+                <i class="fas fa-clipboard-check"></i> Revisão do Chamado
+                <span class="badge-step">Passo 5 de 5</span>
+            </div>
+            <div id="reviewContent"></div>
+            <div class="form-actions">
+                <button class="btn-back" onclick="prevStep(5)"><i class="fas fa-edit"></i> Editar</button>
+                <button class="btn-submit" onclick="submitChamado()"><i class="fas fa-paper-plane"></i> Enviar</button>
+            </div>
+        </div>
+
+        <!-- ===== LISTA DE CHAMADOS ===== -->
+        <div class="chamados-lista">
+            <div class="titulo">
+                <i class="fas fa-list"></i> Meus Chamados
+                <span class="badge-count" id="qtdChamados">0</span>
+            </div>
+            <div id="chamadosList">
+                <div class="empty-state">
+                    <i class="fas fa-inbox"></i>
+                    <p>Selecione um vendedor para ver seus chamados</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== MODAL DO CHAT ===== -->
+    <div class="modal-overlay" id="modalChat">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="titulo">
+                    <span id="chatProtocolo">GAR-20260805-2359</span>
+                    <small id="chatCliente">Cliente: Nome do Cliente</small>
+                </div>
+                <button class="btn-fechar-modal" onclick="fecharChat()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="chat-container" id="chatContainer"></div>
+            <div class="decisao-container" id="decisaoContainer">
+                <div class="decisao-label"><i class="fas fa-gavel"></i> Decisão do Técnico</div>
+                <div id="decisaoTecnicoDisplay">
+                    <div style="background:#fef3c7;padding:12px 16px;border-radius:12px;border-left:4px solid #f59e0b;font-size:0.85rem;color:#92400e;">
+                        <i class="fas fa-clock"></i> Aguardando decisão do técnico
+                    </div>
+                </div>
+            </div>
+            <div class="chat-input-area">
+                <textarea id="chatInput" placeholder="Digite sua mensagem..." rows="1"></textarea>
+                <button class="btn-enviar-msg" onclick="enviarMensagem()">
+                    <i class="fas fa-paper-plane"></i> Enviar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== MODAL DE REABERTURA ===== -->
+    <div class="modal-overlay" id="modalReabrir">
+        <div class="modal-content wide">
+            <div class="modal-header">
+                <div class="titulo">
+                    <span><i class="fas fa-edit"></i> Reabrir Chamado</span>
+                    <small id="reabrirProtocolo">GAR-20260805-2359</small>
+                </div>
+                <button class="btn-fechar-modal" onclick="fecharReabrir()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-scroll">
+                <!-- ALERTA -->
+                <div class="alert-warning-box">
+                    <i class="fas fa-info-circle"></i>
+                    <strong>Editando chamado:</strong> Você pode editar todas as informações e anexar novos arquivos.
+                    <br><small>Os arquivos antigos serão mantidos.</small>
+                </div>
+
+                <!-- PRODUTO -->
+                <div class="form-group">
+                    <label>Grupo do Produto <span class="required">*</span></label>
+                    <select id="reabrirProduto" class="form-control">
+                        <option value="">-- Selecione --</option>
+                    </select>
+                </div>
+
+                <!-- CÓDIGO PRODUTO -->
+                <div class="form-group">
+                    <label>Código do Produto <span class="required">*</span></label>
+                    <input type="text" id="reabrirCodigoProduto" placeholder="Ex: 006153">
+                </div>
+
+                <!-- DESCRIÇÃO PRODUTO -->
+                <div class="form-group">
+                    <label>Descrição do Produto</label>
+                    <input type="text" id="reabrirDescricaoProduto" placeholder="Descrição do produto">
+                </div>
+
+                <!-- ===== NOTA FISCAL (ADICIONADO) ===== -->
+                <div class="form-group">
+                    <label>Nota Fiscal <span class="required">*</span></label>
+                    <div class="nota-cards">
+                        <div class="nota-card">
+                            <label><i class="fas fa-file-invoice"></i> Nº Nota Marine</label>
+                            <input type="text" id="reabrirNotaMarine" placeholder="Ex: 1010">
+                        </div>
+                        <div class="nota-card">
+                            <label><i class="fas fa-paperclip"></i> Anexar Nova Nota do Cliente</label>
+                            <div class="upload-area-mini" onclick="document.getElementById('reabrirNotaClienteInput').click()">
+                                <i class="fas fa-cloud-upload-alt"></i>
+                                <span class="file-name-mini" id="reabrirNotaClienteFileName">Clique para anexar</span>
+                                <input type="file" id="reabrirNotaClienteInput" accept="image/*,application/pdf" style="display:none" multiple>
+                            </div>
+                            <div class="preview-mini" id="reabrirPreviewNotaCliente"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- NOTAS EXISTENTES (ADICIONADO) -->
+                <div class="form-group" id="reabrirNotasExistentesGroup" style="display:none;">
+                    <label><i class="fas fa-folder-open"></i> Notas já anexadas</label>
+                    <div id="reabrirNotasExistentes" class="notas-existentes"></div>
+                </div>
+
+                <!-- TESTE -->
+                <div class="form-group">
+                    <label>Testou ao receber? <span class="required">*</span></label>
+                    <select id="reabrirTesteReceber">
+                        <option value="">Selecione...</option>
+                        <option value="Sim">Sim</option>
+                        <option value="Não">Não</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Testado no momento da venda? <span class="required">*</span></label>
+                    <select id="reabrirTesteVenda">
+                        <option value="">Selecione...</option>
+                        <option value="Sim">Sim</option>
+                        <option value="Não">Não</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Tempo de uso até apresentar o problema <span class="required">*</span></label>
+                    <select id="reabrirTempoUso">
+                        <option value="">Selecione...</option>
+                        <option value="Nunca usado">Nunca usado</option>
+                        <option value="De 1 a 6 meses">De 1 a 6 meses</option>
+                        <option value="Mais de 6 meses">Mais de 6 meses</option>
+                    </select>
+                </div>
+
+                <!-- DEFEITO -->
+                <div class="form-group">
+                    <label>Descrição do Defeito</label>
+                    <textarea id="reabrirDefeito" rows="3" placeholder="Descreva como o defeito ocorreu..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Capacidade da Loja <span class="required">*</span></label>
+                    <select id="reabrirCapacidade">
+                        <option value="">Selecione...</option>
+                        <option value="Sim">Sim</option>
+                        <option value="Não">Não</option>
+                    </select>
+                </div>
+
+                <!-- ARQUIVOS EXISTENTES -->
+                <div class="form-group">
+                    <label><i class="fas fa-folder-open"></i> Arquivos já anexados</label>
+                    <div id="reabrirArquivosExistentes" class="arquivos-existentes">
+                        <span style="font-size:0.8rem;color:#94a3b8;"><i class="fas fa-info-circle"></i> Nenhum arquivo anexado anteriormente</span>
+                    </div>
+                </div>
+
+                <!-- UPLOAD DE NOVOS ARQUIVOS -->
+                <div class="form-group">
+                    <label><i class="fas fa-paperclip"></i> Anexar novos arquivos (fotos/vídeos)</label>
+                    <div class="upload-grid" id="reabrirUploadGrid"></div>
+                    <p style="font-size:0.7rem; color:#94a3b8; margin-top:6px;">
+                        <i class="fas fa-info-circle"></i> Os arquivos antigos serão mantidos. Clique para adicionar novos.
+                    </p>
+                </div>
+
+                <!-- BOTÕES -->
+                <div class="form-actions" style="margin-top: 20px;">
+                    <button class="btn-back" onclick="fecharReabrir()"><i class="fas fa-times"></i> Cancelar</button>
+                    <button class="btn-submit" onclick="salvarReabertura()">
+                        <i class="fas fa-save"></i> Salvar Alterações
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p><i class="fas fa-certificate"></i> Marine Fishing - Assistência Técnica Autorizada</p>
+        <p style="font-size: 0.8rem; opacity: 0.6; margin-top: 6px;">Qualidade e confiança desde 1998</p>
+    </footer>
+
+    <script>
+        // ================================================================
+        // CONFIGURAÇÕES
+        // ================================================================
+
+        const API_URL = window.location.origin + '/api/garantia';
+        const VENDEDOR_STORAGE_KEY = 'vendedor_selecionado';
+
+        // 🔥 VENDEDORES CORRETOS (extraídos da tabela clientes_cj)
+        const VENDEDORES = [
+            'AGUSTIN',
+            'ALBERTO DAVALOS',
+            'ARMANDO GIMENEZ',
+            'CHICO',
+            'GUIDO SOTELO',
+            'JUAN DAVID CABRERA',
+            'JULIO ELIAS',
+            'JULIO FERNANDO',
+            'OSCAR MARCELO',
+            'REINALDO GIMENEZ CUEVAS',
+            'RICARDO CHAVEZ',
+            'SEBASTIAN GONZALEZ',
+            'WALTER LOPEZ'
+        ];
+
+        const PRODUTOS = [
+            { id: 'CARRETILHAS', name: 'CARRETILHAS', img: 'https://www.marinefishing.com.br/img/9757/produtos/1200/carretilha-Brisa-LS-8000-codigo-008178.jpg' },
+            { id: 'MOLINETES', name: 'MOLINETES', img: 'https://www.marinefishing.com.br/img/8475/produtos/1200/MOLINETE-MS-VENZA-2000-MOLINETE-VENZA-MARINE-2.jpg' },
+            { id: 'VARAS', name: 'VARAS', img: 'https://www.marinefishing.com.br/img/9063/produtos/1200/VARA-LUBINA-LU-C561MM-168m-10-16lb-VARA-LUBINA-MARINE.jpg' },
+            { id: 'MOTOR ELÉTRICO', name: 'MOTOR ELÉTRICO', img: 'https://www.marinefishing.com.br/img/9439/produtos/1200/MOTOR-ELTRICO-PHANTOM-FW-34lb-PHFW34M-2023-PHANTOM-COM-MEDIDOR-PARA-GUA-DOCE-MARINE.jpg' },
+            { id: 'LINHAS', name: 'LINHAS', img: 'https://www.casajapon.com/img/6932/produtos/800/800d23514f430cb06c35d15e82e683ef.jpg' },
+            { id: 'ISCAS', name: 'ISCAS', img: 'https://www.marinefishing.com.br/img/8946/produtos/1200/ISCA-BRAVA-90-C-28B-ISCA-BRAVA-MARINE.jpg' },
+            { id: 'ACESSÓRIOS', name: 'ACESSÓRIOS', img: 'https://www.marinefishing.com.br/img/31/produtos/1200/ACES-ALICATE-TOOL-COMBO-MS-SRP-RTI-ALICATE-COM-BAINHA-MS-SRP-MARINE.jpg' }
+        ];
+
+        // ================================================================
+        // VARIÁVEIS GLOBAIS
+        // ================================================================
+
+        let selectedProduct = null;
+        let currentStep = 1;
+        let clienteEncontrado = null;
+        let clientesEncontrados = [];
+        let produtoEncontrado = null;
+        let arquivosUpload = [];
+        let notaClienteFiles = [];
+        const MAX_ARQUIVOS = 5;
+
+        let vendedorAtual = null;
+        let chamadoAtualChat = null;
+        let intervalChat = null;
+        let timeoutBuscaCliente = null;
+        let timeoutBuscaProduto = null;
+
+        // Variáveis para reabertura
+        let chamadoReabrir = null;
+        let novosArquivosReabrir = [];
+        let reabrirArquivosExistentes = [];
+        let reabrirNotasClienteFiles = [];
+        let reabrirNotasExistentes = [];
+
+        // ================================================================
+        // FUNÇÕES DE RENDERIZAÇÃO
+        // ================================================================
+
+        function renderProducts() {
+            const grid = document.getElementById('productsGrid');
+            grid.innerHTML = PRODUTOS.map(p => `
+                <div class="product-card" data-product="${p.id}" onclick="selectProduct('${p.id}')">
+                    <div class="product-check"><i class="fas fa-check"></i></div>
+                    <div class="product-img">
+                        <img src="${p.img}" alt="${p.name}" onerror="this.src='https://placehold.co/200x150?text=${p.name}'">
+                    </div>
+                    <div class="product-info">
+                        <h3>${p.name}</h3>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderVendedores() {
+            const select = document.getElementById('selectVendedor');
+            select.innerHTML = '<option value="">-- Selecione --</option>';
+            VENDEDORES.forEach(nome => {
+                const option = document.createElement('option');
+                option.value = nome;
+                option.textContent = nome;
+                select.appendChild(option);
+            });
+
+            const vendedorSalvo = localStorage.getItem(VENDEDOR_STORAGE_KEY);
+            if (vendedorSalvo && VENDEDORES.includes(vendedorSalvo)) {
+                select.value = vendedorSalvo;
+                vendedorAtual = vendedorSalvo;
+                carregarChamadosVendedor(vendedorSalvo);
+            }
+
+            select.addEventListener('change', function() {
+                if (this.value) {
+                    localStorage.setItem(VENDEDOR_STORAGE_KEY, this.value);
+                    vendedorAtual = this.value;
+                    carregarChamadosVendedor(this.value);
+                } else {
+                    localStorage.removeItem(VENDEDOR_STORAGE_KEY);
+                    document.getElementById('chamadosList').innerHTML = `
+                        <div class="empty-state">
+                            <i class="fas fa-inbox"></i>
+                            <p>Selecione um vendedor para ver seus chamados</p>
+                        </div>
+                    `;
+                    document.getElementById('qtdChamados').textContent = '0';
+                }
+            });
+        }
+
+        // ================================================================
+        // NOTA DO CLIENTE - UPLOAD (ABERTURA)
+        // ================================================================
+
+        document.getElementById('notaClienteInput').addEventListener('change', function(e) {
+            const files = this.files;
+            const fileNameSpan = document.getElementById('notaClienteFileName');
+            const previewContainer = document.getElementById('previewNotaCliente');
+            notaClienteFiles = Array.from(files);
+
+            if (files.length > 0) {
+                const names = notaClienteFiles.map(f => f.name).join(', ');
+                fileNameSpan.textContent = names;
+                fileNameSpan.parentElement.classList.add('has-file');
+
+                previewContainer.innerHTML = '';
+                notaClienteFiles.forEach(file => {
+                    const reader = new FileReader();
+                    reader.onload = function(event) {
+                        const div = document.createElement('div');
+                        div.className = 'mini-item';
+                        if (file.type.startsWith('image/')) {
+                            const img = document.createElement('img');
+                            img.src = event.target.result;
+                            div.appendChild(img);
+                        } else {
+                            div.innerHTML = `<i class="fas fa-file-pdf" style="font-size:24px;color:#e74c3c;display:flex;align-items:center;justify-content:center;height:100%;"></i>`;
+                        }
+                        const remove = document.createElement('div');
+                        remove.className = 'remove-mini';
+                        remove.innerHTML = '×';
+                        remove.onclick = (ev) => {
+                            ev.stopPropagation();
+                            div.remove();
+                            const index = notaClienteFiles.indexOf(file);
+                            if (index > -1) notaClienteFiles.splice(index, 1);
+                            document.getElementById('notaClienteInput').value = '';
+                            if (notaClienteFiles.length === 0) {
+                                document.getElementById('notaClienteFileName').textContent = 'Clique para anexar';
+                                document.getElementById('notaClienteFileName').parentElement.classList.remove('has-file');
+                            }
+                        };
+                        div.appendChild(remove);
+                        previewContainer.appendChild(div);
+                    };
+                    reader.readAsDataURL(file);
+                });
+            } else {
+                fileNameSpan.textContent = 'Clique para anexar';
+                fileNameSpan.parentElement.classList.remove('has-file');
+                previewContainer.innerHTML = '';
+                notaClienteFiles = [];
+            }
+        });
+
+        // ================================================================
+        // UPLOAD DE FOTOS/VIDEOS (ABERTURA)
+        // ================================================================
+
+        function renderUploads() {
+            const grid = document.getElementById('uploadGrid');
+            grid.innerHTML = '';
+            for (let i = 0; i < MAX_ARQUIVOS; i++) {
+                const div = document.createElement('div');
+                div.className = 'upload-item';
+                div.dataset.index = i;
+                div.innerHTML = `
+                    <i class="fas fa-plus-circle"></i>
+                    <span>Arquivo ${i+1}</span>
+                    <input type="file" accept="image/*,video/*" style="display:none" onchange="handleUpload(${i}, this)">
+                `;
+                div.onclick = () => div.querySelector('input').click();
+                grid.appendChild(div);
+            }
+        }
+
+        function handleUpload(index, input) {
+            const file = input.files[0];
+            if (!file) return;
+
+            if (arquivosUpload.length >= MAX_ARQUIVOS) {
+                showAlert('error', 'Limite de 5 arquivos atingido');
+                input.value = '';
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const item = document.querySelector(`.upload-item[data-index="${index}"]`);
+                if (!item) return;
+
+                const preview = document.createElement(file.type.startsWith('video/') ? 'video' : 'img');
+                preview.className = 'file-preview';
+                preview.src = e.target.result;
+                if (file.type.startsWith('video/')) preview.controls = true;
+
+                const icon = item.querySelector('i');
+                const span = item.querySelector('span');
+                if (icon) icon.remove();
+                if (span) span.remove();
+
+                item.appendChild(preview);
+                item.classList.add('has-file');
+
+                const removeBtn = document.createElement('div');
+                removeBtn.className = 'remove-upload';
+                removeBtn.innerHTML = '×';
+                removeBtn.onclick = (ev) => {
+                    ev.stopPropagation();
+                    removerUpload(index);
+                };
+                item.appendChild(removeBtn);
+
+                const counter = document.createElement('div');
+                counter.className = 'file-counter';
+                counter.textContent = `${arquivosUpload.length + 1}/${MAX_ARQUIVOS}`;
+                item.appendChild(counter);
+
+                arquivosUpload.push({
+                    index: index,
+                    file: file,
+                    dataUrl: e.target.result,
+                    type: file.type,
+                    name: file.name,
+                    tamanho: file.size
+                });
+
+                showAlert('success', `✅ Arquivo ${arquivosUpload.length} adicionado!`);
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function removerUpload(index) {
+            const item = document.querySelector(`.upload-item[data-index="${index}"]`);
+            if (!item) return;
+
+            const input = item.querySelector('input');
+            item.innerHTML = '';
+            item.appendChild(input);
+            item.classList.remove('has-file');
+
+            const icon = document.createElement('i');
+            icon.className = 'fas fa-plus-circle';
+            const span = document.createElement('span');
+            span.textContent = `Arquivo ${index + 1}`;
+            item.appendChild(icon);
+            item.appendChild(span);
+
+            arquivosUpload = arquivosUpload.filter(a => a.index !== index);
+            arquivosUpload.forEach((a, i) => a.index = i);
+
+            atualizarUploads();
+            showAlert('info', '🗑️ Arquivo removido');
+        }
+
+        function atualizarUploads() {
+            const grid = document.getElementById('uploadGrid');
+            grid.innerHTML = '';
+
+            for (let i = 0; i < MAX_ARQUIVOS; i++) {
+                const div = document.createElement('div');
+                div.className = 'upload-item';
+                div.dataset.index = i;
+
+                const fileData = arquivosUpload.find(a => a.index === i);
+
+                if (fileData) {
+                    const preview = document.createElement(fileData.type.startsWith('video/') ? 'video' : 'img');
+                    preview.className = 'file-preview';
+                    preview.src = fileData.dataUrl;
+                    if (fileData.type.startsWith('video/')) preview.controls = true;
+                    div.appendChild(preview);
+                    div.classList.add('has-file');
+
+                    const removeBtn = document.createElement('div');
+                    removeBtn.className = 'remove-upload';
+                    removeBtn.innerHTML = '×';
+                    removeBtn.onclick = (ev) => {
+                        ev.stopPropagation();
+                        removerUpload(i);
+                    };
+                    div.appendChild(removeBtn);
+
+                    const counter = document.createElement('div');
+                    counter.className = 'file-counter';
+                    counter.textContent = `${arquivosUpload.length}/${MAX_ARQUIVOS}`;
+                    div.appendChild(counter);
+                } else {
+                    const icon = document.createElement('i');
+                    icon.className = 'fas fa-plus-circle';
+                    const span = document.createElement('span');
+                    span.textContent = `Arquivo ${i+1}`;
+                    div.appendChild(icon);
+                    div.appendChild(span);
+                }
+
+                const input = document.createElement('input');
+                input.type = 'file';
+                input.accept = 'image/*,video/*';
+                input.style.display = 'none';
+                input.onchange = function(e) {
+                    if (arquivosUpload.length >= MAX_ARQUIVOS) {
+                        showAlert('error', 'Limite de 5 arquivos atingido');
+                        this.value = '';
+                        return;
+                    }
+                    handleUpload(i, this);
+                };
+                div.appendChild(input);
+
+                div.onclick = () => {
+                    if (arquivosUpload.length >= MAX_ARQUIVOS && !arquivosUpload.find(a => a.index === i)) {
+                        showAlert('error', 'Limite de 5 arquivos atingido');
+                        return;
+                    }
+                    div.querySelector('input').click();
+                };
+
+                grid.appendChild(div);
+            }
+        }
+
+        // ================================================================
+        // BUSCA CLIENTE
+        // ================================================================
+
+        async function buscarCliente() {
+            const termo = document.getElementById('buscaCliente').value.trim();
+
+            if (!termo) {
+                showAlert('error', 'Digite o ID do cliente (ex: 7866)');
+                return;
+            }
+
+            if (isNaN(termo)) {
+                showAlert('error', 'Digite apenas números para o ID do cliente');
+                return;
+            }
+
+            const btn = document.querySelector('.btn-busca');
+            const originalHtml = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Buscando...';
+            btn.disabled = true;
+
+            try {
+                const response = await fetch(`${API_URL}/buscar-cliente-exato/${encodeURIComponent(termo)}`);
+                const data = await response.json();
+
+                console.log('🔍 Resposta da busca de cliente:', data);
+
+                if (!data.success) {
+                    showAlert('error', data.error || 'Erro na busca');
+                    return;
+                }
+
+                const resultados = data.clientes || [];
+                const resultadoDiv = document.getElementById('resultadoCliente');
+                const clienteInfoDiv = document.getElementById('clienteInfo');
+                const badge = document.getElementById('clienteBadge');
+
+                if (resultados.length === 0) {
+                    resultadoDiv.classList.add('show');
+                    clienteInfoDiv.innerHTML = `
+                        <div style="color:#e74c3c; grid-column:1/-1; padding:10px 0;">
+                            <i class="fas fa-exclamation-circle"></i> 
+                            <strong>Nenhum cliente encontrado</strong> com ID "${termo}"
+                        </div>
+                    `;
+                    badge.style.display = 'none';
+                    clienteEncontrado = null;
+                    document.getElementById('buscaCliente').style.borderColor = '#e74c3c';
+                    return;
+                }
+
+                const cliente = resultados[0];
+                clienteEncontrado = cliente;
+
+                resultadoDiv.classList.add('show');
+                clienteInfoDiv.innerHTML = `
+                    <div>
+                        <div class="label">ID Cliente</div>
+                        <div class="value"><span class="value-destaque">${cliente.id_cliente}</span></div>
+                    </div>
+                    <div>
+                        <div class="label">Nome</div>
+                        <div class="value"><strong>${cliente.cliente_nome || 'N/A'}</strong></div>
+                    </div>
+                    <div>
+                        <div class="label">Vendedor</div>
+                        <div class="value"><strong>${cliente.vendedor || '—'}</strong></div>
+                    </div>
+                `;
+                badge.style.display = 'inline-block';
+                document.getElementById('buscaCliente').style.borderColor = '#10b981';
+
+                if (resultados.length > 1) {
+                    showAlert('info', `ℹ️ Encontrado ${resultados.length} registros. Carregado o primeiro: ${cliente.cliente_nome}`);
+                } else {
+                    showAlert('success', `✅ Cliente encontrado: ${cliente.cliente_nome || cliente.id_cliente}`);
+                }
+
+                document.getElementById('buscaProduto').focus();
+
+            } catch (error) {
+                console.error('❌ Erro ao buscar cliente:', error);
+                showAlert('error', 'Erro ao buscar cliente: ' + error.message);
+            } finally {
+                btn.innerHTML = originalHtml;
+                btn.disabled = false;
+            }
+        }
+
+        document.getElementById('buscaCliente').addEventListener('input', function(e) {
+            const termo = this.value.trim();
+            this.value = this.value.replace(/[^0-9]/g, '');
+            this.style.borderColor = '#e8edf3';
+
+            if (timeoutBuscaCliente) {
+                clearTimeout(timeoutBuscaCliente);
+            }
+
+            if (termo.length === 0) {
+                document.getElementById('resultadoCliente').classList.remove('show');
+                document.getElementById('clienteBadge').style.display = 'none';
+                clienteEncontrado = null;
+                return;
+            }
+
+            if (termo.length >= 2) {
+                timeoutBuscaCliente = setTimeout(() => {
+                    buscarCliente();
+                }, 500);
+            }
+        });
+
+        document.getElementById('buscaCliente').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                if (timeoutBuscaCliente) {
+                    clearTimeout(timeoutBuscaCliente);
+                }
+                buscarCliente();
+            }
+        });
+
+        // ================================================================
+        // BUSCA PRODUTO
+        // ================================================================
+
+        async function buscarProdutoEspecifico() {
+            const termo = document.getElementById('buscaProduto').value.trim();
+
+            if (!termo) {
+                showAlert('error', 'Digite o código ou descrição do produto');
+                return;
+            }
+
+            if (termo.length < 2) {
+                showAlert('error', 'Digite pelo menos 2 caracteres para buscar');
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_URL}/buscar-produto/${encodeURIComponent(termo)}`);
+                const data = await response.json();
+
+                console.log('📦 Resposta da busca:', data);
+
+                if (!data.success) {
+                    showAlert('error', data.error || 'Erro na busca do produto');
+                    return;
+                }
+
+                let resultados = [];
+                if (data.produto) {
+                    resultados = [data.produto];
+                } else if (data.produtos && Array.isArray(data.produtos)) {
+                    resultados = data.produtos;
+                } else {
+                    showAlert('error', 'Resposta inválida do servidor');
+                    return;
+                }
+
+                const resultadoDiv = document.getElementById('resultadoProduto');
+                const produtoInfoDiv = document.getElementById('produtoInfo');
+                const badge = document.getElementById('produtoBadge');
+
+                if (resultados.length === 0) {
+                    resultadoDiv.classList.add('show');
+                    produtoInfoDiv.innerHTML = `
+                        <div style="color:#e74c3c; grid-column:1/-1; padding:10px 0;">
+                            <i class="fas fa-exclamation-circle"></i> 
+                            <strong>Nenhum produto encontrado</strong> com "${termo}"
+                        </div>
+                    `;
+                    badge.style.display = 'none';
+                    produtoEncontrado = null;
+                    return;
+                }
+
+                if (resultados.length === 1) {
+                    const produto = resultados[0];
+                    produtoEncontrado = {
+                        codigo: produto.codigo_cj || produto.codigo,
+                        codigo_antigo: produto.codigo,
+                        descricao: produto.descricao
+                    };
+                    resultadoDiv.classList.add('show');
+                    produtoInfoDiv.innerHTML = `
+                        <div class="label">Código CJ</div>
+                        <div class="value"><span class="value-destaque">${produto.codigo_cj || produto.codigo}</span></div>
+                        ${produto.codigo && produto.codigo !== produto.codigo_cj ? `
+                            <div class="label">Código Antigo</div>
+                            <div class="value">${produto.codigo}</div>
+                        ` : ''}
+                        <div class="label">Descrição</div>
+                        <div class="value"><strong>${produto.descricao}</strong></div>
+                        <div class="label">Quantidade</div>
+                        <div class="value">1 unidade (default)</div>
+                    `;
+                    badge.style.display = 'inline-block';
+                    showAlert('success', `✅ Produto encontrado: ${produto.descricao}`);
+                    return;
+                }
+
+                let html = `
+                    <div style="grid-column:1/-1;font-weight:600;margin-bottom:8px;color:#0d3b66;">
+                        <i class="fas fa-boxes"></i> ${resultados.length} produtos encontrados:
+                    </div>
+                    <div style="grid-column:1/-1;display:flex;flex-direction:column;gap:6px;max-height:200px;overflow-y:auto;">
+                `;
+
+                resultados.forEach(produto => {
+                    const codigoExibir = produto.codigo_cj || produto.codigo;
+                    html += `
+                        <button onclick="selecionarProdutoEspecifico('${codigoExibir}')" 
+                                style="background:#f8fafc;color:#0d3b66;border:2px solid #e8edf3;padding:10px 16px;border-radius:10px;cursor:pointer;font-size:0.85rem;transition:all 0.2s;text-align:left;display:flex;justify-content:space-between;align-items:center;"
+                                onmouseover="this.style.background='#f0f7ff';this.style.borderColor='#f8b81f'"
+                                onmouseout="this.style.background='#f8fafc';this.style.borderColor='#e8edf3'">
+                            <span><strong>${codigoExibir}</strong> - ${produto.descricao}</span>
+                            <span style="font-size:0.7rem;color:#94a3b8;background:#e8edf3;padding:2px 10px;border-radius:12px;">1 unidade</span>
+                        </button>
+                    `;
+                });
+
+                html += `</div>`;
+
+                resultadoDiv.classList.add('show');
+                produtoInfoDiv.innerHTML = html;
+                badge.style.display = 'none';
+                produtoEncontrado = null;
+
+            } catch (error) {
+                showAlert('error', 'Erro ao buscar produto: ' + error.message);
+            }
+        }
+
+        function selecionarProdutoEspecifico(codigo) {
+            document.getElementById('buscaProduto').value = codigo;
+            buscarProdutoExato(codigo);
+        }
+
+        async function buscarProdutoExato(codigo) {
+            try {
+                const response = await fetch(`${API_URL}/buscar-produto/${encodeURIComponent(codigo)}`);
+                const data = await response.json();
+
+                if (!data.success || !data.produtos || data.produtos.length === 0) {
+                    showAlert('error', 'Produto não encontrado');
+                    return;
+                }
+
+                const produto = data.produtos[0];
+                produtoEncontrado = {
+                    codigo: produto.codigo_cj || produto.codigo,
+                    codigo_antigo: produto.codigo,
+                    descricao: produto.descricao
+                };
+
+                const resultadoDiv = document.getElementById('resultadoProduto');
+                const produtoInfoDiv = document.getElementById('produtoInfo');
+                const badge = document.getElementById('produtoBadge');
+
+                resultadoDiv.classList.add('show');
+                produtoInfoDiv.innerHTML = `
+                    <div class="label">Código CJ</div>
+                    <div class="value"><span class="value-destaque">${produto.codigo_cj || produto.codigo}</span></div>
+                    ${produto.codigo && produto.codigo !== produto.codigo_cj ? `
+                        <div class="label">Código Antigo</div>
+                        <div class="value">${produto.codigo}</div>
+                    ` : ''}
+                    <div class="label">Descrição</div>
+                    <div class="value"><strong>${produto.descricao}</strong></div>
+                    <div class="label">Quantidade</div>
+                    <div class="value">1 unidade (default)</div>
+                `;
+                badge.style.display = 'inline-block';
+                showAlert('success', `✅ Produto selecionado: ${produto.descricao}`);
+
+            } catch (error) {
+                showAlert('error', 'Erro ao selecionar produto: ' + error.message);
+            }
+        }
+
+        // ================================================================
+        // CARREGAR CHAMADOS DO VENDEDOR
+        // ================================================================
+
+        async function carregarChamadosVendedor(vendedor) {
+            const container = document.getElementById('chamadosList');
+            const badge = document.getElementById('qtdChamados');
+
+            container.innerHTML = `
+                <div class="loading-state">
+                    <i class="fas fa-spinner fa-pulse fa-2x"></i>
+                    <p>Carregando chamados...</p>
+                </div>
+            `;
+
+            try {
+                const response = await fetch(`${API_URL}/vendedor/${encodeURIComponent(vendedor)}`);
+                const data = await response.json();
+
+                if (!data.success) {
+                    container.innerHTML = `
+                        <div class="empty-state">
+                            <i class="fas fa-exclamation-circle"></i>
+                            <p>Erro ao carregar: ${data.error || 'Erro desconhecido'}</p>
+                        </div>
+                    `;
+                    badge.textContent = '0';
+                    return;
+                }
+
+                const chamados = data.chamados || [];
+                badge.textContent = chamados.length;
+
+                const totalNaoLidas = chamados.reduce((acc, c) => acc + (c.msg_nao_lidas || 0), 0);
+                atualizarBadgeNotificacao(totalNaoLidas);
+
+                if (chamados.length === 0) {
+                    container.innerHTML = `
+                        <div class="empty-state">
+                            <i class="fas fa-inbox"></i>
+                            <p>Nenhum chamado encontrado para ${vendedor}</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                const statusMap = {
+                    'Pendente': 'status-pendente',
+                    'Em Análise': 'status-analise',
+                    'Aprovado': 'status-aprovado',
+                    'Recusado': 'status-recusado'
+                };
+
+                container.innerHTML = chamados.map(c => {
+                    const naoLidas = c.msg_nao_lidas || 0;
+                    
+                    return `
+                        <div class="chamado-item">
+                            <div class="top-row">
+                                <div class="info">
+                                    <h4>
+                                        ${c.protocolo} - ${c.produto}
+                                        ${naoLidas > 0 ? `<span class="badge-msg">${naoLidas}</span>` : ''}
+                                    </h4>
+                                    <p>
+                                        <strong>${c.cliente_nome}</strong> • Vendedor: ${c.vendedor || '—'}
+                                        <br>
+                                        Nota: ${c.nota_marine}
+                                        ${c.codigo_produto ? `<br>📦 Código: ${c.codigo_produto}` : ''}
+                                        <br>
+                                        <span style="font-size:0.65rem;color:#94a3b8;">
+                                            <i class="fas fa-clock"></i> ${c.data_criacao || ''}
+                                        </span>
+                                    </p>
+                                </div>
+                                <span class="status ${statusMap[c.status] || 'status-pendente'}">${c.status}</span>
+                            </div>
+                            <div class="bottom-row">
+                                <span class="data"><i class="far fa-calendar-alt"></i> ${c.data_criacao || ''}</span>
+                                <div style="display:flex;gap:6px;flex-wrap:wrap;">
+                                    <button class="btn-reabrir" onclick="event.stopPropagation(); reabrirChamado('${c.protocolo}')">
+                                        <i class="fas fa-undo"></i> Reabrir
+                                    </button>
+                                    <button class="btn-ver" onclick="event.stopPropagation(); abrirChat('${c.protocolo}')">
+                                        <i class="fas fa-comment-dots"></i> ${naoLidas > 0 ? `Ver (${naoLidas})` : 'Abrir Chat'}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+
+                iniciarPolling(vendedor);
+
+            } catch (error) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <p>Erro ao carregar chamados: ${error.message}</p>
+                    </div>
+                `;
+                badge.textContent = '0';
+            }
+        }
+
+        function atualizarBadgeNotificacao(total) {
+            const badge = document.getElementById('notificacaoBadge');
+            if (total > 0) {
+                badge.style.display = 'inline-block';
+                badge.textContent = total;
+            } else {
+                badge.style.display = 'none';
+            }
+        }
+
+        function iniciarPolling(vendedor) {
+            if (intervalChat) clearInterval(intervalChat);
+            intervalChat = setInterval(() => {
+                if (vendedor) {
+                    carregarChamadosVendedor(vendedor);
+                }
+            }, 30000);
+        }
+
+        // ================================================================
+        // NAVEGAÇÃO
+        // ================================================================
+
+        function selectProduct(id) {
+            selectedProduct = PRODUTOS.find(p => p.id === id);
+            document.querySelectorAll('.product-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            document.querySelector(`.product-card[data-product="${id}"]`).classList.add('selected');
+            setTimeout(() => nextStep(1), 350);
+        }
+
+        function nextStep(step) {
+            if (step === 1 && !selectedProduct) {
+                showAlert('error', 'Selecione um grupo de produto');
+                return;
+            }
+            if (step === 2) {
+                const vendedor = document.getElementById('selectVendedor').value;
+                const notaMarine = document.getElementById('numeroNotaMarine').value.trim();
+
+                if (!vendedor) {
+                    showAlert('error', 'Selecione o vendedor');
+                    return;
+                }
+                if (!clienteEncontrado) {
+                    showAlert('error', 'Busque e selecione um cliente pelo ID');
+                    return;
+                }
+                if (!produtoEncontrado) {
+                    showAlert('error', 'Busque e selecione o produto específico');
+                    return;
+                }
+                if (!notaMarine) {
+                    showAlert('error', 'Digite o número da nota Marine');
+                    return;
+                }
+                if (notaClienteFiles.length === 0) {
+                    showAlert('error', 'Anexe a nota do cliente');
+                    return;
+                }
+            }
+            if (step === 3) {
+                const testeReceber = document.getElementById('testeReceber').value;
+                const testeVenda = document.getElementById('testeVenda').value;
+                const tempoUso = document.getElementById('tempoUso').value;
+
+                if (!testeReceber) {
+                    showAlert('error', 'Selecione se o cliente testou ao receber');
+                    return;
+                }
+                if (!testeVenda) {
+                    showAlert('error', 'Selecione se foi testado no momento da venda');
+                    return;
+                }
+                if (!tempoUso) {
+                    showAlert('error', 'Selecione o tempo de uso');
+                    return;
+                }
+            }
+            if (step === 4) {
+                const capacidade = document.getElementById('capacidadeLoja').value;
+                if (!capacidade) {
+                    showAlert('error', 'Informe se a loja tem capacidade de arrumar');
+                    return;
+                }
+            }
+
+            if (step === 4) {
+                updateReview();
+            }
+
+            document.getElementById(`step${currentStep}`).classList.remove('active-section');
+            document.querySelector(`.step[data-step="${currentStep}"]`).classList.remove('active');
+            currentStep = step + 1;
+            document.getElementById(`step${currentStep}`).classList.add('active-section');
+            document.querySelector(`.step[data-step="${currentStep}"]`).classList.add('active');
+            if (currentStep > 1) {
+                document.querySelector(`.step[data-step="${currentStep - 1}"]`).classList.add('completed');
+            }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function prevStep(step) {
+            document.getElementById(`step${currentStep}`).classList.remove('active-section');
+            document.querySelector(`.step[data-step="${currentStep}"]`).classList.remove('active');
+            currentStep = step - 1;
+            document.getElementById(`step${currentStep}`).classList.add('active-section');
+            document.querySelector(`.step[data-step="${currentStep}"]`).classList.add('active');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // ================================================================
+        // REVISÃO
+        // ================================================================
+
+        function updateReview() {
+            console.log('📋 Atualizando revisão...');
+
+            const vendedor = document.getElementById('selectVendedor').value || 'N/A';
+            const grupoProduto = selectedProduct ? selectedProduct.name : 'N/A';
+            const codigoProduto = produtoEncontrado ? produtoEncontrado.codigo : 'N/A';
+            const descricaoProduto = produtoEncontrado ? produtoEncontrado.descricao : 'N/A';
+
+            const idCliente = clienteEncontrado ? clienteEncontrado.id_cliente : 'N/A';
+            const clienteDisplay = clienteEncontrado ?
+                `${clienteEncontrado.cliente_nome} (Vendedor: ${clienteEncontrado.vendedor || '—'})` :
+                'N/A';
+
+            const notaMarine = document.getElementById('numeroNotaMarine').value || 'N/A';
+            const qtdNotaCliente = notaClienteFiles.length;
+
+            const testeReceber = document.getElementById('testeReceber').value || 'N/A';
+            const testeVenda = document.getElementById('testeVenda').value || 'N/A';
+            const tempoUso = document.getElementById('tempoUso').value || 'N/A';
+
+            const descricaoDefeito = document.getElementById('descricaoDefeito').value || 'Não informado';
+            const capacidade = document.getElementById('capacidadeLoja').value || 'N/A';
+            const qtdArquivos = arquivosUpload.length;
+
+            const container = document.getElementById('reviewContent');
+
+            if (vendedor === 'N/A' && grupoProduto === 'N/A' && clienteDisplay === 'N/A') {
+                container.innerHTML = `
+                    <div style="text-align:center;padding:40px;color:#94a3b8;">
+                        <i class="fas fa-info-circle" style="font-size:40px;margin-bottom:16px;opacity:0.3;"></i>
+                        <p>Nenhum dado preenchido ainda.</p>
+                        <p style="font-size:0.85rem;">Volte e preencha todas as etapas.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = `
+                <div class="review-card">
+                    <h3><i class="fas fa-user-tie"></i> Vendedor</h3>
+                    <p><strong>Vendedor:</strong> ${vendedor}</p>
+                </div>
+
+                <div class="review-card" style="border-left-color: #0d3b66;">
+                    <h3><i class="fas fa-box"></i> Produto</h3>
+                    <p>
+                        <strong>Grupo:</strong> ${grupoProduto}<br>
+                        <strong>Código:</strong> ${codigoProduto}<br>
+                        <strong>Descrição:</strong> ${descricaoProduto}<br>
+                        <strong>Quantidade:</strong> 1 unidade
+                    </p>
+                </div>
+
+                <div class="review-card" style="border-left-color: #10b981;">
+                    <h3><i class="fas fa-user"></i> Cliente</h3>
+                    <p>
+                        <strong>ID Cliente:</strong> ${idCliente}<br>
+                        <strong>Cliente:</strong> ${clienteDisplay}
+                    </p>
+                </div>
+
+                <div class="review-card" style="border-left-color: #f59e0b;">
+                    <h3><i class="fas fa-file-invoice"></i> Nota Fiscal</h3>
+                    <p>
+                        <strong>Nº Nota Marine:</strong> ${notaMarine}<br>
+                        <strong>Nota do Cliente:</strong> ${qtdNotaCliente} arquivo(s) anexado(s)
+                    </p>
+                </div>
+
+                <div class="review-card" style="border-left-color: #3b82f6;">
+                    <h3><i class="fas fa-check-circle"></i> Teste</h3>
+                    <p>
+                        <strong>Testou ao receber?</strong> ${testeReceber}<br>
+                        <strong>Testado na venda?</strong> ${testeVenda}<br>
+                        <strong>Tempo de uso:</strong> ${tempoUso}
+                    </p>
+                </div>
+
+                <div class="review-card" style="border-left-color: #ef4444;">
+                    <h3><i class="fas fa-tools"></i> Defeito</h3>
+                    <p>
+                        <strong>Descrição:</strong> ${descricaoDefeito}<br>
+                        <strong>Loja pode arrumar?</strong> ${capacidade}<br>
+                        <strong>Arquivos anexados:</strong> ${qtdArquivos} de ${MAX_ARQUIVOS}
+                    </p>
+                </div>
+            `;
+
+            console.log('✅ Revisão atualizada com sucesso!');
+        }
+
+        // ================================================================
+        // ENVIO DO CHAMADO
+        // ================================================================
+
+        async function submitChamado() {
+            const btn = document.querySelector('.btn-submit');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enviando...';
+
+            try {
+                const arquivosBase64 = [];
+                for (const arquivo of arquivosUpload) {
+                    arquivosBase64.push({
+                        nome: arquivo.name,
+                        tamanho: arquivo.tamanho,
+                        tipo: arquivo.type,
+                        dataUrl: arquivo.dataUrl
+                    });
+                }
+
+                const notasBase64 = [];
+                for (const file of notaClienteFiles) {
+                    const base64 = await fileParaBase64(file);
+                    notasBase64.push({
+                        nome: file.name,
+                        tamanho: file.size,
+                        tipo: file.type,
+                        dataUrl: base64
+                    });
+                }
+
+                const dados = {
+                    vendedor: document.getElementById('selectVendedor').value,
+                    produto: selectedProduct ? selectedProduct.name : 'N/A',
+                    codigo_produto: produtoEncontrado ? produtoEncontrado.codigo : 'N/A',
+                    descricao_produto: produtoEncontrado ? produtoEncontrado.descricao : 'N/A',
+                    cliente: clienteEncontrado,
+                    notaMarine: document.getElementById('numeroNotaMarine').value,
+                    testeReceber: document.getElementById('testeReceber').value,
+                    testeVenda: document.getElementById('testeVenda').value,
+                    tempoUso: document.getElementById('tempoUso').value,
+                    descricaoDefeito: document.getElementById('descricaoDefeito').value,
+                    capacidadeLoja: document.getElementById('capacidadeLoja').value,
+                    arquivos: arquivosBase64,
+                    notasCliente: notasBase64
+                };
+
+                console.log('📦 Enviando chamado:', JSON.stringify(dados, null, 2));
+
+                const response = await fetch(`${API_URL}/novo`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(dados)
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    showAlert('success', '✅ Chamado #' + result.protocolo + ' criado com sucesso!');
+
+                    const vendedor = document.getElementById('selectVendedor').value;
+                    if (vendedor) {
+                        await carregarChamadosVendedor(vendedor);
+                    }
+
+                    Swal.fire({
+                        title: '✅ Chamado criado!',
+                        html: `
+                            <div style="text-align:center;">
+                                <i class="fas fa-check-circle" style="font-size:48px;color:#10b981;"></i>
+                                <p style="font-size:20px;font-weight:700;margin-top:10px;">
+                                    ${selectedProduct ? selectedProduct.name : ''}
+                                </p>
+                                <p style="color:#0d3b66;font-size:24px;font-weight:800;">
+                                    ${result.protocolo}
+                                </p>
+                                <p style="color:#64748b;font-size:14px;">
+                                    Cliente: ${clienteEncontrado ? clienteEncontrado.cliente_nome : 'N/A'}
+                                </p>
+                                <p style="color:#64748b;font-size:14px;">
+                                    Produto: ${produtoEncontrado ? produtoEncontrado.codigo + ' - ' + produtoEncontrado.descricao : 'N/A'}
+                                </p>
+                                <p style="color:#64748b;font-size:14px;">
+                                    Nota Marine: ${document.getElementById('numeroNotaMarine').value}
+                                </p>
+                                <p style="color:#64748b;font-size:14px;">
+                                    Arquivos enviados: ${result.arquivos || 0}
+                                </p>
+                                <div style="margin-top:16px;background:#d1fae5;padding:12px;border-radius:12px;">
+                                    <i class="fas fa-info-circle" style="color:#059669;"></i>
+                                    Status: <strong>Pendente</strong>
+                                </div>
+                            </div>
+                        `,
+                        icon: 'success',
+                        confirmButtonText: 'OK',
+                        confirmButtonColor: '#10b981'
+                    }).then(() => {
+                        resetarFormulario();
+                    });
+
+                } else {
+                    showAlert('error', '❌ Erro: ' + (result.error || 'Erro desconhecido'));
+                    btn.disabled = false;
+                    btn.innerHTML = '<i class="fas fa-paper-plane"></i> Enviar';
+                }
+
+            } catch (error) {
+                showAlert('error', '❌ Erro ao enviar: ' + error.message);
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-paper-plane"></i> Enviar';
+            }
+        }
+
+        function resetarFormulario() {
+            document.querySelectorAll('.step').forEach(s => s.classList.remove('active', 'completed'));
+            document.querySelector('.step[data-step="1"]').classList.add('active');
+            document.querySelectorAll('.products-section, .form-section').forEach(s => s.classList.remove('active-section'));
+            document.getElementById('step1').classList.add('active-section');
+            currentStep = 1;
+
+            document.querySelectorAll('.product-card').forEach(c => c.classList.remove('selected'));
+            selectedProduct = null;
+
+            clienteEncontrado = null;
+            document.getElementById('buscaCliente').value = '';
+            document.getElementById('resultadoCliente').classList.remove('show');
+            document.getElementById('clienteBadge').style.display = 'none';
+
+            produtoEncontrado = null;
+            document.getElementById('buscaProduto').value = '';
+            document.getElementById('resultadoProduto').classList.remove('show');
+            document.getElementById('produtoBadge').style.display = 'none';
+
+            document.getElementById('numeroNotaMarine').value = '';
+            document.getElementById('notaClienteInput').value = '';
+            document.getElementById('notaClienteFileName').textContent = 'Clique para anexar';
+            document.getElementById('notaClienteFileName').parentElement.classList.remove('has-file');
+            document.getElementById('previewNotaCliente').innerHTML = '';
+            notaClienteFiles = [];
+
+            document.getElementById('testeReceber').value = '';
+            document.getElementById('testeVenda').value = '';
+            document.getElementById('tempoUso').value = '';
+
+            document.getElementById('descricaoDefeito').value = '';
+            document.getElementById('capacidadeLoja').value = '';
+
+            arquivosUpload = [];
+            atualizarUploads();
+
+            document.getElementById('reviewContent').innerHTML = '';
+
+            document.querySelector('.btn-submit').disabled = false;
+            document.querySelector('.btn-submit').innerHTML = '<i class="fas fa-paper-plane"></i> Enviar';
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // ================================================================
+        // CHAT
+        // ================================================================
+
+        async function abrirChat(protocolo) {
+            const modal = document.getElementById('modalChat');
+            modal.classList.add('active');
+
+            try {
+                const response = await fetch(`${API_URL}/detalhe/${protocolo}`);
+                const data = await response.json();
+
+                if (!data.success) {
+                    Swal.fire('Erro', data.error || 'Erro ao carregar chat', 'error');
+                    fecharChat();
+                    return;
+                }
+
+                chamadoAtualChat = data.garantia;
+                document.getElementById('chatProtocolo').textContent = chamadoAtualChat.protocolo;
+                document.getElementById('chatCliente').textContent = `Cliente: ${chamadoAtualChat.cliente_nome} • ${chamadoAtualChat.produto}`;
+
+                let conversa = [];
+                try {
+                    conversa = JSON.parse(chamadoAtualChat.conversa || '[]');
+                } catch(e) {
+                    conversa = [];
+                }
+                carregarMensagens(conversa);
+
+                const decisao = chamadoAtualChat.decisao_tecnico || '';
+                const decisaoEl = document.getElementById('decisaoTecnicoDisplay');
+                if (decisao) {
+                    decisaoEl.innerHTML = `
+                        <div style="background:#d1fae5;padding:12px 16px;border-radius:12px;border-left:4px solid #10b981;font-size:0.85rem;color:#065f46;">
+                            <strong><i class="fas fa-check-circle" style="color:#10b981;"></i> Decisão do Técnico:</strong><br>
+                            ${decisao}
+                        </div>
+                    `;
+                } else {
+                    decisaoEl.innerHTML = `
+                        <div style="background:#fef3c7;padding:12px 16px;border-radius:12px;border-left:4px solid #f59e0b;font-size:0.85rem;color:#92400e;">
+                            <i class="fas fa-clock"></i> Aguardando decisão do técnico
+                        </div>
+                    `;
+                }
+
+                await marcarMensagensLidas(protocolo, 'vendedor');
+
+                document.getElementById('chatInput').value = '';
+                document.getElementById('chatInput').focus();
+
+                const container = document.getElementById('chatContainer');
+                container.scrollTop = container.scrollHeight;
+
+            } catch (error) {
+                Swal.fire('Erro', 'Erro ao abrir chat: ' + error.message, 'error');
+                fecharChat();
+            }
+        }
+
+        function carregarMensagens(conversa) {
+            const container = document.getElementById('chatContainer');
+
+            if (!conversa || conversa.length === 0) {
+                container.innerHTML = `
+                    <div style="text-align:center;padding:30px;color:#94a3b8;">
+                        <i class="fas fa-comment-dots" style="font-size:30px;margin-bottom:10px;opacity:0.3;"></i>
+                        <p>Nenhuma mensagem ainda</p>
+                        <p style="font-size:0.8rem;">Envie uma mensagem para iniciar a conversa</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = conversa.map(msg => {
+                const isVendedor = msg.tipo === 'vendedor';
+                const classe = isVendedor ? 'vendedor' : 'tecnico';
+                const remetenteNome = isVendedor ? 'Você' : (msg.remetente || 'Técnico');
+                const hora = msg.data || new Date(msg.timestamp).toLocaleString('pt-BR');
+
+                return `
+                    <div class="mensagem ${classe}">
+                        <div class="remetente">${remetenteNome}</div>
+                        <div class="bubble">
+                            ${msg.mensagem}
+                            ${!msg.lida && !isVendedor ? '<span class="badge-nao-lida">Nova</span>' : ''}
+                        </div>
+                        <div class="hora">${hora}</div>
+                    </div>
+                `;
+            }).join('');
+
+            container.scrollTop = container.scrollHeight;
+        }
+
+        function fecharChat() {
+            document.getElementById('modalChat').classList.remove('active');
+            chamadoAtualChat = null;
+            if (vendedorAtual) {
+                carregarChamadosVendedor(vendedorAtual);
+            }
+        }
+
+        async function enviarMensagem() {
+            if (!chamadoAtualChat) {
+                showAlert('error', 'Nenhum chat aberto');
+                return;
+            }
+
+            const input = document.getElementById('chatInput');
+            const mensagem = input.value.trim();
+
+            if (!mensagem) {
+                showAlert('error', 'Digite uma mensagem');
+                return;
+            }
+
+            const btn = document.querySelector('.chat-input-area .btn-enviar-msg');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+
+            try {
+                const response = await fetch(`${API_URL}/mensagem/${chamadoAtualChat.protocolo}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        mensagem: mensagem,
+                        remetente: vendedorAtual || 'Vendedor',
+                        tipo: 'vendedor'
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    const conversaAtual = JSON.parse(chamadoAtualChat.conversa || '[]');
+                    conversaAtual.push(data.novaMensagem);
+                    chamadoAtualChat.conversa = JSON.stringify(conversaAtual);
+                    carregarMensagens(chamadoAtualChat.conversa);
+
+                    input.value = '';
+                    input.focus();
+
+                    if (vendedorAtual) {
+                        carregarChamadosVendedor(vendedorAtual);
+                    }
+
+                } else {
+                    showAlert('error', data.error || 'Erro ao enviar mensagem');
+                }
+
+            } catch (error) {
+                showAlert('error', 'Erro ao enviar mensagem: ' + error.message);
+            }
+
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fas fa-paper-plane"></i> Enviar';
+        }
+
+        async function marcarMensagensLidas(protocolo, tipoUsuario) {
+            try {
+                await fetch(`${API_URL}/mensagens-lidas/${protocolo}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ tipoUsuario: tipoUsuario })
+                });
+            } catch (error) {
+                console.error('Erro ao marcar mensagens como lidas:', error);
+            }
+        }
+
+        // ================================================================
+        // NOTAS DO CLIENTE NA REABERTURA
+        // ================================================================
+
+        document.getElementById('reabrirNotaClienteInput').addEventListener('change', function(e) {
+            const files = this.files;
+            const fileNameSpan = document.getElementById('reabrirNotaClienteFileName');
+            const previewContainer = document.getElementById('reabrirPreviewNotaCliente');
+            reabrirNotasClienteFiles = Array.from(files);
+
+            if (files.length > 0) {
+                const names = reabrirNotasClienteFiles.map(f => f.name).join(', ');
+                fileNameSpan.textContent = names;
+                fileNameSpan.parentElement.classList.add('has-file');
+
+                previewContainer.innerHTML = '';
+                reabrirNotasClienteFiles.forEach(file => {
+                    const reader = new FileReader();
+                    reader.onload = function(event) {
+                        const div = document.createElement('div');
+                        div.className = 'mini-item';
+                        if (file.type.startsWith('image/')) {
+                            const img = document.createElement('img');
+                            img.src = event.target.result;
+                            div.appendChild(img);
+                        } else {
+                            div.innerHTML = `<i class="fas fa-file-pdf" style="font-size:24px;color:#e74c3c;display:flex;align-items:center;justify-content:center;height:100%;"></i>`;
+                        }
+                        const remove = document.createElement('div');
+                        remove.className = 'remove-mini';
+                        remove.innerHTML = '×';
+                        remove.onclick = (ev) => {
+                            ev.stopPropagation();
+                            div.remove();
+                            const index = reabrirNotasClienteFiles.indexOf(file);
+                            if (index > -1) reabrirNotasClienteFiles.splice(index, 1);
+                            document.getElementById('reabrirNotaClienteInput').value = '';
+                            if (reabrirNotasClienteFiles.length === 0) {
+                                document.getElementById('reabrirNotaClienteFileName').textContent = 'Clique para anexar';
+                                document.getElementById('reabrirNotaClienteFileName').parentElement.classList.remove('has-file');
+                            }
+                        };
+                        div.appendChild(remove);
+                        previewContainer.appendChild(div);
+                    };
+                    reader.readAsDataURL(file);
+                });
+            } else {
+                fileNameSpan.textContent = 'Clique para anexar';
+                fileNameSpan.parentElement.classList.remove('has-file');
+                previewContainer.innerHTML = '';
+                reabrirNotasClienteFiles = [];
+            }
+        });
+
+        // ================================================================
+        // REABERTURA DE CHAMADO
+        // ================================================================
+
+        async function reabrirChamado(protocolo) {
+            try {
+                const response = await fetch(`${API_URL}/detalhe/${protocolo}`);
+                const data = await response.json();
+
+                if (!data.success) {
+                    Swal.fire('Erro', data.error || 'Erro ao carregar chamado', 'error');
+                    return;
+                }
+
+                chamadoReabrir = data.garantia;
+                console.log('🔄 Reabrindo chamado:', chamadoReabrir);
+
+                document.getElementById('reabrirProtocolo').textContent = chamadoReabrir.protocolo;
+                document.getElementById('reabrirProduto').value = chamadoReabrir.produto || '';
+                document.getElementById('reabrirCodigoProduto').value = chamadoReabrir.codigo_produto || '';
+                document.getElementById('reabrirDescricaoProduto').value = chamadoReabrir.descricao_produto || '';
+                
+                document.getElementById('reabrirNotaMarine').value = chamadoReabrir.nota_marine || '';
+
+                document.getElementById('reabrirTesteReceber').value = chamadoReabrir.teste_receber || '';
+                document.getElementById('reabrirTesteVenda').value = chamadoReabrir.teste_venda || '';
+                document.getElementById('reabrirTempoUso').value = chamadoReabrir.tempo_uso || '';
+                document.getElementById('reabrirDefeito').value = chamadoReabrir.descricao_defeito || '';
+                document.getElementById('reabrirCapacidade').value = chamadoReabrir.capacidade_loja || '';
+
+                const selectProduto = document.getElementById('reabrirProduto');
+                selectProduto.innerHTML = '';
+                PRODUTOS.forEach(p => {
+                    const option = document.createElement('option');
+                    option.value = p.name;
+                    option.textContent = p.name;
+                    if (p.name === chamadoReabrir.produto) option.selected = true;
+                    selectProduto.appendChild(option);
+                });
+
+                reabrirArquivosExistentes = chamadoReabrir.arquivos || [];
+                mostrarArquivosExistentes();
+
+                reabrirNotasExistentes = chamadoReabrir.notas_cliente || [];
+                mostrarNotasExistentes();
+
+                novosArquivosReabrir = [];
+                reabrirNotasClienteFiles = [];
+                renderizarUploadReabrir();
+
+                document.getElementById('reabrirNotaClienteInput').value = '';
+                document.getElementById('reabrirNotaClienteFileName').textContent = 'Clique para anexar';
+                document.getElementById('reabrirNotaClienteFileName').parentElement.classList.remove('has-file');
+                document.getElementById('reabrirPreviewNotaCliente').innerHTML = '';
+
+                document.getElementById('modalReabrir').classList.add('active');
+
+            } catch (error) {
+                Swal.fire('Erro', 'Erro ao reabrir chamado: ' + error.message, 'error');
+            }
+        }
+
+        function mostrarArquivosExistentes() {
+            const container = document.getElementById('reabrirArquivosExistentes');
+            container.innerHTML = '';
+
+            if (!reabrirArquivosExistentes || reabrirArquivosExistentes.length === 0) {
+                container.innerHTML = '<span style="font-size:0.8rem;color:#94a3b8;"><i class="fas fa-info-circle"></i> Nenhum arquivo anexado anteriormente</span>';
+                return;
+            }
+
+            const label = document.createElement('div');
+            label.className = 'arquivos-label';
+            label.innerHTML = `<i class="fas fa-folder-open"></i> Arquivos existentes (${reabrirArquivosExistentes.length}):`;
+            container.appendChild(label);
+
+            reabrirArquivosExistentes.forEach((arquivo, index) => {
+                const div = document.createElement('div');
+                div.className = 'arquivo-existente';
+
+                const isVideo = arquivo.tipo && arquivo.tipo.startsWith('video/');
+                const icon = isVideo ? 'fa-video' : 'fa-image';
+
+                div.innerHTML = `
+                    <i class="fas ${icon}" style="color:#0d3b66;"></i>
+                    <span style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${arquivo.nome || 'Arquivo'}</span>
+                    <a href="${arquivo.dataUrl || '#'}" target="_blank" style="color:#0d3b66;text-decoration:none;" title="Visualizar">
+                        <i class="fas fa-eye"></i>
+                    </a>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function mostrarNotasExistentes() {
+            const container = document.getElementById('reabrirNotasExistentes');
+            const group = document.getElementById('reabrirNotasExistentesGroup');
+            
+            container.innerHTML = '';
+
+            if (!reabrirNotasExistentes || reabrirNotasExistentes.length === 0) {
+                group.style.display = 'none';
+                return;
+            }
+
+            group.style.display = 'block';
+
+            const label = document.createElement('div');
+            label.className = 'arquivos-label';
+            label.innerHTML = `<i class="fas fa-file-invoice"></i> Notas existentes (${reabrirNotasExistentes.length}):`;
+            container.appendChild(label);
+
+            reabrirNotasExistentes.forEach((nota, index) => {
+                const div = document.createElement('div');
+                div.className = 'nota-existente';
+
+                const isPDF = nota.tipo && nota.tipo === 'application/pdf';
+                const icon = isPDF ? 'fa-file-pdf' : 'fa-image';
+
+                div.innerHTML = `
+                    <i class="fas ${icon}" style="color:#10b981;"></i>
+                    <span style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${nota.nome || 'Nota'}</span>
+                    <span class="badge-nota">Nota</span>
+                    <a href="${nota.dataUrl || '#'}" target="_blank" style="color:#0d3b66;text-decoration:none;" title="Visualizar">
+                        <i class="fas fa-eye"></i>
+                    </a>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function renderizarUploadReabrir() {
+            const grid = document.getElementById('reabrirUploadGrid');
+            grid.innerHTML = '';
+            const MAX_NOVOS = 5;
+
+            for (let i = 0; i < MAX_NOVOS; i++) {
+                const div = document.createElement('div');
+                div.className = 'upload-item';
+                div.dataset.index = i;
+
+                const fileData = novosArquivosReabrir.find(a => a.index === i);
+
+                if (fileData) {
+                    const preview = document.createElement(fileData.type.startsWith('video/') ? 'video' : 'img');
+                    preview.className = 'file-preview';
+                    preview.src = fileData.dataUrl;
+                    if (fileData.type.startsWith('video/')) preview.controls = true;
+                    div.appendChild(preview);
+                    div.classList.add('has-file');
+
+                    const removeBtn = document.createElement('div');
+                    removeBtn.className = 'remove-upload';
+                    removeBtn.innerHTML = '×';
+                    removeBtn.onclick = (ev) => {
+                        ev.stopPropagation();
+                        removerUploadReabrir(i);
+                    };
+                    div.appendChild(removeBtn);
+
+                    const counter = document.createElement('div');
+                    counter.className = 'file-counter';
+                    counter.textContent = `${novosArquivosReabrir.length}/${MAX_NOVOS}`;
+                    div.appendChild(counter);
+                } else {
+                    const icon = document.createElement('i');
+                    icon.className = 'fas fa-plus-circle';
+                    const span = document.createElement('span');
+                    span.textContent = `Novo ${i+1}`;
+                    div.appendChild(icon);
+                    div.appendChild(span);
+                }
+
+                const input = document.createElement('input');
+                input.type = 'file';
+                input.accept = 'image/*,video/*';
+                input.style.display = 'none';
+                input.onchange = function(e) {
+                    if (novosArquivosReabrir.length >= MAX_NOVOS) {
+                        Swal.fire('Aviso', 'Limite de 5 novos arquivos', 'warning');
+                        this.value = '';
+                        return;
+                    }
+                    handleUploadReabrir(i, this);
+                };
+                div.appendChild(input);
+
+                div.onclick = () => {
+                    if (novosArquivosReabrir.length >= MAX_NOVOS && !novosArquivosReabrir.find(a => a.index === i)) {
+                        Swal.fire('Aviso', 'Limite de 5 novos arquivos', 'warning');
+                        return;
+                    }
+                    div.querySelector('input').click();
+                };
+
+                grid.appendChild(div);
+            }
+        }
+
+        function handleUploadReabrir(index, input) {
+            const file = input.files[0];
+            if (!file) return;
+
+            if (novosArquivosReabrir.length >= 5) {
+                Swal.fire('Aviso', 'Limite de 5 novos arquivos', 'warning');
+                input.value = '';
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                novosArquivosReabrir.push({
+                    index: index,
+                    file: file,
+                    dataUrl: e.target.result,
+                    type: file.type,
+                    name: file.name,
+                    tamanho: file.size
+                });
+                renderizarUploadReabrir();
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Arquivo adicionado!',
+                    text: `${file.name} (${(file.size/1024).toFixed(1)} KB)`,
+                    timer: 1500,
+                    showConfirmButton: false
+                });
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function removerUploadReabrir(index) {
+            novosArquivosReabrir = novosArquivosReabrir.filter(a => a.index !== index);
+            novosArquivosReabrir.forEach((a, i) => a.index = i);
+            renderizarUploadReabrir();
+        }
+
+        function fecharReabrir() {
+            document.getElementById('modalReabrir').classList.remove('active');
+            chamadoReabrir = null;
+            novosArquivosReabrir = [];
+            reabrirNotasClienteFiles = [];
+        }
+
+        async function salvarReabertura() {
+            if (!chamadoReabrir) {
+                Swal.fire('Erro', 'Nenhum chamado para editar', 'error');
+                return;
+            }
+
+            const produto = document.getElementById('reabrirProduto').value;
+            const codigo = document.getElementById('reabrirCodigoProduto').value.trim();
+            const nota = document.getElementById('reabrirNotaMarine').value.trim();
+            const testeReceber = document.getElementById('reabrirTesteReceber').value;
+            const testeVenda = document.getElementById('reabrirTesteVenda').value;
+            const tempoUso = document.getElementById('reabrirTempoUso').value;
+            const capacidade = document.getElementById('reabrirCapacidade').value;
+
+            if (!produto) { Swal.fire('Aviso', 'Selecione o grupo do produto', 'warning'); return; }
+            if (!codigo) { Swal.fire('Aviso', 'Digite o código do produto', 'warning'); return; }
+            if (!nota) { Swal.fire('Aviso', 'Digite o número da nota Marine', 'warning'); return; }
+            if (!testeReceber) { Swal.fire('Aviso', 'Selecione se testou ao receber', 'warning'); return; }
+            if (!testeVenda) { Swal.fire('Aviso', 'Selecione se testou na venda', 'warning'); return; }
+            if (!tempoUso) { Swal.fire('Aviso', 'Selecione o tempo de uso', 'warning'); return; }
+            if (!capacidade) { Swal.fire('Aviso', 'Selecione a capacidade da loja', 'warning'); return; }
+
+            const btn = document.querySelector('#modalReabrir .btn-submit');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Salvando...';
+
+            try {
+                const novosArquivosBase64 = [];
+                for (const arquivo of novosArquivosReabrir) {
+                    novosArquivosBase64.push({
+                        nome: arquivo.name,
+                        tamanho: arquivo.tamanho,
+                        tipo: arquivo.type,
+                        dataUrl: arquivo.dataUrl
+                    });
+                }
+
+                const novasNotasBase64 = [];
+                for (const file of reabrirNotasClienteFiles) {
+                    const base64 = await fileParaBase64(file);
+                    novasNotasBase64.push({
+                        nome: file.name,
+                        tamanho: file.size,
+                        tipo: file.type,
+                        dataUrl: base64
+                    });
+                }
+
+                const dados = {
+                    protocolo: chamadoReabrir.protocolo,
+                    produto: produto,
+                    codigo_produto: codigo,
+                    descricao_produto: document.getElementById('reabrirDescricaoProduto').value.trim(),
+                    nota_marine: nota,
+                    teste_receber: testeReceber,
+                    teste_venda: testeVenda,
+                    tempo_uso: tempoUso,
+                    descricao_defeito: document.getElementById('reabrirDefeito').value.trim(),
+                    capacidade_loja: capacidade,
+                    novos_arquivos: novosArquivosBase64,
+                    arquivos_existentes: reabrirArquivosExistentes,
+                    novas_notas: novasNotasBase64,
+                    notas_existentes: reabrirNotasExistentes
+                };
+
+                console.log('📦 Enviando reabertura:', dados);
+
+                const response = await fetch(`${API_URL}/reabrir`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(dados)
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    let msg = `🔄 **Chamado reaberto e editado pelo cliente**\n\n📝 Alterações realizadas:\n• Produto: ${produto}\n• Código: ${codigo}\n• Nota: ${nota}`;
+                    
+                    if (novosArquivosReabrir.length > 0) {
+                        msg += `\n• ${novosArquivosReabrir.length} novo(s) arquivo(s) anexado(s)`;
+                    }
+                    if (reabrirNotasClienteFiles.length > 0) {
+                        msg += `\n• ${reabrirNotasClienteFiles.length} nova(s) nota(s) anexada(s)`;
+                    }
+                    msg += `\n\n⏰ Aguardando nova análise.`;
+
+                    await fetch(`${API_URL}/mensagem/${chamadoReabrir.protocolo}`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            mensagem: msg,
+                            remetente: 'Cliente',
+                            tipo: 'vendedor'
+                        })
+                    });
+
+                    Swal.fire({
+                        icon: 'success',
+                        title: '✅ Chamado reaberto!',
+                        html: `
+                            <div style="text-align:center;">
+                                <i class="fas fa-check-circle" style="font-size:48px;color:#10b981;"></i>
+                                <p style="font-size:18px;font-weight:700;margin-top:10px;">
+                                    ${chamadoReabrir.protocolo}
+                                </p>
+                                <p style="color:#64748b;">O chamado foi reaberto com sucesso.</p>
+                                <p style="color:#64748b;font-size:14px;">
+                                    ${novosArquivosReabrir.length} novo(s) arquivo(s) anexado(s)
+                                    ${reabrirNotasClienteFiles.length > 0 ? `<br>${reabrirNotasClienteFiles.length} nova(s) nota(s) anexada(s)` : ''}
+                                </p>
+                                <div style="margin-top:16px;background:#fef3c7;padding:12px;border-radius:12px;">
+                                    <i class="fas fa-info-circle" style="color:#f59e0b;"></i>
+                                    Status: <strong>Pendente</strong>
+                                </div>
+                            </div>
+                        `,
+                        confirmButtonText: 'OK',
+                        confirmButtonColor: '#10b981'
+                    });
+
+                    fecharReabrir();
+
+                    if (vendedorAtual) {
+                        carregarChamadosVendedor(vendedorAtual);
+                    }
+
+                } else {
+                    Swal.fire('Erro', result.error || 'Erro ao reabrir chamado', 'error');
+                }
+
+            } catch (error) {
+                Swal.fire('Erro', 'Erro ao salvar: ' + error.message, 'error');
+            }
+
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fas fa-save"></i> Salvar Alterações';
+        }
+
+        // ================================================================
+        // UTILITÁRIOS
+        // ================================================================
+
+        function fileParaBase64(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = reject;
+                reader.readAsDataURL(file);
+            });
+        }
+
+        function showAlert(type, msg) {
+            const container = document.getElementById('alertContainer');
+            const alertClass = type === 'error' ? 'alert-error' : type === 'success' ? 'alert-success' : 'alert-info';
+            container.innerHTML = `<div class="alert ${alertClass}" style="display:block;">${msg}</div>`;
+            setTimeout(() => container.innerHTML = '', 5000);
+        }
+
+        // ================================================================
+        // EVENTOS
+        // ================================================================
+
+        document.getElementById('buscaProduto').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                buscarProdutoEspecifico();
+            }
+        });
+
+        document.getElementById('chatInput').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                enviarMensagem();
+            }
+        });
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                fecharChat();
+                fecharReabrir();
+            }
+        });
+
+        document.getElementById('modalChat').addEventListener('click', function(e) {
+            if (e.target === this) {
+                fecharChat();
+            }
+        });
+
+        document.getElementById('modalReabrir').addEventListener('click', function(e) {
+            if (e.target === this) {
+                fecharReabrir();
+            }
+        });
+
+        // ================================================================
+        // INICIALIZAÇÃO
+        // ================================================================
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderProducts();
+            renderVendedores();
+            renderUploads();
+        });
+    </script>
+
+</body>
+</html>

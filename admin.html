@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin | Projeto CJ - Importação</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f0f4f8;
+            color: #1a2a3a;
+            min-height: 100vh;
+        }
+
+        /* HEADER */
+        .main-header {
+            background: linear-gradient(135deg, #0a2a4a 0%, #0d3b66 100%);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            padding: 14px 24px;
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .logo-img {
+            height: 55px;
+            background: white;
+            padding: 6px 12px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .brand-sub {
+            color: #ffffff;
+            font-size: 0.85rem;
+            opacity: 0.9;
+        }
+
+        .brand-sub i { color: #f8b81f; margin-right: 4px; }
+
+        .header-badge {
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(10px);
+            padding: 8px 20px;
+            border-radius: 40px;
+            color: white;
+            font-size: 0.8rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .header-badge i { color: #f8b81f; }
+
+        /* CONTAINER */
+        .container {
+            max-width: 1200px;
+            margin: 32px auto;
+            padding: 0 24px;
+        }
+
+        /* STATS */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-bottom: 28px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 16px;
+            padding: 20px 24px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+            border-left: 4px solid #0d3b66;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.10);
+        }
+
+        .stat-card .stat-number {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #0d3b66;
+            line-height: 1.1;
+        }
+
+        .stat-card .stat-label {
+            font-size: 0.75rem;
+            color: #6b7a8a;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 600;
+            margin-top: 6px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .stat-card.clientes { border-left-color: #3b82f6; }
+        .stat-card.clientes .stat-number { color: #3b82f6; }
+
+        .stat-card.produtos { border-left-color: #10b981; }
+        .stat-card.produtos .stat-number { color: #10b981; }
+
+        .stat-card.garantias { border-left-color: #f59e0b; }
+        .stat-card.garantias .stat-number { color: #f59e0b; }
+
+        /* SEÇÃO DE IMPORTAÇÃO */
+        .section {
+            background: white;
+            border-radius: 24px;
+            padding: 28px 32px;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+        }
+
+        .section-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #0d3b66;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title i { color: #f8b81f; }
+
+        .section-desc {
+            font-size: 0.85rem;
+            color: #6b7a8a;
+            margin-bottom: 20px;
+        }
+
+        /* DROP ZONE */
+        .drop-zone {
+            border: 3px dashed #d5dce6;
+            border-radius: 16px;
+            padding: 40px 24px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: #fafcff;
+            margin-bottom: 16px;
+        }
+
+        .drop-zone:hover,
+        .drop-zone.dragover {
+            border-color: #f8b81f;
+            background: #fffcf0;
+            transform: scale(1.01);
+        }
+
+        .drop-zone i {
+            font-size: 3rem;
+            color: #94a3b8;
+            margin-bottom: 12px;
+            display: block;
+            transition: all 0.3s ease;
+        }
+
+        .drop-zone:hover i,
+        .drop-zone.dragover i {
+            color: #f8b81f;
+            transform: scale(1.1);
+        }
+
+        .drop-zone p {
+            font-weight: 600;
+            color: #0d3b66;
+            margin-bottom: 4px;
+        }
+
+        .drop-zone small {
+            color: #94a3b8;
+            font-size: 0.8rem;
+        }
+
+        /* PREVIEW */
+        .preview-info {
+            background: #f0f7ff;
+            border-radius: 12px;
+            padding: 16px 20px;
+            margin-bottom: 16px;
+            border-left: 4px solid #3b82f6;
+            display: none;
+        }
+
+        .preview-info.show { display: block; }
+
+        .preview-info h4 {
+            font-size: 0.9rem;
+            color: #0d3b66;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .preview-info .info-row {
+            display: flex;
+            gap: 20px;
+            font-size: 0.85rem;
+            color: #475569;
+            flex-wrap: wrap;
+        }
+
+        .preview-info .info-row strong { color: #0d3b66; }
+
+        /* TABELA PREVIEW */
+        .preview-table-wrapper {
+            max-height: 250px;
+            overflow: auto;
+            border-radius: 12px;
+            border: 1px solid #e8edf3;
+            margin-bottom: 16px;
+            display: none;
+        }
+
+        .preview-table-wrapper.show { display: block; }
+
+        .preview-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.75rem;
+        }
+
+        .preview-table th {
+            background: #0d3b66;
+            color: white;
+            padding: 10px 12px;
+            text-align: left;
+            font-weight: 600;
+            position: sticky;
+            top: 0;
+            z-index: 2;
+        }
+
+        .preview-table td {
+            padding: 8px 12px;
+            border-bottom: 1px solid #e8edf3;
+            color: #475569;
+        }
+
+        .preview-table tr:nth-child(even) { background: #fafcff; }
+        .preview-table tr:hover { background: #f0f7ff; }
+
+        /* BOTÕES */
+        .btn-group {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #0d3b66, #1a5276);
+            color: white;
+            box-shadow: 0 4px 16px rgba(13, 59, 102, 0.2);
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(13, 59, 102, 0.3);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            box-shadow: 0 4px 16px rgba(16, 185, 129, 0.2);
+        }
+
+        .btn-success:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(16, 185, 129, 0.3);
+        }
+
+        .btn-danger {
+            background: #ef4444;
+            color: white;
+        }
+
+        .btn-danger:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(239, 68, 68, 0.3);
+        }
+
+        .btn-back {
+            background: #e8edf3;
+            color: #1a2a3a;
+        }
+
+        .btn-back:hover:not(:disabled) {
+            background: #d5dce6;
+            transform: translateY(-2px);
+        }
+
+        /* FOOTER */
+        footer {
+            background: linear-gradient(135deg, #0a2a4a, #0d3b66);
+            color: white;
+            text-align: center;
+            padding: 28px;
+            margin-top: 48px;
+        }
+
+        footer p { opacity: 0.85; font-size: 0.9rem; }
+        footer i { color: #f8b81f; margin: 0 4px; }
+
+        /* RESPONSIVO */
+        @media (max-width: 768px) {
+            .stats-grid { grid-template-columns: 1fr; }
+            .section { padding: 20px; }
+            .btn { width: 100%; justify-content: center; }
+            .btn-group { flex-direction: column; }
+            .preview-info .info-row { flex-direction: column; gap: 6px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- HEADER -->
+    <div class="main-header">
+        <div class="header-container">
+            <div class="logo-area">
+                <img class="logo-img"
+                     src="https://drive.google.com/thumbnail?id=1gm3KfLFEXAfSmZyDNC0QXTq0Q7adSnT2"
+                     alt="Marine Fishing"
+                     onerror="this.src='https://placehold.co/300x100?text=MARINE'">
+                <div>
+                    <span class="brand-sub"><i class="fas fa-cog"></i> Painel Administrativo</span>
+                </div>
+            </div>
+            <div class="header-badge">
+                <i class="fas fa-shield-alt"></i> Projeto CJ
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+
+        <!-- STATS -->
+        <div class="stats-grid">
+            <div class="stat-card clientes">
+                <div class="stat-number" id="statClientes">0</div>
+                <div class="stat-label"><i class="fas fa-users"></i> Clientes</div>
+            </div>
+            <div class="stat-card produtos">
+                <div class="stat-number" id="statProdutos">0</div>
+                <div class="stat-label"><i class="fas fa-box"></i> Produtos</div>
+            </div>
+            <div class="stat-card garantias">
+                <div class="stat-number" id="statGarantias">0</div>
+                <div class="stat-label"><i class="fas fa-clipboard-list"></i> Chamados</div>
+            </div>
+        </div>
+
+        <!-- ===== IMPORTAR CLIENTES ===== -->
+        <div class="section">
+            <div class="section-title">
+                <i class="fas fa-users"></i> Importar Clientes
+            </div>
+            <div class="section-desc">
+                Faça upload da planilha <strong>CLIENTES.xlsx</strong>.
+                Colunas esperadas: <code>Código_cli</code>, <code>nome_cli</code>, <code>vendedor</code>.
+            </div>
+
+            <div class="drop-zone" id="dropClientes">
+                <i class="fas fa-cloud-upload-alt"></i>
+                <p>Arraste o arquivo aqui ou clique para selecionar</p>
+                <small>Apenas .xlsx ou .xls</small>
+                <input type="file" id="fileClientes" accept=".xlsx,.xls" style="display:none">
+            </div>
+
+            <div class="preview-info" id="previewClientes">
+                <h4><i class="fas fa-file-excel"></i> Pré-visualização</h4>
+                <div class="info-row">
+                    <span><strong>Arquivo:</strong> <span id="nomeArquivoClientes">—</span></span>
+                    <span><strong>Total de linhas:</strong> <span id="totalClientes">0</span></span>
+                </div>
+            </div>
+
+            <div class="preview-table-wrapper" id="tableClientes">
+                <table class="preview-table" id="tableClientesContent"></table>
+            </div>
+
+            <div class="btn-group">
+                <button class="btn btn-primary" id="btnImportarClientes" disabled>
+                    <i class="fas fa-file-import"></i> Importar Clientes
+                </button>
+                <button class="btn btn-back" onclick="resetarClientes()">
+                    <i class="fas fa-times"></i> Limpar
+                </button>
+                <button class="btn btn-danger" onclick="limparTabela('clientes_cj')">
+                    <i class="fas fa-trash"></i> Apagar Todos Clientes
+                </button>
+            </div>
+        </div>
+
+        <!-- ===== IMPORTAR PRODUTOS ===== -->
+        <div class="section">
+            <div class="section-title">
+                <i class="fas fa-box"></i> Importar Produtos
+            </div>
+            <div class="section-desc">
+                Faça upload da planilha <strong>Planilha de Produtos Gerais.xlsx</strong>.
+                Colunas esperadas: <code>Código</code>, <code>Código_CJ</code>, <code>Descrição - Casa Japon</code>.
+            </div>
+
+            <div class="drop-zone" id="dropProdutos">
+                <i class="fas fa-cloud-upload-alt"></i>
+                <p>Arraste o arquivo aqui ou clique para selecionar</p>
+                <small>Apenas .xlsx ou .xls</small>
+                <input type="file" id="fileProdutos" accept=".xlsx,.xls" style="display:none">
+            </div>
+
+            <div class="preview-info" id="previewProdutos">
+                <h4><i class="fas fa-file-excel"></i> Pré-visualização</h4>
+                <div class="info-row">
+                    <span><strong>Arquivo:</strong> <span id="nomeArquivoProdutos">—</span></span>
+                    <span><strong>Total de linhas:</strong> <span id="totalProdutos">0</span></span>
+                </div>
+            </div>
+
+            <div class="preview-table-wrapper" id="tableProdutos">
+                <table class="preview-table" id="tableProdutosContent"></table>
+            </div>
+
+            <div class="btn-group">
+                <button class="btn btn-success" id="btnImportarProdutos" disabled>
+                    <i class="fas fa-file-import"></i> Importar Produtos
+                </button>
+                <button class="btn btn-back" onclick="resetarProdutos()">
+                    <i class="fas fa-times"></i> Limpar
+                </button>
+                <button class="btn btn-danger" onclick="limparTabela('produtos_cj')">
+                    <i class="fas fa-trash"></i> Apagar Todos Produtos
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+    <footer>
+        <p><i class="fas fa-certificate"></i> Marine Fishing - Painel Admin</p>
+        <p style="font-size: 0.8rem; opacity: 0.6; margin-top: 6px;">Sistema de Garantia · CJ</p>
+    </footer>
+
+    <script>
+        // ================================================================
+        // CONFIG
+        // ================================================================
+        const API_URL = window.location.origin + '/api';
+
+        let dadosClientes = null;
+        let dadosProdutos = null;
+
+        // ================================================================
+        // CARREGAR ESTATÍSTICAS
+        // ================================================================
+        async function carregarStats() {
+            try {
+                const res = await fetch(`${API_URL}/admin/stats`);
+                const data = await res.json();
+                if (data.success) {
+                    document.getElementById('statClientes').textContent = data.clientes || 0;
+                    document.getElementById('statProdutos').textContent = data.produtos || 0;
+                    document.getElementById('statGarantias').textContent = data.garantias || 0;
+                }
+            } catch (e) {
+                console.error('Erro ao buscar stats:', e);
+            }
+        }
+
+        // ================================================================
+        // LER ARQUIVO XLSX
+        // ================================================================
+        function lerXLSX(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    try {
+                        const data = new Uint8Array(e.target.result);
+                        const workbook = XLSX.read(data, { type: 'array' });
+                        const sheetName = workbook.SheetNames[0];
+                        const sheet = workbook.Sheets[sheetName];
+                        const json = XLSX.utils.sheet_to_json(sheet);
+                        resolve(json);
+                    } catch (err) {
+                        reject(err);
+                    }
+                };
+                reader.onerror = reject;
+                reader.readAsArrayBuffer(file);
+            });
+        }
+
+        // ================================================================
+        // RENDERIZAR PREVIEW DA TABELA
+        // ================================================================
+        function renderPreview(containerId, dados, maxRows = 10) {
+            const container = document.getElementById(containerId);
+            if (!dados || dados.length === 0) {
+                container.innerHTML = '<tr><td>Sem dados</td></tr>';
+                return;
+            }
+
+            const colunas = Object.keys(dados[0]);
+            let html = '<thead><tr>';
+            colunas.forEach(col => {
+                html += `<th>${col}</th>`;
+            });
+            html += '</tr></thead><tbody>';
+
+            dados.slice(0, maxRows).forEach(row => {
+                html += '<tr>';
+                colunas.forEach(col => {
+                    const valor = row[col] !== undefined && row[col] !== null ? row[col] : '';
+                    html += `<td>${valor}</td>`;
+                });
+                html += '</tr>';
+            });
+
+            html += '</tbody>';
+            container.innerHTML = html;
+        }
+
+        // ================================================================
+        // CLIENTES
+        // ================================================================
+        const dropClientes = document.getElementById('dropClientes');
+        const fileClientes = document.getElementById('fileClientes');
+
+        dropClientes.addEventListener('click', () => fileClientes.click());
+
+        dropClientes.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropClientes.classList.add('dragover');
+        });
+
+        dropClientes.addEventListener('dragleave', () => {
+            dropClientes.classList.remove('dragover');
+        });
+
+        dropClientes.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropClientes.classList.remove('dragover');
+            if (e.dataTransfer.files.length) {
+                processarClientes(e.dataTransfer.files[0]);
+            }
+        });
+
+        fileClientes.addEventListener('change', (e) => {
+            if (e.target.files.length) {
+                processarClientes(e.target.files[0]);
+            }
+        });
+
+        async function processarClientes(file) {
+            try {
+                if (!file.name.match(/\.(xlsx|xls)$/i)) {
+                    Swal.fire('Erro', 'Envie apenas arquivos .xlsx ou .xls', 'error');
+                    return;
+                }
+
+                const dados = await lerXLSX(file);
+                dadosClientes = dados;
+
+                document.getElementById('nomeArquivoClientes').textContent = file.name;
+                document.getElementById('totalClientes').textContent = dados.length;
+                document.getElementById('previewClientes').classList.add('show');
+
+                renderPreview('tableClientesContent', dados);
+                document.getElementById('tableClientes').classList.add('show');
+                document.getElementById('btnImportarClientes').disabled = false;
+
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Arquivo carregado!',
+                    text: `${dados.length} linhas encontradas. Clique em "Importar Clientes" para confirmar.`,
+                    timer: 2500,
+                    showConfirmButton: false,
+                    toast: true,
+                    position: 'top'
+                });
+
+            } catch (e) {
+                console.error(e);
+                Swal.fire('Erro', 'Erro ao ler arquivo: ' + e.message, 'error');
+            }
+        }
+
+        document.getElementById('btnImportarClientes').addEventListener('click', async () => {
+            if (!dadosClientes || dadosClientes.length === 0) {
+                Swal.fire('Aviso', 'Nenhum dado carregado', 'warning');
+                return;
+            }
+
+            const btn = document.getElementById('btnImportarClientes');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Importando...';
+
+            try {
+                const res = await fetch(`${API_URL}/admin/importar-clientes`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ dados: dadosClientes })
+                });
+
+                const result = await res.json();
+
+                if (result.success) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: '✅ Clientes importados!',
+                        html: `
+                            <div style="text-align:left;">
+                                <p><strong>Inseridos:</strong> ${result.inseridos}</p>
+                                <p><strong>Atualizados:</strong> ${result.atualizados}</p>
+                                <p><strong>Ignorados:</strong> ${result.ignorados}</p>
+                                <p><strong>Total:</strong> ${result.total}</p>
+                            </div>
+                        `,
+                        confirmButtonText: 'OK',
+                        confirmButtonColor: '#10b981'
+                    });
+
+                    resetarClientes();
+                    carregarStats();
+                } else {
+                    Swal.fire('Erro', result.error || 'Erro ao importar', 'error');
+                }
+            } catch (e) {
+                Swal.fire('Erro', 'Erro na importação: ' + e.message, 'error');
+            }
+
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fas fa-file-import"></i> Importar Clientes';
+        });
+
+        function resetarClientes() {
+            dadosClientes = null;
+            document.getElementById('fileClientes').value = '';
+            document.getElementById('previewClientes').classList.remove('show');
+            document.getElementById('tableClientes').classList.remove('show');
+            document.getElementById('btnImportarClientes').disabled = true;
+        }
+
+        // ================================================================
+        // PRODUTOS
+        // ================================================================
+        const dropProdutos = document.getElementById('dropProdutos');
+        const fileProdutos = document.getElementById('fileProdutos');
+
+        dropProdutos.addEventListener('click', () => fileProdutos.click());
+
+        dropProdutos.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropProdutos.classList.add('dragover');
+        });
+
+        dropProdutos.addEventListener('dragleave', () => {
+            dropProdutos.classList.remove('dragover');
+        });
+
+        dropProdutos.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropProdutos.classList.remove('dragover');
+            if (e.dataTransfer.files.length) {
+                processarProdutos(e.dataTransfer.files[0]);
+            }
+        });
+
+        fileProdutos.addEventListener('change', (e) => {
+            if (e.target.files.length) {
+                processarProdutos(e.target.files[0]);
+            }
+        });
+
+        async function processarProdutos(file) {
+            try {
+                if (!file.name.match(/\.(xlsx|xls)$/i)) {
+                    Swal.fire('Erro', 'Envie apenas arquivos .xlsx ou .xls', 'error');
+                    return;
+                }
+
+                const dados = await lerXLSX(file);
+                dadosProdutos = dados;
+
+                document.getElementById('nomeArquivoProdutos').textContent = file.name;
+                document.getElementById('totalProdutos').textContent = dados.length;
+                document.getElementById('previewProdutos').classList.add('show');
+
+                renderPreview('tableProdutosContent', dados);
+                document.getElementById('tableProdutos').classList.add('show');
+                document.getElementById('btnImportarProdutos').disabled = false;
+
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Arquivo carregado!',
+                    text: `${dados.length} linhas encontradas.`,
+                    timer: 2500,
+                    showConfirmButton: false,
+                    toast: true,
+                    position: 'top'
+                });
+
+            } catch (e) {
+                console.error(e);
+                Swal.fire('Erro', 'Erro ao ler arquivo: ' + e.message, 'error');
+            }
+        }
+
+        document.getElementById('btnImportarProdutos').addEventListener('click', async () => {
+            if (!dadosProdutos || dadosProdutos.length === 0) {
+                Swal.fire('Aviso', 'Nenhum dado carregado', 'warning');
+                return;
+            }
+
+            const btn = document.getElementById('btnImportarProdutos');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Importando...';
+
+            try {
+                const res = await fetch(`${API_URL}/admin/importar-produtos`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ dados: dadosProdutos })
+                });
+
+                const result = await res.json();
+
+                if (result.success) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: '✅ Produtos importados!',
+                        html: `
+                            <div style="text-align:left;">
+                                <p><strong>Inseridos:</strong> ${result.inseridos}</p>
+                                <p><strong>Atualizados:</strong> ${result.atualizados}</p>
+                                <p><strong>Ignorados:</strong> ${result.ignorados}</p>
+                                <p><strong>Total:</strong> ${result.total}</p>
+                            </div>
+                        `,
+                        confirmButtonText: 'OK',
+                        confirmButtonColor: '#10b981'
+                    });
+
+                    resetarProdutos();
+                    carregarStats();
+                } else {
+                    Swal.fire('Erro', result.error || 'Erro ao importar', 'error');
+                }
+            } catch (e) {
+                Swal.fire('Erro', 'Erro na importação: ' + e.message, 'error');
+            }
+
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fas fa-file-import"></i> Importar Produtos';
+        });
+
+        function resetarProdutos() {
+            dadosProdutos = null;
+            document.getElementById('fileProdutos').value = '';
+            document.getElementById('previewProdutos').classList.remove('show');
+            document.getElementById('tableProdutos').classList.remove('show');
+            document.getElementById('btnImportarProdutos').disabled = true;
+        }
+
+        // ================================================================
+        // LIMPAR TABELA
+        // ================================================================
+        async function limparTabela(tabela) {
+            const nome = tabela === 'clientes_cj' ? 'clientes' : 'produtos';
+
+            const confirm = await Swal.fire({
+                title: '⚠️ Tem certeza?',
+                text: `Todos os ${nome} serão apagados permanentemente!`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Sim, apagar',
+                cancelButtonText: 'Cancelar',
+                confirmButtonColor: '#ef4444',
+                cancelButtonColor: '#6b7a8a'
+            });
+
+            if (!confirm.isConfirmed) return;
+
+            try {
+                const res = await fetch(`${API_URL}/admin/limpar/${tabela}`, { method: 'DELETE' });
+                const result = await res.json();
+
+                if (result.success) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Apagado!',
+                        text: result.mensagem,
+                        timer: 2000,
+                        showConfirmButton: false,
+                        toast: true,
+                        position: 'top'
+                    });
+                    carregarStats();
+                } else {
+                    Swal.fire('Erro', result.error, 'error');
+                }
+            } catch (e) {
+                Swal.fire('Erro', e.message, 'error');
+            }
+        }
+
+        // ================================================================
+        // INICIALIZAÇÃO
+        // ================================================================
+        carregarStats();
+        setInterval(carregarStats, 15000);
+    </script>
+
+</body>
+</html>
