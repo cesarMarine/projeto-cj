@@ -719,19 +719,19 @@
 
             <!-- SUB-ABAS (EMPRESAS) -->
             <div class="subtabs" id="subtabs">
-                <button class="subtab-btn marine active" onclick="mudarSubAba('MARINE', this)">
-                    <i class="fas fa-fish"></i> MARINE BR
-                    <span class="count-badge" id="badge-marine">0</span>
-                </button>
-                <button class="subtab-btn casajapon" onclick="mudarSubAba('CJ', this)">
-                    <i class="fas fa-store"></i> CASA JAPON
-                    <span class="count-badge" id="badge-cj">0</span>
-                </button>
-                <button class="subtab-btn geral" onclick="mudarSubAba('GERAL', this)">
-                    <i class="fas fa-globe"></i> GERAL
-                    <span class="count-badge" id="badge-geral">0</span>
-                </button>
-            </div>
+    <button class="subtab-btn casajapon active" onclick="mudarSubAba('CJ', this)">
+        <i class="fas fa-store"></i> CASA JAPON
+        <span class="count-badge" id="badge-cj">0</span>
+    </button>
+    <button class="subtab-btn marine" onclick="mudarSubAba('MARINE', this)">
+        <i class="fas fa-fish"></i> MARINE BR
+        <span class="count-badge" id="badge-marine">0</span>
+    </button>
+    <button class="subtab-btn geral" onclick="mudarSubAba('GERAL', this)">
+        <i class="fas fa-globe"></i> GERAL
+        <span class="count-badge" id="badge-geral">0</span>
+    </button>
+</div>
 
             <!-- FILTROS -->
             <div class="section">
@@ -860,7 +860,7 @@
         let ordenacao = { campo: 'data_criacao', direcao: 'desc' };
         let dadosExcelClientes = [];
         let dadosExcelProdutos = [];
-        let subAbaAtual = 'MARINE';   // MARINE | CJ | GERAL
+        let subAbaAtual = 'CJ';   // MARINE | CJ | GERAL
 
         // ================================================================
         // ABAS

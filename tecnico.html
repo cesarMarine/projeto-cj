@@ -805,16 +805,16 @@
     <div class="container">
 
         <!-- SUB-ABAS (EMPRESAS) -->
-        <div class="subtabs">
-            <button class="subtab-btn marine active" onclick="mudarSubAba('MARINE', this)">
-                <i class="fas fa-fish"></i> MARINE BR
-                <span class="count-badge" id="badge-marine">0</span>
-            </button>
-            <button class="subtab-btn casajapon" onclick="mudarSubAba('CJ', this)">
-                <i class="fas fa-store"></i> CASA JAPON
-                <span class="count-badge" id="badge-cj">0</span>
-            </button>
-        </div>
+<div class="subtabs">
+    <button class="subtab-btn casajapon active" onclick="mudarSubAba('CJ', this)">
+        <i class="fas fa-store"></i> CASA JAPON
+        <span class="count-badge" id="badge-cj">0</span>
+    </button>
+    <button class="subtab-btn marine" onclick="mudarSubAba('MARINE', this)">
+        <i class="fas fa-fish"></i> MARINE BR
+        <span class="count-badge" id="badge-marine">0</span>
+    </button>
+</div>
 
         <!-- FILTROS -->
         <div class="filtros-section">
@@ -932,7 +932,7 @@
         let chamadosAtuais = [];
         let chamadoSelecionado = null;
         let filtroStatusAtual = '';
-        let subAbaAtual = 'MARINE';   // MARINE | CJ
+       let subAbaAtual = 'CJ';   // MARINE | CJ
 
         function renderVendedores() {
             const select = document.getElementById('filtroVendedor');
