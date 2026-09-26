@@ -350,6 +350,7 @@ app.get('/api/garantia/verificar-produto/:codigo', async (req, res) => {
 // ================================================================
 
 // Criar novo chamado
+// Criar novo chamado
 app.post('/api/garantia/novo', async (req, res) => {
     try {
         const db = await openDb();
@@ -368,8 +369,8 @@ app.post('/api/garantia/novo', async (req, res) => {
                 protocolo, vendedor, id_cliente, cliente_nome, vendedor_cliente,
                 produto, codigo_produto, descricao_produto, nota_marine,
                 teste_receber, teste_venda, tempo_uso,
-                descricao_defeito, capacidade_loja, status
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'Pendente')
+                descricao_defeito, capacidade_loja, status, origem
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'Pendente', 'CJ')
         `, [
             protocolo,
             dados.vendedor,
@@ -399,7 +400,6 @@ app.post('/api/garantia/novo', async (req, res) => {
         res.status(500).json({ success: false, error: error.message });
     }
 });
-
 // Listar chamados de um vendedor
 app.get('/api/garantia/vendedor/:vendedor', async (req, res) => {
     try {
@@ -425,27 +425,37 @@ app.get('/api/garantia/vendedor/:vendedor', async (req, res) => {
 });
 
 // Listar todos os chamados (técnico)
+// Listar todos os chamados (técnico) - aceita filtro por origem
 app.get('/api/garantia/todos', async (req, res) => {
     try {
         const db = await openDb();
+        const { origem } = req.query; // 'CJ' ou 'MARINE' (ou vazio pra todos)
 
-        const chamados = await db.all(`
+        let sql = `
             SELECT 
                 id, protocolo, vendedor, id_cliente, cliente_nome, vendedor_cliente,
-                produto, codigo_produto, nota_marine, status,
-                data_criacao,
-                decisao_tecnico, conversa,
-                reaberto, reaberto_em, motivo_reabertura
+                produto, codigo_produto, descricao_produto, nota_marine, status,
+                data_criacao, decisao_tecnico, conversa,
+                reaberto, reaberto_em, motivo_reabertura, origem
             FROM chamados_cj
-            ORDER BY data_criacao DESC
-        `);
+        `;
+        let params = [];
+
+        if (origem === 'CJ') {
+            sql += ` WHERE origem = 'CJ'`;
+        } else if (origem === 'MARINE') {
+            sql += ` WHERE (origem IS NULL OR origem != 'CJ')`;
+        }
+
+        sql += ` ORDER BY data_criacao DESC`;
+
+        const chamados = await db.all(sql, params);
 
         res.json({ success: true, chamados });
     } catch (error) {
         res.status(500).json({ success: false, error: error.message });
     }
 });
-
 // Buscar detalhes de um chamado
 app.get('/api/garantia/detalhe/:protocolo', async (req, res) => {
     try {
@@ -667,55 +677,44 @@ app.get('/api/admin/relatorio-chamados', async (req, res) => {
     try {
         const db = await openDb();
 
-        // Filtros dinâmicos via query string
         const {
-            vendedor,        // vendedor que abriu
-            status,          // Pendente / Em Análise / Aprovado / Recusado
-            data_inicio,     // YYYY-MM-DD
-            data_fim,        // YYYY-MM-DD
-            busca,           // busca livre (protocolo, cliente, produto, código)
-            produto,         // filtro por produto específico
-            cliente,         // filtro por ID cliente
+            vendedor, status, data_inicio, data_fim, busca, produto, cliente,
+            origem  // 'CJ', 'MARINE' ou vazio
         } = req.query;
 
-        // 1. Busca todos os chamados
-        const chamados = await db.all(`
+        let sql = `
             SELECT 
-                id,
-                protocolo,
-                vendedor,
-                id_cliente,
-                cliente_nome,
-                vendedor_cliente,
-                produto,
-                codigo_produto,
-                descricao_produto,
-                nota_marine,
-                teste_receber,
-                teste_venda,
-                tempo_uso,
-                descricao_defeito,
-                capacidade_loja,
-                status,
-                decisao_tecnico,
-                reaberto,
-                reaberto_em,
-                motivo_reabertura,
-                data_criacao,
-                data_atualizacao
+                id, protocolo, vendedor, id_cliente, cliente_nome, vendedor_cliente,
+                cidade_uf, produto, codigo_produto, descricao_produto, nota_marine,
+                teste_receber, teste_venda, tempo_uso, descricao_defeito,
+                capacidade_loja, status, decisao_tecnico,
+                reaberto, reaberto_em, motivo_reabertura,
+                data_criacao, data_atualizacao, origem
             FROM chamados_cj
-            ORDER BY data_criacao DESC
-        `);
+        `;
 
-        // 2. Aplica filtros em memória (mais flexível que SQL dinâmico)
+        const wheres = [];
+        const params = [];
+
+        if (origem === 'CJ') {
+            wheres.push(`origem = 'CJ'`);
+        } else if (origem === 'MARINE') {
+            wheres.push(`(origem IS NULL OR origem != 'CJ')`);
+        }
+
+        if (wheres.length) {
+            sql += ' WHERE ' + wheres.join(' AND ');
+        }
+
+        sql += ` ORDER BY data_criacao DESC`;
+
+        const chamados = await db.all(sql, params);
+
+        // Filtros em memória
         let filtrados = chamados;
 
-        if (vendedor) {
-            filtrados = filtrados.filter(c => c.vendedor === vendedor);
-        }
-        if (status) {
-            filtrados = filtrados.filter(c => c.status === status);
-        }
+        if (vendedor) filtrados = filtrados.filter(c => c.vendedor === vendedor);
+        if (status) filtrados = filtrados.filter(c => c.status === status);
         if (produto) {
             const p = produto.toLowerCase();
             filtrados = filtrados.filter(c =>
@@ -723,15 +722,9 @@ app.get('/api/admin/relatorio-chamados', async (req, res) => {
                 (c.descricao_produto || '').toLowerCase().includes(p)
             );
         }
-        if (cliente) {
-            filtrados = filtrados.filter(c => String(c.id_cliente) === String(cliente));
-        }
-        if (data_inicio) {
-            filtrados = filtrados.filter(c => c.data_criacao && c.data_criacao.slice(0, 10) >= data_inicio);
-        }
-        if (data_fim) {
-            filtrados = filtrados.filter(c => c.data_criacao && c.data_criacao.slice(0, 10) <= data_fim);
-        }
+        if (cliente) filtrados = filtrados.filter(c => String(c.id_cliente) === String(cliente));
+        if (data_inicio) filtrados = filtrados.filter(c => c.data_criacao && c.data_criacao.slice(0, 10) >= data_inicio);
+        if (data_fim) filtrados = filtrados.filter(c => c.data_criacao && c.data_criacao.slice(0, 10) <= data_fim);
         if (busca) {
             const b = busca.toLowerCase();
             filtrados = filtrados.filter(c =>
@@ -744,18 +737,13 @@ app.get('/api/admin/relatorio-chamados', async (req, res) => {
             );
         }
 
-        res.json({
-            success: true,
-            total: filtrados.length,
-            chamados: filtrados
-        });
+        res.json({ success: true, total: filtrados.length, chamados: filtrados });
 
     } catch (error) {
         console.error('❌ Erro no relatório:', error);
         res.status(500).json({ success: false, error: error.message });
     }
 });
-
 // ================================================================
 // 🗑️ ADMIN - LIMPAR TABELAS
 // ================================================================

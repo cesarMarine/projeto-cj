@@ -18,7 +18,6 @@
             min-height: 100vh;
         }
 
-        /* HEADER */
         .main-header {
             background: linear-gradient(135deg, #0a2a4a 0%, #0d3b66 100%);
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
@@ -35,11 +34,7 @@
             gap: 16px;
         }
 
-        .logo-area {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-        }
+        .logo-area { display: flex; align-items: center; gap: 16px; }
 
         .logo-img {
             height: 55px;
@@ -49,12 +44,7 @@
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
         }
 
-        .brand-sub {
-            color: #ffffff;
-            font-size: 0.85rem;
-            opacity: 0.9;
-        }
-
+        .brand-sub { color: #ffffff; font-size: 0.85rem; opacity: 0.9; }
         .brand-sub i { color: #f8b81f; margin-right: 4px; }
 
         .header-badge {
@@ -72,18 +62,13 @@
 
         .header-badge i { color: #f8b81f; }
 
-        /* CONTAINER */
-        .container {
-            max-width: 1400px;
-            margin: 32px auto;
-            padding: 0 24px;
-        }
+        .container { max-width: 1400px; margin: 32px auto; padding: 0 24px; }
 
-        /* ABAS */
+        /* ABAS PRINCIPAIS */
         .tabs {
             display: flex;
             gap: 8px;
-            margin-bottom: 24px;
+            margin-bottom: 16px;
             background: white;
             padding: 8px;
             border-radius: 60px;
@@ -108,9 +93,7 @@
             gap: 8px;
         }
 
-        .tab-btn:hover {
-            background: #f0f4f8;
-        }
+        .tab-btn:hover { background: #f0f4f8; }
 
         .tab-btn.active {
             background: linear-gradient(135deg, #0d3b66, #1a5276);
@@ -118,19 +101,64 @@
             box-shadow: 0 4px 16px rgba(13, 59, 102, 0.2);
         }
 
-        .tab-content {
-            display: none;
-        }
-
-        .tab-content.active {
-            display: block;
-            animation: fadeIn 0.4s ease;
-        }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; animation: fadeIn 0.4s ease; }
 
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
+
+        /* SUB-ABAS (empresas) */
+        .subtabs {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 20px;
+            padding: 6px;
+            background: #f8fafc;
+            border-radius: 50px;
+            border: 2px solid #e8edf3;
+            width: fit-content;
+            flex-wrap: wrap;
+        }
+
+        .subtab-btn {
+            background: transparent;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 40px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #6b7a8a;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .subtab-btn:hover { background: white; }
+
+        .subtab-btn.active {
+            background: white;
+            color: #0d3b66;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .subtab-btn.marine.active { background: #dbeafe; color: #1e40af; }
+        .subtab-btn.casajapon.active { background: #fef3c7; color: #92400e; }
+        .subtab-btn.geral.active { background: #0d3b66; color: white; }
+
+        .subtab-btn .count-badge {
+            background: rgba(0, 0, 0, 0.08);
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 0.7rem;
+            font-weight: 700;
+        }
+
+        .subtab-btn.active .count-badge { background: rgba(255, 255, 255, 0.3); }
 
         /* SECTION */
         .section {
@@ -153,11 +181,7 @@
 
         .section-title i { color: #f8b81f; }
 
-        .section-desc {
-            font-size: 0.85rem;
-            color: #6b7a8a;
-            margin-bottom: 20px;
-        }
+        .section-desc { font-size: 0.85rem; color: #6b7a8a; margin-bottom: 20px; }
 
         /* DROP ZONE */
         .drop-zone {
@@ -171,8 +195,7 @@
             margin-bottom: 16px;
         }
 
-        .drop-zone:hover,
-        .drop-zone.dragover {
+        .drop-zone:hover, .drop-zone.dragover {
             border-color: #f8b81f;
             background: #fffcf0;
             transform: scale(1.01);
@@ -186,22 +209,13 @@
             transition: all 0.3s ease;
         }
 
-        .drop-zone:hover i,
-        .drop-zone.dragover i {
+        .drop-zone:hover i, .drop-zone.dragover i {
             color: #f8b81f;
             transform: scale(1.1);
         }
 
-        .drop-zone p {
-            font-weight: 600;
-            color: #0d3b66;
-            margin-bottom: 4px;
-        }
-
-        .drop-zone small {
-            color: #94a3b8;
-            font-size: 0.8rem;
-        }
+        .drop-zone p { font-weight: 600; color: #0d3b66; margin-bottom: 4px; }
+        .drop-zone small { color: #94a3b8; font-size: 0.8rem; }
 
         /* PREVIEW */
         .preview-info {
@@ -245,11 +259,7 @@
 
         .preview-table-wrapper.show { display: block; }
 
-        .preview-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.75rem;
-        }
+        .preview-table { width: 100%; border-collapse: collapse; font-size: 0.75rem; }
 
         .preview-table th {
             background: #0d3b66;
@@ -272,11 +282,7 @@
         .preview-table tr:hover { background: #f0f7ff; }
 
         /* BOTÕES */
-        .btn-group {
-            display: flex;
-            gap: 12px;
-            flex-wrap: wrap;
-        }
+        .btn-group { display: flex; gap: 12px; flex-wrap: wrap; }
 
         .btn {
             padding: 12px 24px;
@@ -292,11 +298,7 @@
             font-family: 'Inter', sans-serif;
         }
 
-        .btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            transform: none !important;
-        }
+        .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none !important; }
 
         .btn-primary {
             background: linear-gradient(135deg, #0d3b66, #1a5276);
@@ -304,10 +306,7 @@
             box-shadow: 0 4px 16px rgba(13, 59, 102, 0.2);
         }
 
-        .btn-primary:hover:not(:disabled) {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 24px rgba(13, 59, 102, 0.3);
-        }
+        .btn-primary:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(13, 59, 102, 0.3); }
 
         .btn-success {
             background: linear-gradient(135deg, #10b981, #059669);
@@ -315,32 +314,15 @@
             box-shadow: 0 4px 16px rgba(16, 185, 129, 0.2);
         }
 
-        .btn-success:hover:not(:disabled) {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 24px rgba(16, 185, 129, 0.3);
-        }
+        .btn-success:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(16, 185, 129, 0.3); }
 
-        .btn-danger {
-            background: #ef4444;
-            color: white;
-        }
+        .btn-danger { background: #ef4444; color: white; }
+        .btn-danger:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(239, 68, 68, 0.3); }
 
-        .btn-danger:hover:not(:disabled) {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 24px rgba(239, 68, 68, 0.3);
-        }
+        .btn-back { background: #e8edf3; color: #1a2a3a; }
+        .btn-back:hover:not(:disabled) { background: #d5dce6; transform: translateY(-2px); }
 
-        .btn-back {
-            background: #e8edf3;
-            color: #1a2a3a;
-        }
-
-        .btn-back:hover:not(:disabled) {
-            background: #d5dce6;
-            transform: translateY(-2px);
-        }
-
-        /* ============ RELATÓRIO ============ */
+        /* RELATÓRIO */
         .relatorio-filtros {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
@@ -348,9 +330,7 @@
             margin-bottom: 20px;
         }
 
-        .relatorio-filtros .form-group {
-            margin-bottom: 0;
-        }
+        .relatorio-filtros .form-group { margin-bottom: 0; }
 
         .relatorio-filtros .form-group label {
             font-size: 0.7rem;
@@ -402,27 +382,13 @@
             user-select: none;
         }
 
-        .agregacao-toggle:hover {
-            border-color: #f8b81f;
-            background: #fffcf0;
-        }
+        .agregacao-toggle:hover { border-color: #f8b81f; background: #fffcf0; }
 
-        .agregacao-toggle.active {
-            background: #0d3b66;
-            border-color: #0d3b66;
-            color: white;
-        }
+        .agregacao-toggle.active { background: #0d3b66; border-color: #0d3b66; color: white; }
 
-        .agregacao-toggle input {
-            cursor: pointer;
-        }
+        .agregacao-toggle input { cursor: pointer; }
+        .agregacao-toggle .label { font-size: 0.85rem; font-weight: 600; }
 
-        .agregacao-toggle .label {
-            font-size: 0.85rem;
-            font-weight: 600;
-        }
-
-        /* RESUMO */
         .resumo-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
@@ -437,20 +403,8 @@
             border-left: 4px solid #0d3b66;
         }
 
-        .resumo-card .num {
-            font-size: 1.6rem;
-            font-weight: 800;
-            color: #0d3b66;
-            line-height: 1.1;
-        }
-
-        .resumo-card .lab {
-            font-size: 0.65rem;
-            color: #6b7a8a;
-            text-transform: uppercase;
-            font-weight: 600;
-            margin-top: 4px;
-        }
+        .resumo-card .num { font-size: 1.6rem; font-weight: 800; color: #0d3b66; line-height: 1.1; }
+        .resumo-card .lab { font-size: 0.65rem; color: #6b7a8a; text-transform: uppercase; font-weight: 600; margin-top: 4px; }
 
         .resumo-card.pendente { border-left-color: #f59e0b; }
         .resumo-card.pendente .num { color: #f59e0b; }
@@ -461,7 +415,6 @@
         .resumo-card.recusado { border-left-color: #ef4444; }
         .resumo-card.recusado .num { color: #ef4444; }
 
-        /* TABELA RELATÓRIO */
         .relatorio-tabela-wrapper {
             overflow-x: auto;
             border-radius: 12px;
@@ -469,11 +422,7 @@
             max-height: 600px;
         }
 
-        .relatorio-tabela {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.8rem;
-        }
+        .relatorio-tabela { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
 
         .relatorio-tabela th {
             background: #0d3b66;
@@ -492,19 +441,9 @@
             white-space: nowrap;
         }
 
-        .relatorio-tabela th:hover {
-            background: #1a5276;
-        }
-
-        .relatorio-tabela th .sort-icon {
-            opacity: 0.4;
-            margin-left: 4px;
-            font-size: 0.6rem;
-        }
-
-        .relatorio-tabela th.sorted .sort-icon {
-            opacity: 1;
-        }
+        .relatorio-tabela th:hover { background: #1a5276; }
+        .relatorio-tabela th .sort-icon { opacity: 0.4; margin-left: 4px; font-size: 0.6rem; }
+        .relatorio-tabela th.sorted .sort-icon { opacity: 1; }
 
         .relatorio-tabela td {
             padding: 10px 14px;
@@ -537,16 +476,8 @@
             text-transform: uppercase;
         }
 
-        .badge-alerta.amarelo {
-            background: #fef3c7;
-            color: #92400e;
-        }
-
-        .badge-alerta.vermelho {
-            background: #fecaca;
-            color: #991b1b;
-            animation: pulse-alerta 1.5s infinite;
-        }
+        .badge-alerta.amarelo { background: #fef3c7; color: #92400e; }
+        .badge-alerta.vermelho { background: #fecaca; color: #991b1b; animation: pulse-alerta 1.5s infinite; }
 
         @keyframes pulse-alerta {
             0%, 100% { opacity: 1; }
@@ -567,7 +498,19 @@
         .status-Recusado { background: #fecaca; color: #991b1b; }
         .status-reaberto { background: #ede9fe; color: #5b21b6; }
 
-        /* MODAL DETALHE DO CHAMADO */
+        .origem-badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 0.55rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .origem-cj { background: #fef3c7; color: #92400e; }
+        .origem-marine { background: #dbeafe; color: #1e40af; }
+
+        /* MODAL */
         .modal-overlay {
             display: none;
             position: fixed;
@@ -607,10 +550,7 @@
             transition: all 0.2s;
         }
 
-        .modal-content .btn-fechar:hover {
-            background: #ef4444;
-            color: white;
-        }
+        .modal-content .btn-fechar:hover { background: #ef4444; color: white; }
 
         .modal-content h2 {
             font-size: 1.3rem;
@@ -618,9 +558,7 @@
             margin-bottom: 16px;
         }
 
-        .modal-content .campo {
-            margin-bottom: 12px;
-        }
+        .modal-content .campo { margin-bottom: 12px; }
 
         .modal-content .campo .label {
             font-size: 0.65rem;
@@ -636,7 +574,6 @@
             font-size: 0.95rem;
         }
 
-        /* FOOTER */
         footer {
             background: linear-gradient(135deg, #0a2a4a, #0d3b66);
             color: white;
@@ -648,7 +585,6 @@
         footer p { opacity: 0.85; font-size: 0.9rem; }
         footer i { color: #f8b81f; margin: 0 4px; }
 
-        /* RESPONSIVO */
         @media (max-width: 768px) {
             .section { padding: 20px; }
             .btn { width: 100%; justify-content: center; }
@@ -656,12 +592,13 @@
             .relatorio-filtros { grid-template-columns: 1fr; }
             .relatorio-acoes { flex-direction: column; align-items: stretch; }
             .modal-content { padding: 20px; }
+            .subtabs { width: 100%; }
+            .subtab-btn { flex: 1; justify-content: center; padding: 10px 12px; font-size: 0.75rem; }
         }
     </style>
 </head>
 <body>
 
-    <!-- HEADER -->
     <div class="main-header">
         <div class="header-container">
             <div class="logo-area">
@@ -681,7 +618,7 @@
 
     <div class="container">
 
-        <!-- ABAS -->
+        <!-- ABAS PRINCIPAIS -->
         <div class="tabs">
             <button class="tab-btn active" onclick="mudarAba('importacao', this)">
                 <i class="fas fa-file-import"></i> Importação
@@ -694,7 +631,6 @@
         <!-- ==================== ABA 1: IMPORTAÇÃO ==================== -->
         <div class="tab-content active" id="tab-importacao">
 
-            <!-- IMPORTAR CLIENTES -->
             <div class="section">
                 <div class="section-title">
                     <i class="fas fa-users"></i> Importar Clientes
@@ -736,7 +672,6 @@
                 </div>
             </div>
 
-            <!-- IMPORTAR PRODUTOS -->
             <div class="section">
                 <div class="section-title">
                     <i class="fas fa-box"></i> Importar Produtos
@@ -782,6 +717,22 @@
         <!-- ==================== ABA 2: RELATÓRIO ==================== -->
         <div class="tab-content" id="tab-relatorio">
 
+            <!-- SUB-ABAS (EMPRESAS) -->
+            <div class="subtabs" id="subtabs">
+                <button class="subtab-btn marine active" onclick="mudarSubAba('MARINE', this)">
+                    <i class="fas fa-fish"></i> MARINE BR
+                    <span class="count-badge" id="badge-marine">0</span>
+                </button>
+                <button class="subtab-btn casajapon" onclick="mudarSubAba('CJ', this)">
+                    <i class="fas fa-store"></i> CASA JAPON
+                    <span class="count-badge" id="badge-cj">0</span>
+                </button>
+                <button class="subtab-btn geral" onclick="mudarSubAba('GERAL', this)">
+                    <i class="fas fa-globe"></i> GERAL
+                    <span class="count-badge" id="badge-geral">0</span>
+                </button>
+            </div>
+
             <!-- FILTROS -->
             <div class="section">
                 <div class="section-title">
@@ -793,7 +744,7 @@
 
                 <div class="relatorio-filtros">
                     <div class="form-group">
-                        <label>Vendedor (chamado)</label>
+                        <label>Vendedor</label>
                         <select id="rel-filtro-vendedor">
                             <option value="">Todos</option>
                         </select>
@@ -854,7 +805,6 @@
                 </div>
             </div>
 
-            <!-- RESUMO -->
             <div class="section" id="resumoSection" style="display:none;">
                 <div class="section-title">
                     <i class="fas fa-chart-pie"></i> Resumo
@@ -862,7 +812,6 @@
                 <div class="resumo-grid" id="resumoGrid"></div>
             </div>
 
-            <!-- TABELA -->
             <div class="section">
                 <div class="section-title">
                     <i class="fas fa-table"></i> Chamados
@@ -888,7 +837,6 @@
 
     </div><!-- /container -->
 
-    <!-- MODAL DETALHE -->
     <div class="modal-overlay" id="modalDetalhe" onclick="fecharModal(event)">
         <div class="modal-content" onclick="event.stopPropagation()">
             <button class="btn-fechar" onclick="fecharModal()"><i class="fas fa-times"></i></button>
@@ -897,7 +845,6 @@
         </div>
     </div>
 
-    <!-- FOOTER -->
     <footer>
         <p><i class="fas fa-fish"></i> Marine Fishing <i class="fas fa-fish"></i> — Projeto CJ © 2025</p>
     </footer>
@@ -906,13 +853,14 @@
         // ================================================================
         // ESTADO GLOBAL
         // ================================================================
-        let chamadosOriginais = [];
-        let chamadosFiltrados = [];
-        let chamadosVisiveis = [];
+        let chamadosOriginais = [];   // todos (carregados uma vez)
+        let chamadosFiltrados = [];   // após filtro de empresa + campos
+        let chamadosVisiveis = [];    // após agregação
         let agregarAtivo = false;
         let ordenacao = { campo: 'data_criacao', direcao: 'desc' };
         let dadosExcelClientes = [];
         let dadosExcelProdutos = [];
+        let subAbaAtual = 'MARINE';   // MARINE | CJ | GERAL
 
         // ================================================================
         // ABAS
@@ -929,16 +877,33 @@
         }
 
         // ================================================================
+        // SUB-ABAS (empresas)
+        // ================================================================
+        function mudarSubAba(empresa, btn) {
+            subAbaAtual = empresa;
+            document.querySelectorAll('.subtab-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            aplicarFiltros();
+        }
+
+        function atualizarBadges() {
+            const marine = chamadosOriginais.filter(c => !c.origem || c.origem !== 'CJ').length;
+            const cj = chamadosOriginais.filter(c => c.origem === 'CJ').length;
+            const geral = chamadosOriginais.length;
+
+            document.getElementById('badge-marine').textContent = marine;
+            document.getElementById('badge-cj').textContent = cj;
+            document.getElementById('badge-geral').textContent = geral;
+        }
+
+        // ================================================================
         // IMPORTAÇÃO - CLIENTES
         // ================================================================
         const dropClientes = document.getElementById('dropClientes');
         const fileClientes = document.getElementById('fileClientes');
 
         dropClientes.addEventListener('click', () => fileClientes.click());
-        dropClientes.addEventListener('dragover', e => {
-            e.preventDefault();
-            dropClientes.classList.add('dragover');
-        });
+        dropClientes.addEventListener('dragover', e => { e.preventDefault(); dropClientes.classList.add('dragover'); });
         dropClientes.addEventListener('dragleave', () => dropClientes.classList.remove('dragover'));
         dropClientes.addEventListener('drop', e => {
             e.preventDefault();
@@ -956,23 +921,17 @@
                 const workbook = XLSX.read(data, { type: 'array' });
                 const sheet = workbook.Sheets[workbook.SheetNames[0]];
                 const json = XLSX.utils.sheet_to_json(sheet, { defval: '' });
-
                 dadosExcelClientes = json;
-
                 document.getElementById('nomeArquivoClientes').textContent = file.name;
                 document.getElementById('totalClientes').textContent = json.length;
                 document.getElementById('previewClientes').classList.add('show');
-
                 const preview = json.slice(0, 5);
                 const colunas = Object.keys(json[0] || {});
                 let html = '<thead><tr>' + colunas.map(c => `<th>${c}</th>`).join('') + '</tr></thead><tbody>';
-                preview.forEach(row => {
-                    html += '<tr>' + colunas.map(c => `<td>${row[c]}</td>`).join('') + '</tr>';
-                });
+                preview.forEach(row => { html += '<tr>' + colunas.map(c => `<td>${row[c]}</td>`).join('') + '</tr>'; });
                 html += '</tbody>';
                 document.getElementById('tableClientesContent').innerHTML = html;
                 document.getElementById('tableClientes').classList.add('show');
-
                 document.getElementById('btnImportarClientes').disabled = false;
             };
             reader.readAsArrayBuffer(file);
@@ -980,11 +939,9 @@
 
         document.getElementById('btnImportarClientes').addEventListener('click', async () => {
             if (!dadosExcelClientes.length) return;
-
             const btn = document.getElementById('btnImportarClientes');
             btn.disabled = true;
             btn.innerHTML = '<i class="fas fa-spinner fa-pulse"></i> Importando...';
-
             try {
                 const resp = await fetch('/api/admin/importar-clientes', {
                     method: 'POST',
@@ -992,25 +949,12 @@
                     body: JSON.stringify({ dados: dadosExcelClientes })
                 });
                 const result = await resp.json();
-
                 if (result.success) {
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Clientes importados!',
-                        text: `${result.total || dadosExcelClientes.length} registros processados.`,
-                        timer: 2500,
-                        showConfirmButton: false
-                    });
+                    Swal.fire({ icon: 'success', title: 'Clientes importados!', text: `${result.total || dadosExcelClientes.length} registros processados.`, timer: 2500, showConfirmButton: false });
                     resetarClientes();
-                } else {
-                    throw new Error(result.error || 'Erro desconhecido');
-                }
-            } catch (err) {
-                Swal.fire('Erro', err.message, 'error');
-            } finally {
-                btn.disabled = false;
-                btn.innerHTML = '<i class="fas fa-file-import"></i> Importar Clientes';
-            }
+                } else throw new Error(result.error || 'Erro desconhecido');
+            } catch (err) { Swal.fire('Erro', err.message, 'error'); }
+            finally { btn.disabled = false; btn.innerHTML = '<i class="fas fa-file-import"></i> Importar Clientes'; }
         });
 
         function resetarClientes() {
@@ -1028,10 +972,7 @@
         const fileProdutos = document.getElementById('fileProdutos');
 
         dropProdutos.addEventListener('click', () => fileProdutos.click());
-        dropProdutos.addEventListener('dragover', e => {
-            e.preventDefault();
-            dropProdutos.classList.add('dragover');
-        });
+        dropProdutos.addEventListener('dragover', e => { e.preventDefault(); dropProdutos.classList.add('dragover'); });
         dropProdutos.addEventListener('dragleave', () => dropProdutos.classList.remove('dragover'));
         dropProdutos.addEventListener('drop', e => {
             e.preventDefault();
@@ -1049,23 +990,17 @@
                 const workbook = XLSX.read(data, { type: 'array' });
                 const sheet = workbook.Sheets[workbook.SheetNames[0]];
                 const json = XLSX.utils.sheet_to_json(sheet, { defval: '' });
-
                 dadosExcelProdutos = json;
-
                 document.getElementById('nomeArquivoProdutos').textContent = file.name;
                 document.getElementById('totalProdutos').textContent = json.length;
                 document.getElementById('previewProdutos').classList.add('show');
-
                 const preview = json.slice(0, 5);
                 const colunas = Object.keys(json[0] || {});
                 let html = '<thead><tr>' + colunas.map(c => `<th>${c}</th>`).join('') + '</tr></thead><tbody>';
-                preview.forEach(row => {
-                    html += '<tr>' + colunas.map(c => `<td>${row[c]}</td>`).join('') + '</tr>';
-                });
+                preview.forEach(row => { html += '<tr>' + colunas.map(c => `<td>${row[c]}</td>`).join('') + '</tr>'; });
                 html += '</tbody>';
                 document.getElementById('tableProdutosContent').innerHTML = html;
                 document.getElementById('tableProdutos').classList.add('show');
-
                 document.getElementById('btnImportarProdutos').disabled = false;
             };
             reader.readAsArrayBuffer(file);
@@ -1073,11 +1008,9 @@
 
         document.getElementById('btnImportarProdutos').addEventListener('click', async () => {
             if (!dadosExcelProdutos.length) return;
-
             const btn = document.getElementById('btnImportarProdutos');
             btn.disabled = true;
             btn.innerHTML = '<i class="fas fa-spinner fa-pulse"></i> Importando...';
-
             try {
                 const resp = await fetch('/api/admin/importar-produtos', {
                     method: 'POST',
@@ -1085,25 +1018,12 @@
                     body: JSON.stringify({ dados: dadosExcelProdutos })
                 });
                 const result = await resp.json();
-
                 if (result.success) {
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Produtos importados!',
-                        text: `${result.total || dadosExcelProdutos.length} registros processados.`,
-                        timer: 2500,
-                        showConfirmButton: false
-                    });
+                    Swal.fire({ icon: 'success', title: 'Produtos importados!', text: `${result.total || dadosExcelProdutos.length} registros processados.`, timer: 2500, showConfirmButton: false });
                     resetarProdutos();
-                } else {
-                    throw new Error(result.error || 'Erro desconhecido');
-                }
-            } catch (err) {
-                Swal.fire('Erro', err.message, 'error');
-            } finally {
-                btn.disabled = false;
-                btn.innerHTML = '<i class="fas fa-file-import"></i> Importar Produtos';
-            }
+                } else throw new Error(result.error || 'Erro desconhecido');
+            } catch (err) { Swal.fire('Erro', err.message, 'error'); }
+            finally { btn.disabled = false; btn.innerHTML = '<i class="fas fa-file-import"></i> Importar Produtos'; }
         });
 
         function resetarProdutos() {
@@ -1114,9 +1034,6 @@
             document.getElementById('btnImportarProdutos').disabled = true;
         }
 
-        // ================================================================
-        // LIMPAR TABELAS
-        // ================================================================
         async function limparTabela(tabela) {
             const confirm = await Swal.fire({
                 title: 'Tem certeza?',
@@ -1127,21 +1044,13 @@
                 confirmButtonText: 'Sim, apagar!',
                 cancelButtonText: 'Cancelar'
             });
-
             if (!confirm.isConfirmed) return;
-
             try {
                 const resp = await fetch(`/api/admin/limpar/${tabela}`, { method: 'DELETE' });
                 const result = await resp.json();
-
-                if (result.success) {
-                    Swal.fire('Apagado!', `Tabela ${tabela} foi limpa.`, 'success');
-                } else {
-                    throw new Error(result.error);
-                }
-            } catch (err) {
-                Swal.fire('Erro', err.message, 'error');
-            }
+                if (result.success) Swal.fire('Apagado!', `Tabela ${tabela} foi limpa.`, 'success');
+                else throw new Error(result.error);
+            } catch (err) { Swal.fire('Erro', err.message, 'error'); }
         }
 
         // ================================================================
@@ -1152,17 +1061,21 @@
             tbody.innerHTML = '<tr><td colspan="20" style="text-align:center; padding:30px; color:#94a3b8;"><i class="fas fa-spinner fa-pulse fa-2x"></i><p style="margin-top:8px;">Carregando...</p></td></tr>';
 
             try {
+                // Carrega TODOS os chamados (sem filtro de origem)
                 const resp = await fetch('/api/admin/relatorio-chamados');
                 const result = await resp.json();
-
                 if (!result.success) throw new Error(result.error);
 
                 chamadosOriginais = result.chamados || [];
 
+                // Popula vendedores
                 const vendedores = [...new Set(chamadosOriginais.map(c => c.vendedor).filter(Boolean))].sort();
                 const selVend = document.getElementById('rel-filtro-vendedor');
                 selVend.innerHTML = '<option value="">Todos</option>' +
                     vendedores.map(v => `<option value="${v}">${v}</option>`).join('');
+
+                // Atualiza badges das sub-abas
+                atualizarBadges();
 
                 aplicarFiltros();
             } catch (err) {
@@ -1182,7 +1095,17 @@
             const cliente = document.getElementById('rel-filtro-cliente').value.trim();
             const busca = document.getElementById('rel-filtro-busca').value.toLowerCase();
 
-            chamadosFiltrados = chamadosOriginais.filter(c => {
+            // 1. Filtra por EMPRESA (sub-aba)
+            let base = chamadosOriginais;
+            if (subAbaAtual === 'MARINE') {
+                base = base.filter(c => !c.origem || c.origem !== 'CJ');
+            } else if (subAbaAtual === 'CJ') {
+                base = base.filter(c => c.origem === 'CJ');
+            }
+            // GERAL → mantém todos
+
+            // 2. Filtra pelos campos
+            chamadosFiltrados = base.filter(c => {
                 if (vendedor && c.vendedor !== vendedor) return false;
                 if (status && c.status !== status) return false;
                 if (dataInicio && c.data_criacao && c.data_criacao.slice(0, 10) < dataInicio) return false;
@@ -1222,9 +1145,7 @@
         }
 
         function renderizarResumo() {
-            const section = document.getElementById('resumoSection');
-            section.style.display = 'block';
-
+            document.getElementById('resumoSection').style.display = 'block';
             const total = chamadosFiltrados.length;
             const pend = chamadosFiltrados.filter(c => c.status === 'Pendente').length;
             const analise = chamadosFiltrados.filter(c => c.status === 'Em Análise').length;
@@ -1233,36 +1154,19 @@
             const reab = chamadosFiltrados.filter(c => c.reaberto == 1 || c.reaberto === true).length;
 
             document.getElementById('resumoGrid').innerHTML = `
-                <div class="resumo-card">
-                    <div class="num">${total}</div>
-                    <div class="lab">Total</div>
-                </div>
-                <div class="resumo-card pendente">
-                    <div class="num">${pend}</div>
-                    <div class="lab">Pendentes</div>
-                </div>
-                <div class="resumo-card analise">
-                    <div class="num">${analise}</div>
-                    <div class="lab">Em Análise</div>
-                </div>
-                <div class="resumo-card aprovado">
-                    <div class="num">${aprov}</div>
-                    <div class="lab">Aprovados</div>
-                </div>
-                <div class="resumo-card recusado">
-                    <div class="num">${recus}</div>
-                    <div class="lab">Recusados</div>
-                </div>
-                <div class="resumo-card">
-                    <div class="num">${reab}</div>
-                    <div class="lab">Reabertos</div>
-                </div>
+                <div class="resumo-card"><div class="num">${total}</div><div class="lab">Total</div></div>
+                <div class="resumo-card pendente"><div class="num">${pend}</div><div class="lab">Pendentes</div></div>
+                <div class="resumo-card analise"><div class="num">${analise}</div><div class="lab">Em Análise</div></div>
+                <div class="resumo-card aprovado"><div class="num">${aprov}</div><div class="lab">Aprovados</div></div>
+                <div class="resumo-card recusado"><div class="num">${recus}</div><div class="lab">Recusados</div></div>
+                <div class="resumo-card"><div class="num">${reab}</div><div class="lab">Reabertos</div></div>
             `;
         }
 
         function renderizarTabela() {
             const thead = document.getElementById('relatorioThead');
             const tbody = document.getElementById('relatorioTbody');
+            const mostrarOrigem = (subAbaAtual === 'GERAL');
 
             const colunas = [
                 { key: 'protocolo', label: 'Protocolo' },
@@ -1282,15 +1186,7 @@
                 chamadosFiltrados.forEach(c => {
                     const chave = (c.codigo_produto || '') + '|' + (c.descricao_produto || c.produto || '');
                     if (!grupos[chave]) {
-                        grupos[chave] = {
-                            codigo_produto: c.codigo_produto,
-                            descricao_produto: c.descricao_produto || c.produto,
-                            quantidade: 0,
-                            clientes: new Set(),
-                            vendedores: new Set(),
-                            status: {},
-                            chamados: []
-                        };
+                        grupos[chave] = { codigo_produto: c.codigo_produto, descricao_produto: c.descricao_produto || c.produto, quantidade: 0, clientes: new Set(), vendedores: new Set(), status: {}, chamados: [] };
                     }
                     const g = grupos[chave];
                     g.quantidade++;
@@ -1302,123 +1198,96 @@
 
                 const arr = Object.values(grupos).sort((a, b) => b.quantidade - a.quantidade);
 
-                thead.innerHTML = `
-                    <tr>
-                        <th>Cód. Produto</th>
-                        <th>Descrição Produto</th>
-                        <th>Qtd. Chamados</th>
-                        <th>Clientes Distintos</th>
-                        <th>Vendedores</th>
-                        <th>Status</th>
-                        <th>Alerta</th>
-                    </tr>
-                `;
+                thead.innerHTML = `<tr><th>Cód. Produto</th><th>Descrição Produto</th><th>Qtd. Chamados</th><th>Clientes Distintos</th><th>Vendedores</th><th>Status</th><th>Alerta</th></tr>`;
 
                 tbody.innerHTML = arr.map(g => {
-                    let alertaClasse = '';
-                    let alertaBadge = '';
-                    if (g.quantidade >= 10) {
-                        alertaClasse = 'alerta-critico';
-                        alertaBadge = '<span class="badge-alerta vermelho"><i class="fas fa-exclamation-triangle"></i> CRÍTICO</span>';
-                    } else if (g.quantidade >= 5) {
-                        alertaClasse = 'alerta-produto';
-                        alertaBadge = '<span class="badge-alerta amarelo"><i class="fas fa-exclamation-circle"></i> ATENÇÃO</span>';
-                    }
-
+                    let alertaClasse = '', alertaBadge = '';
+                    if (g.quantidade >= 10) { alertaClasse = 'alerta-critico'; alertaBadge = '<span class="badge-alerta vermelho"><i class="fas fa-exclamation-triangle"></i> CRÍTICO</span>'; }
+                    else if (g.quantidade >= 5) { alertaClasse = 'alerta-produto'; alertaBadge = '<span class="badge-alerta amarelo"><i class="fas fa-exclamation-circle"></i> ATENÇÃO</span>'; }
                     const statusStr = Object.entries(g.status).map(([k, v]) => `${k}: ${v}`).join(' | ');
-
-                    return `
-                        <tr class="${alertaClasse}">
-                            <td><strong>${g.codigo_produto || '—'}</strong></td>
-                            <td>${g.descricao_produto || '—'}</td>
-                            <td><strong style="font-size:1.1rem;">${g.quantidade}</strong></td>
-                            <td>${g.clientes.size}</td>
-                            <td>${[...g.vendedores].join(', ')}</td>
-                            <td style="font-size:0.7rem;">${statusStr}</td>
-                            <td>${alertaBadge}</td>
-                        </tr>
-                    `;
+                    return `<tr class="${alertaClasse}">
+                        <td><strong>${g.codigo_produto || '—'}</strong></td>
+                        <td>${g.descricao_produto || '—'}</td>
+                        <td><strong style="font-size:1.1rem;">${g.quantidade}</strong></td>
+                        <td>${g.clientes.size}</td>
+                        <td>${[...g.vendedores].join(', ')}</td>
+                        <td style="font-size:0.7rem;">${statusStr}</td>
+                        <td>${alertaBadge}</td>
+                    </tr>`;
                 }).join('');
 
                 document.getElementById('rel-contador').textContent = `${arr.length} produtos agregados`;
                 chamadosVisiveis = arr;
-
-            } else {
-                thead.innerHTML = `
-                    <tr>
-                        ${colunas.map(c => `
-                            <th onclick="ordenarPor('${c.key}')" class="${ordenacao.campo === c.key ? 'sorted' : ''}">
-                                ${c.label}
-                                <i class="fas fa-sort sort-icon"></i>
-                            </th>
-                        `).join('')}
-                        <th>Ações</th>
-                    </tr>
-                `;
-
-                if (chamadosFiltrados.length === 0) {
-                    tbody.innerHTML = '<tr><td colspan="20" style="text-align:center; padding:30px; color:#94a3b8;">Nenhum chamado encontrado.</td></tr>';
-                    document.getElementById('rel-contador').textContent = '0 registros';
-                    chamadosVisiveis = [];
-                    return;
-                }
-
-                const contProduto = {};
-                chamadosFiltrados.forEach(c => {
-                    const k = c.codigo_produto || c.produto || '';
-                    contProduto[k] = (contProduto[k] || 0) + 1;
-                });
-
-                tbody.innerHTML = chamadosFiltrados.map(c => {
-                    const chaveProd = c.codigo_produto || c.produto || '';
-                    const qtd = contProduto[chaveProd] || 0;
-                    let alertaClasse = '';
-                    if (qtd >= 10) alertaClasse = 'alerta-critico';
-                    else if (qtd >= 5) alertaClasse = 'alerta-produto';
-
-                    const statusClass = c.status === 'Em Análise' ? 'analise' : (c.status || 'Pendente');
-
-                    return `
-                        <tr class="${alertaClasse}">
-                            <td><strong>${c.protocolo || '—'}</strong></td>
-                            <td>${c.data_criacao ? new Date(c.data_criacao).toLocaleDateString('pt-BR') : '—'}</td>
-                            <td>${c.vendedor || '—'}</td>
-                            <td>${c.id_cliente || '—'}</td>
-                            <td>${c.cliente_nome || '—'}</td>
-                            <td>${c.codigo_produto || '—'}</td>
-                            <td>${c.descricao_produto || c.produto || '—'}</td>
-                            <td>${c.nota_marine || '—'}</td>
-                            <td><span class="status-badge status-${statusClass}">${c.status || 'Pendente'}</span></td>
-                            <td>${c.decisao_tecnico || '—'}</td>
-                            <td>
-                                <button class="btn btn-primary" style="padding:6px 12px; font-size:0.7rem;" onclick="verDetalhe(${c.id})">
-                                    <i class="fas fa-eye"></i>
-                                </button>
-                            </td>
-                        </tr>
-                    `;
-                }).join('');
-
-                document.getElementById('rel-contador').textContent = `${chamadosFiltrados.length} registros`;
-                chamadosVisiveis = chamadosFiltrados;
+                return;
             }
+
+            // Modo normal
+            const colunasComOrigem = mostrarOrigem ? [...colunas.slice(0, 2), { key: 'origem_label', label: 'Empresa' }, ...colunas.slice(2)] : colunas;
+
+            thead.innerHTML = `<tr>
+                ${colunasComOrigem.map(c => `<th onclick="${c.key !== 'origem_label' ? `ordenarPor('${c.key}')` : ''}" class="${ordenacao.campo === c.key ? 'sorted' : ''}">${c.label}<i class="fas fa-sort sort-icon"></i></th>`).join('')}
+                <th>Ações</th>
+            </tr>`;
+
+            if (chamadosFiltrados.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="20" style="text-align:center; padding:30px; color:#94a3b8;">Nenhum chamado encontrado.</td></tr>';
+                document.getElementById('rel-contador').textContent = '0 registros';
+                chamadosVisiveis = [];
+                return;
+            }
+
+            const contProduto = {};
+            chamadosFiltrados.forEach(c => {
+                const k = c.codigo_produto || c.produto || '';
+                contProduto[k] = (contProduto[k] || 0) + 1;
+            });
+
+            tbody.innerHTML = chamadosFiltrados.map(c => {
+                const chaveProd = c.codigo_produto || c.produto || '';
+                const qtd = contProduto[chaveProd] || 0;
+                let alertaClasse = '';
+                if (qtd >= 10) alertaClasse = 'alerta-critico';
+                else if (qtd >= 5) alertaClasse = 'alerta-produto';
+
+                const statusClass = c.status === 'Em Análise' ? 'analise' : (c.status || 'Pendente');
+                const isCJ = c.origem === 'CJ';
+
+                const origemHtml = mostrarOrigem
+                    ? `<td><span class="origem-badge ${isCJ ? 'origem-cj' : 'origem-marine'}">${isCJ ? 'CASA JAPON' : 'MARINE BR'}</span></td>`
+                    : '';
+
+                return `<tr class="${alertaClasse}">
+                    <td><strong>${c.protocolo || '—'}</strong></td>
+                    <td>${c.data_criacao ? new Date(c.data_criacao).toLocaleDateString('pt-BR') : '—'}</td>
+                    ${origemHtml}
+                    <td>${c.vendedor || '—'}</td>
+                    <td>${c.id_cliente || '—'}</td>
+                    <td>${c.cliente_nome || '—'}</td>
+                    <td>${c.codigo_produto || '—'}</td>
+                    <td>${c.descricao_produto || c.produto || '—'}</td>
+                    <td>${c.nota_marine || '—'}</td>
+                    <td><span class="status-badge status-${statusClass}">${c.status || 'Pendente'}</span></td>
+                    <td>${c.decisao_tecnico || '—'}</td>
+                    <td><button class="btn btn-primary" style="padding:6px 12px; font-size:0.7rem;" onclick="verDetalhe(${c.id})"><i class="fas fa-eye"></i></button></td>
+                </tr>`;
+            }).join('');
+
+            document.getElementById('rel-contador').textContent = `${chamadosFiltrados.length} registros`;
+            chamadosVisiveis = chamadosFiltrados;
         }
 
         function ordenarPor(campo) {
-            if (ordenacao.campo === campo) {
-                ordenacao.direcao = ordenacao.direcao === 'asc' ? 'desc' : 'asc';
-            } else {
-                ordenacao.campo = campo;
-                ordenacao.direcao = 'asc';
-            }
+            if (ordenacao.campo === campo) ordenacao.direcao = ordenacao.direcao === 'asc' ? 'desc' : 'asc';
+            else { ordenacao.campo = campo; ordenacao.direcao = 'asc'; }
             aplicarFiltros();
         }
 
         function verDetalhe(id) {
             const c = chamadosOriginais.find(x => x.id === id);
             if (!c) return;
-
+            const isCJ = c.origem === 'CJ';
             const campos = [
+                ['Empresa', isCJ ? 'CASA JAPON' : 'MARINE BR'],
                 ['Protocolo', c.protocolo],
                 ['Data Criação', c.data_criacao ? new Date(c.data_criacao).toLocaleString('pt-BR') : '—'],
                 ['Vendedor (chamado)', c.vendedor],
@@ -1441,14 +1310,9 @@
                 ['Motivo Reabertura', c.motivo_reabertura],
                 ['Última Atualização', c.data_atualizacao]
             ];
-
             document.getElementById('modalBody').innerHTML = campos.map(([label, val]) => `
-                <div class="campo">
-                    <div class="label">${label}</div>
-                    <div class="value">${val || '—'}</div>
-                </div>
+                <div class="campo"><div class="label">${label}</div><div class="value">${val || '—'}</div></div>
             `).join('');
-
             document.getElementById('modalDetalhe').classList.add('active');
         }
 
@@ -1468,58 +1332,37 @@
             aplicarFiltros();
         }
 
-        // ================================================================
-        // EXPORTAR EXCEL
-        // ================================================================
         function exportarExcel() {
-            if (!chamadosVisiveis.length) {
-                Swal.fire('Atenção', 'Nada para exportar. Filtre primeiro.', 'warning');
-                return;
-            }
-
+            if (!chamadosVisiveis.length) { Swal.fire('Atenção', 'Nada para exportar. Filtre primeiro.', 'warning'); return; }
             let dados;
-
             if (agregarAtivo) {
                 dados = chamadosVisiveis.map(g => ({
-                    'Código Produto': g.codigo_produto,
-                    'Descrição Produto': g.descricao_produto,
-                    'Qtd. Chamados': g.quantidade,
-                    'Clientes Distintos': g.clientes.size,
+                    'Código Produto': g.codigo_produto, 'Descrição Produto': g.descricao_produto,
+                    'Qtd. Chamados': g.quantidade, 'Clientes Distintos': g.clientes.size,
                     'Vendedores': [...g.vendedores].join(', '),
                     'Status': Object.entries(g.status).map(([k, v]) => `${k}: ${v}`).join(' | '),
                     'Alerta': g.quantidade >= 10 ? 'CRÍTICO' : (g.quantidade >= 5 ? 'ATENÇÃO' : '')
                 }));
             } else {
                 dados = chamadosVisiveis.map(c => ({
+                    'Empresa': c.origem === 'CJ' ? 'CASA JAPON' : 'MARINE BR',
                     'Protocolo': c.protocolo,
                     'Data': c.data_criacao ? new Date(c.data_criacao).toLocaleDateString('pt-BR') : '',
-                    'Vendedor': c.vendedor,
-                    'ID Cliente': c.id_cliente,
-                    'Nome Cliente': c.cliente_nome,
-                    'Código Produto': c.codigo_produto,
-                    'Descrição Produto': c.descricao_produto || c.produto,
-                    'Nota Marine': c.nota_marine,
-                    'Status': c.status,
-                    'Decisão Técnico': c.decisao_tecnico,
+                    'Vendedor': c.vendedor, 'ID Cliente': c.id_cliente, 'Nome Cliente': c.cliente_nome,
+                    'Código Produto': c.codigo_produto, 'Descrição Produto': c.descricao_produto || c.produto,
+                    'Nota Marine': c.nota_marine, 'Status': c.status, 'Decisão Técnico': c.decisao_tecnico,
                     'Reaberto': (c.reaberto == 1 || c.reaberto === true) ? 'Sim' : 'Não'
                 }));
             }
-
             const ws = XLSX.utils.json_to_sheet(dados);
             const wb = XLSX.utils.book_new();
             XLSX.utils.book_append_sheet(wb, ws, agregarAtivo ? 'Produtos Agregados' : 'Chamados');
-
-            const nomeArq = `relatorio_cj_${new Date().toISOString().slice(0, 10)}.xlsx`;
+            const nomeArq = `relatorio_${subAbaAtual.toLowerCase()}_${new Date().toISOString().slice(0, 10)}.xlsx`;
             XLSX.writeFile(wb, nomeArq);
         }
 
-        // ================================================================
-        // INIT
-        // ================================================================
         document.querySelectorAll('.relatorio-filtros input, .relatorio-filtros select').forEach(el => {
-            el.addEventListener('keypress', e => {
-                if (e.key === 'Enter') aplicarFiltros();
-            });
+            el.addEventListener('keypress', e => { if (e.key === 'Enter') aplicarFiltros(); });
             el.addEventListener('change', () => aplicarFiltros());
         });
     </script>
