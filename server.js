@@ -776,6 +776,107 @@ app.delete('/api/admin/limpar/:tabela', async (req, res) => {
 });
 
 // ================================================================
+// 🔄 SYNC - RECEBER CHAMADOS DO PC LOCAL
+// ================================================================
+app.post('/api/admin/sync-chamados', async (req, res) => {
+    try {
+        const chave = req.headers['x-sync-key'];
+        if (chave !== process.env.SYNC_KEY) {
+            return res.status(401).json({ success: false, error: 'Chave inválida' });
+        }
+
+        const { chamados } = req.body;
+        if (!Array.isArray(chamados) || chamados.length === 0) {
+            return res.status(400).json({ success: false, error: 'Nenhum chamado enviado' });
+        }
+
+        const db = await openDb();
+        let inseridos = 0;
+        let atualizados = 0;
+        let erros = 0;
+
+        for (const c of chamados) {
+            try {
+                const existe = await db.get(
+                    'SELECT id FROM chamados_cj WHERE protocolo = ?',
+                    [c.protocolo]
+                );
+
+                if (existe) {
+                    await db.run(`
+                        UPDATE chamados_cj SET
+                            vendedor = ?, id_cliente = ?, cliente_nome = ?,
+                            cidade_uf = ?, produto = ?, codigo_produto = ?,
+                            descricao_produto = ?, nota_marine = ?,
+                            teste_receber = ?, teste_venda = ?, tempo_uso = ?,
+                            descricao_defeito = ?, capacidade_loja = ?,
+                            status = ?, decisao_tecnico = ?,
+                            arquivos_json = ?, conversa = ?,
+                            reaberto = ?, reaberto_em = ?, motivo_reabertura = ?,
+                            data_atualizacao = ?
+                        WHERE protocolo = ?
+                    `, [
+                        c.vendedor, c.id_cliente, c.cliente_nome,
+                        c.cidade_uf, c.produto, c.codigo_produto,
+                        c.descricao_produto, c.nota_marine,
+                        c.teste_receber, c.teste_venda, c.tempo_uso,
+                        c.descricao_defeito, c.capacidade_loja,
+                        c.status, c.decisao_tecnico,
+                        c.arquivos_json, c.conversa,
+                        c.reaberto, c.reaberto_em, c.motivo_reabertura,
+                        c.data_atualizacao || new Date().toISOString(),
+                        c.protocolo
+                    ]);
+                    atualizados++;
+                } else {
+                    await db.run(`
+                        INSERT INTO chamados_cj (
+                            protocolo, vendedor, id_cliente, cliente_nome,
+                            cidade_uf, produto, codigo_produto, descricao_produto,
+                            nota_marine, teste_receber, teste_venda, tempo_uso,
+                            descricao_defeito, capacidade_loja, status,
+                            decisao_tecnico, arquivos_json, conversa,
+                            reaberto, reaberto_em, motivo_reabertura,
+                            data_criacao, data_atualizacao
+                        ) VALUES (
+                            ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
+                            ?, ?, ?, ?, ?, ?, ?
+                        )
+                    `, [
+                        c.protocolo, c.vendedor, c.id_cliente, c.cliente_nome,
+                        c.cidade_uf, c.produto, c.codigo_produto, c.descricao_produto,
+                        c.nota_marine, c.teste_receber, c.teste_venda, c.tempo_uso,
+                        c.descricao_defeito, c.capacidade_loja, c.status,
+                        c.decisao_tecnico, c.arquivos_json, c.conversa,
+                        c.reaberto, c.reaberto_em, c.motivo_reabertura,
+                        c.data_criacao || new Date().toISOString(),
+                        c.data_atualizacao || new Date().toISOString()
+                    ]);
+                    inseridos++;
+                }
+            } catch (err) {
+                console.error('❌ Erro ao sincronizar protocolo', c.protocolo, ':', err.message);
+                erros++;
+            }
+        }
+
+        console.log(`🔄 Sync: ${inseridos} inseridos, ${atualizados} atualizados, ${erros} erros`);
+
+        res.json({
+            success: true,
+            inseridos,
+            atualizados,
+            erros,
+            total: chamados.length
+        });
+
+    } catch (error) {
+        console.error('❌ Erro no sync:', error);
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+// ================================================================
 // 🚀 INICIALIZAÇÃO
 // ================================================================
 
