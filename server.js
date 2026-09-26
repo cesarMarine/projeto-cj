@@ -106,7 +106,7 @@ app.post('/api/admin/importar-clientes', async (req, res) => {
         }
 
         await stmt.finalize();
-        await db.run('COMMIT');
+       // await db.run('COMMIT');
 
         res.json({
             success: true,
@@ -168,7 +168,7 @@ app.post('/api/admin/importar-produtos', async (req, res) => {
         }
 
         await stmt.finalize();
-        await db.run('COMMIT');
+        //await db.run('COMMIT');
 
         res.json({
             success: true,
@@ -656,6 +656,121 @@ app.get('/api/garantia/notificacoes/:vendedor', async (req, res) => {
 
         res.json({ success: true, chamados: comNaoLidas });
     } catch (error) {
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+// ================================================================
+// 📊 ADMIN - RELATÓRIO DE CHAMADOS (para tela admin)
+// ================================================================
+app.get('/api/admin/relatorio-chamados', async (req, res) => {
+    try {
+        const db = await openDb();
+
+        // Filtros dinâmicos via query string
+        const {
+            vendedor,        // vendedor que abriu
+            status,          // Pendente / Em Análise / Aprovado / Recusado
+            data_inicio,     // YYYY-MM-DD
+            data_fim,        // YYYY-MM-DD
+            busca,           // busca livre (protocolo, cliente, produto, código)
+            produto,         // filtro por produto específico
+            cliente,         // filtro por ID cliente
+        } = req.query;
+
+        // 1. Busca todos os chamados
+        const chamados = await db.all(`
+            SELECT 
+                id,
+                protocolo,
+                vendedor,
+                id_cliente,
+                cliente_nome,
+                vendedor_cliente,
+                produto,
+                codigo_produto,
+                descricao_produto,
+                nota_marine,
+                teste_receber,
+                teste_venda,
+                tempo_uso,
+                descricao_defeito,
+                capacidade_loja,
+                status,
+                decisao_tecnico,
+                reaberto,
+                reaberto_em,
+                motivo_reabertura,
+                data_criacao,
+                data_atualizacao
+            FROM chamados_cj
+            ORDER BY data_criacao DESC
+        `);
+
+        // 2. Aplica filtros em memória (mais flexível que SQL dinâmico)
+        let filtrados = chamados;
+
+        if (vendedor) {
+            filtrados = filtrados.filter(c => c.vendedor === vendedor);
+        }
+        if (status) {
+            filtrados = filtrados.filter(c => c.status === status);
+        }
+        if (produto) {
+            const p = produto.toLowerCase();
+            filtrados = filtrados.filter(c =>
+                (c.produto || '').toLowerCase().includes(p) ||
+                (c.descricao_produto || '').toLowerCase().includes(p)
+            );
+        }
+        if (cliente) {
+            filtrados = filtrados.filter(c => String(c.id_cliente) === String(cliente));
+        }
+        if (data_inicio) {
+            filtrados = filtrados.filter(c => c.data_criacao && c.data_criacao.slice(0, 10) >= data_inicio);
+        }
+        if (data_fim) {
+            filtrados = filtrados.filter(c => c.data_criacao && c.data_criacao.slice(0, 10) <= data_fim);
+        }
+        if (busca) {
+            const b = busca.toLowerCase();
+            filtrados = filtrados.filter(c =>
+                (c.protocolo || '').toLowerCase().includes(b) ||
+                (c.cliente_nome || '').toLowerCase().includes(b) ||
+                (c.produto || '').toLowerCase().includes(b) ||
+                (c.codigo_produto || '').toLowerCase().includes(b) ||
+                (c.id_cliente || '').toLowerCase().includes(b) ||
+                (c.nota_marine || '').toLowerCase().includes(b)
+            );
+        }
+
+        res.json({
+            success: true,
+            total: filtrados.length,
+            chamados: filtrados
+        });
+
+    } catch (error) {
+        console.error('❌ Erro no relatório:', error);
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+// ================================================================
+// 🗑️ ADMIN - LIMPAR TABELAS
+// ================================================================
+app.delete('/api/admin/limpar/:tabela', async (req, res) => {
+    try {
+        const { tabela } = req.params;
+        const permitidas = ['clientes_cj', 'produtos_cj'];
+        if (!permitidas.includes(tabela)) {
+            return res.status(400).json({ success: false, error: 'Tabela não permitida' });
+        }
+        const db = await openDb();
+        await db.run(`DELETE FROM ${tabela}`);
+        res.json({ success: true, mensagem: `Tabela ${tabela} limpa` });
+    } catch (error) {
+        console.error('❌ Erro ao limpar:', error);
         res.status(500).json({ success: false, error: error.message });
     }
 });

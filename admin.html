@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin | Projeto CJ - Importação</title>
+    <title>Admin | Projeto CJ</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -26,7 +26,7 @@
         }
 
         .header-container {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
             display: flex;
             align-items: center;
@@ -74,62 +74,65 @@
 
         /* CONTAINER */
         .container {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 32px auto;
             padding: 0 24px;
         }
 
-        /* STATS */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 16px;
-            margin-bottom: 28px;
-        }
-
-        .stat-card {
+        /* ABAS */
+        .tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 24px;
             background: white;
-            border-radius: 16px;
-            padding: 20px 24px;
+            padding: 8px;
+            border-radius: 60px;
             box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
-            border-left: 4px solid #0d3b66;
-            transition: all 0.3s ease;
+            width: fit-content;
+            flex-wrap: wrap;
         }
 
-        .stat-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.10);
-        }
-
-        .stat-card .stat-number {
-            font-size: 2rem;
-            font-weight: 800;
-            color: #0d3b66;
-            line-height: 1.1;
-        }
-
-        .stat-card .stat-label {
-            font-size: 0.75rem;
-            color: #6b7a8a;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+        .tab-btn {
+            background: transparent;
+            border: none;
+            padding: 12px 28px;
+            border-radius: 40px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
             font-weight: 600;
-            margin-top: 6px;
+            color: #6b7a8a;
+            cursor: pointer;
+            transition: all 0.3s ease;
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 8px;
         }
 
-        .stat-card.clientes { border-left-color: #3b82f6; }
-        .stat-card.clientes .stat-number { color: #3b82f6; }
+        .tab-btn:hover {
+            background: #f0f4f8;
+        }
 
-        .stat-card.produtos { border-left-color: #10b981; }
-        .stat-card.produtos .stat-number { color: #10b981; }
+        .tab-btn.active {
+            background: linear-gradient(135deg, #0d3b66, #1a5276);
+            color: white;
+            box-shadow: 0 4px 16px rgba(13, 59, 102, 0.2);
+        }
 
-        .stat-card.garantias { border-left-color: #f59e0b; }
-        .stat-card.garantias .stat-number { color: #f59e0b; }
+        .tab-content {
+            display: none;
+        }
 
-        /* SEÇÃO DE IMPORTAÇÃO */
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.4s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* SECTION */
         .section {
             background: white;
             border-radius: 24px;
@@ -231,7 +234,6 @@
 
         .preview-info .info-row strong { color: #0d3b66; }
 
-        /* TABELA PREVIEW */
         .preview-table-wrapper {
             max-height: 250px;
             overflow: auto;
@@ -338,6 +340,302 @@
             transform: translateY(-2px);
         }
 
+        /* ============ RELATÓRIO ============ */
+        .relatorio-filtros {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 14px;
+            margin-bottom: 20px;
+        }
+
+        .relatorio-filtros .form-group {
+            margin-bottom: 0;
+        }
+
+        .relatorio-filtros .form-group label {
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: #6b7a8a;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .relatorio-filtros .form-group input,
+        .relatorio-filtros .form-group select {
+            width: 100%;
+            padding: 10px 14px;
+            border: 2px solid #e8edf3;
+            border-radius: 12px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.85rem;
+            background: #fafcff;
+            color: #1a2a3a;
+        }
+
+        .relatorio-filtros .form-group input:focus,
+        .relatorio-filtros .form-group select:focus {
+            outline: none;
+            border-color: #f8b81f;
+            box-shadow: 0 0 0 4px rgba(248, 184, 31, 0.12);
+        }
+
+        .relatorio-acoes {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .agregacao-toggle {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: #f8fafc;
+            border: 2px solid #e8edf3;
+            border-radius: 12px;
+            padding: 10px 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            user-select: none;
+        }
+
+        .agregacao-toggle:hover {
+            border-color: #f8b81f;
+            background: #fffcf0;
+        }
+
+        .agregacao-toggle.active {
+            background: #0d3b66;
+            border-color: #0d3b66;
+            color: white;
+        }
+
+        .agregacao-toggle input {
+            cursor: pointer;
+        }
+
+        .agregacao-toggle .label {
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        /* RESUMO */
+        .resumo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .resumo-card {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 14px 16px;
+            border-left: 4px solid #0d3b66;
+        }
+
+        .resumo-card .num {
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: #0d3b66;
+            line-height: 1.1;
+        }
+
+        .resumo-card .lab {
+            font-size: 0.65rem;
+            color: #6b7a8a;
+            text-transform: uppercase;
+            font-weight: 600;
+            margin-top: 4px;
+        }
+
+        .resumo-card.pendente { border-left-color: #f59e0b; }
+        .resumo-card.pendente .num { color: #f59e0b; }
+        .resumo-card.analise { border-left-color: #3b82f6; }
+        .resumo-card.analise .num { color: #3b82f6; }
+        .resumo-card.aprovado { border-left-color: #10b981; }
+        .resumo-card.aprovado .num { color: #10b981; }
+        .resumo-card.recusado { border-left-color: #ef4444; }
+        .resumo-card.recusado .num { color: #ef4444; }
+
+        /* TABELA RELATÓRIO */
+        .relatorio-tabela-wrapper {
+            overflow-x: auto;
+            border-radius: 12px;
+            border: 1px solid #e8edf3;
+            max-height: 600px;
+        }
+
+        .relatorio-tabela {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.8rem;
+        }
+
+        .relatorio-tabela th {
+            background: #0d3b66;
+            color: white;
+            padding: 12px 14px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            position: sticky;
+            top: 0;
+            z-index: 2;
+            cursor: pointer;
+            user-select: none;
+            white-space: nowrap;
+        }
+
+        .relatorio-tabela th:hover {
+            background: #1a5276;
+        }
+
+        .relatorio-tabela th .sort-icon {
+            opacity: 0.4;
+            margin-left: 4px;
+            font-size: 0.6rem;
+        }
+
+        .relatorio-tabela th.sorted .sort-icon {
+            opacity: 1;
+        }
+
+        .relatorio-tabela td {
+            padding: 10px 14px;
+            border-bottom: 1px solid #e8edf3;
+            color: #475569;
+            vertical-align: top;
+        }
+
+        .relatorio-tabela tr:nth-child(even) { background: #fafcff; }
+        .relatorio-tabela tr:hover { background: #f0f7ff; }
+
+        .relatorio-tabela tr.alerta-produto {
+            background: #fef3c7 !important;
+            border-left: 4px solid #f59e0b;
+        }
+
+        .relatorio-tabela tr.alerta-critico {
+            background: #fecaca !important;
+            border-left: 4px solid #ef4444;
+        }
+
+        .badge-alerta {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 0.6rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .badge-alerta.amarelo {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .badge-alerta.vermelho {
+            background: #fecaca;
+            color: #991b1b;
+            animation: pulse-alerta 1.5s infinite;
+        }
+
+        @keyframes pulse-alerta {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 3px 12px;
+            border-radius: 20px;
+            font-size: 0.65rem;
+            font-weight: 700;
+        }
+
+        .status-Pendente { background: #fef3c7; color: #92400e; }
+        .status-analise { background: #dbeafe; color: #1e40af; }
+        .status-Aprovado { background: #d1fae5; color: #065f46; }
+        .status-Recusado { background: #fecaca; color: #991b1b; }
+        .status-reaberto { background: #ede9fe; color: #5b21b6; }
+
+        /* MODAL DETALHE DO CHAMADO */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(8px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .modal-overlay.active { display: flex; }
+
+        .modal-content {
+            background: white;
+            border-radius: 24px;
+            max-width: 800px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 28px 32px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            position: relative;
+        }
+
+        .modal-content .btn-fechar {
+            position: absolute;
+            top: 16px; right: 16px;
+            background: #e8edf3;
+            border: none;
+            width: 36px; height: 36px;
+            border-radius: 50%;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .modal-content .btn-fechar:hover {
+            background: #ef4444;
+            color: white;
+        }
+
+        .modal-content h2 {
+            font-size: 1.3rem;
+            color: #0d3b66;
+            margin-bottom: 16px;
+        }
+
+        .modal-content .campo {
+            margin-bottom: 12px;
+        }
+
+        .modal-content .campo .label {
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            color: #94a3b8;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+        }
+
+        .modal-content .campo .value {
+            font-weight: 600;
+            color: #1a2a3a;
+            font-size: 0.95rem;
+        }
+
         /* FOOTER */
         footer {
             background: linear-gradient(135deg, #0a2a4a, #0d3b66);
@@ -352,11 +650,12 @@
 
         /* RESPONSIVO */
         @media (max-width: 768px) {
-            .stats-grid { grid-template-columns: 1fr; }
             .section { padding: 20px; }
             .btn { width: 100%; justify-content: center; }
             .btn-group { flex-direction: column; }
-            .preview-info .info-row { flex-direction: column; gap: 6px; }
+            .relatorio-filtros { grid-template-columns: 1fr; }
+            .relatorio-acoes { flex-direction: column; align-items: stretch; }
+            .modal-content { padding: 20px; }
         }
     </style>
 </head>
@@ -382,482 +681,847 @@
 
     <div class="container">
 
-        <!-- STATS -->
-        <div class="stats-grid">
-            <div class="stat-card clientes">
-                <div class="stat-number" id="statClientes">0</div>
-                <div class="stat-label"><i class="fas fa-users"></i> Clientes</div>
-            </div>
-            <div class="stat-card produtos">
-                <div class="stat-number" id="statProdutos">0</div>
-                <div class="stat-label"><i class="fas fa-box"></i> Produtos</div>
-            </div>
-            <div class="stat-card garantias">
-                <div class="stat-number" id="statGarantias">0</div>
-                <div class="stat-label"><i class="fas fa-clipboard-list"></i> Chamados</div>
-            </div>
+        <!-- ABAS -->
+        <div class="tabs">
+            <button class="tab-btn active" onclick="mudarAba('importacao', this)">
+                <i class="fas fa-file-import"></i> Importação
+            </button>
+            <button class="tab-btn" onclick="mudarAba('relatorio', this)">
+                <i class="fas fa-chart-bar"></i> Relatório Geral
+            </button>
         </div>
 
-        <!-- ===== IMPORTAR CLIENTES ===== -->
-        <div class="section">
-            <div class="section-title">
-                <i class="fas fa-users"></i> Importar Clientes
-            </div>
-            <div class="section-desc">
-                Faça upload da planilha <strong>CLIENTES.xlsx</strong>.
-                Colunas esperadas: <code>Código_cli</code>, <code>nome_cli</code>, <code>vendedor</code>.
-            </div>
+        <!-- ==================== ABA 1: IMPORTAÇÃO ==================== -->
+        <div class="tab-content active" id="tab-importacao">
 
-            <div class="drop-zone" id="dropClientes">
-                <i class="fas fa-cloud-upload-alt"></i>
-                <p>Arraste o arquivo aqui ou clique para selecionar</p>
-                <small>Apenas .xlsx ou .xls</small>
-                <input type="file" id="fileClientes" accept=".xlsx,.xls" style="display:none">
-            </div>
+            <!-- IMPORTAR CLIENTES -->
+            <div class="section">
+                <div class="section-title">
+                    <i class="fas fa-users"></i> Importar Clientes
+                </div>
+                <div class="section-desc">
+                    Faça upload da planilha <strong>CLIENTES.xlsx</strong>.
+                    Colunas: <code>Código_cli</code>, <code>nome_cli</code>, <code>vendedor</code>.
+                </div>
 
-            <div class="preview-info" id="previewClientes">
-                <h4><i class="fas fa-file-excel"></i> Pré-visualização</h4>
-                <div class="info-row">
-                    <span><strong>Arquivo:</strong> <span id="nomeArquivoClientes">—</span></span>
-                    <span><strong>Total de linhas:</strong> <span id="totalClientes">0</span></span>
+                <div class="drop-zone" id="dropClientes">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <p>Arraste o arquivo aqui ou clique para selecionar</p>
+                    <small>Apenas .xlsx ou .xls</small>
+                    <input type="file" id="fileClientes" accept=".xlsx,.xls" style="display:none">
+                </div>
+
+                <div class="preview-info" id="previewClientes">
+                    <h4><i class="fas fa-file-excel"></i> Pré-visualização</h4>
+                    <div class="info-row">
+                        <span><strong>Arquivo:</strong> <span id="nomeArquivoClientes">—</span></span>
+                        <span><strong>Linhas:</strong> <span id="totalClientes">0</span></span>
+                    </div>
+                </div>
+
+                <div class="preview-table-wrapper" id="tableClientes">
+                    <table class="preview-table" id="tableClientesContent"></table>
+                </div>
+
+                <div class="btn-group">
+                    <button class="btn btn-primary" id="btnImportarClientes" disabled>
+                        <i class="fas fa-file-import"></i> Importar Clientes
+                    </button>
+                    <button class="btn btn-back" onclick="resetarClientes()">
+                        <i class="fas fa-times"></i> Limpar
+                    </button>
+                    <button class="btn btn-danger" onclick="limparTabela('clientes_cj')">
+                        <i class="fas fa-trash"></i> Apagar Todos
+                    </button>
                 </div>
             </div>
 
-            <div class="preview-table-wrapper" id="tableClientes">
-                <table class="preview-table" id="tableClientesContent"></table>
-            </div>
+            <!-- IMPORTAR PRODUTOS -->
+            <div class="section">
+                <div class="section-title">
+                    <i class="fas fa-box"></i> Importar Produtos
+                </div>
+                <div class="section-desc">
+                    Faça upload da planilha <strong>Planilha de Produtos Gerais.xlsx</strong>.
+                    Colunas: <code>Código</code>, <code>Código_CJ</code>, <code>Descrição - Casa Japon</code>.
+                </div>
 
-            <div class="btn-group">
-                <button class="btn btn-primary" id="btnImportarClientes" disabled>
-                    <i class="fas fa-file-import"></i> Importar Clientes
-                </button>
-                <button class="btn btn-back" onclick="resetarClientes()">
-                    <i class="fas fa-times"></i> Limpar
-                </button>
-                <button class="btn btn-danger" onclick="limparTabela('clientes_cj')">
-                    <i class="fas fa-trash"></i> Apagar Todos Clientes
-                </button>
+                <div class="drop-zone" id="dropProdutos">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <p>Arraste o arquivo aqui ou clique para selecionar</p>
+                    <small>Apenas .xlsx ou .xls</small>
+                    <input type="file" id="fileProdutos" accept=".xlsx,.xls" style="display:none">
+                </div>
+
+                <div class="preview-info" id="previewProdutos">
+                    <h4><i class="fas fa-file-excel"></i> Pré-visualização</h4>
+                    <div class="info-row">
+                        <span><strong>Arquivo:</strong> <span id="nomeArquivoProdutos">—</span></span>
+                        <span><strong>Linhas:</strong> <span id="totalProdutos">0</span></span>
+                    </div>
+                </div>
+
+                <div class="preview-table-wrapper" id="tableProdutos">
+                    <table class="preview-table" id="tableProdutosContent"></table>
+                </div>
+
+                <div class="btn-group">
+                    <button class="btn btn-success" id="btnImportarProdutos" disabled>
+                        <i class="fas fa-file-import"></i> Importar Produtos
+                    </button>
+                    <button class="btn btn-back" onclick="resetarProdutos()">
+                        <i class="fas fa-times"></i> Limpar
+                    </button>
+                    <button class="btn btn-danger" onclick="limparTabela('produtos_cj')">
+                        <i class="fas fa-trash"></i> Apagar Todos
+                    </button>
+                </div>
             </div>
         </div>
 
-        <!-- ===== IMPORTAR PRODUTOS ===== -->
-        <div class="section">
-            <div class="section-title">
-                <i class="fas fa-box"></i> Importar Produtos
-            </div>
-            <div class="section-desc">
-                Faça upload da planilha <strong>Planilha de Produtos Gerais.xlsx</strong>.
-                Colunas esperadas: <code>Código</code>, <code>Código_CJ</code>, <code>Descrição - Casa Japon</code>.
-            </div>
+        <!-- ==================== ABA 2: RELATÓRIO ==================== -->
+        <div class="tab-content" id="tab-relatorio">
 
-            <div class="drop-zone" id="dropProdutos">
-                <i class="fas fa-cloud-upload-alt"></i>
-                <p>Arraste o arquivo aqui ou clique para selecionar</p>
-                <small>Apenas .xlsx ou .xls</small>
-                <input type="file" id="fileProdutos" accept=".xlsx,.xls" style="display:none">
-            </div>
+            <!-- FILTROS -->
+            <div class="section">
+                <div class="section-title">
+                    <i class="fas fa-filter"></i> Filtros
+                </div>
+                <div class="section-desc">
+                    Combine filtros livremente. Deixe em branco para não filtrar.
+                </div>
 
-            <div class="preview-info" id="previewProdutos">
-                <h4><i class="fas fa-file-excel"></i> Pré-visualização</h4>
-                <div class="info-row">
-                    <span><strong>Arquivo:</strong> <span id="nomeArquivoProdutos">—</span></span>
-                    <span><strong>Total de linhas:</strong> <span id="totalProdutos">0</span></span>
+                <div class="relatorio-filtros">
+                    <div class="form-group">
+                        <label>Vendedor (chamado)</label>
+                        <select id="rel-filtro-vendedor">
+                            <option value="">Todos</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Status</label>
+                        <select id="rel-filtro-status">
+                            <option value="">Todos</option>
+                            <option value="Pendente">Pendente</option>
+                            <option value="Em Análise">Em Análise</option>
+                            <option value="Aprovado">Aprovado</option>
+                            <option value="Recusado">Recusado</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Data início</label>
+                        <input type="date" id="rel-filtro-data-inicio">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Data fim</label>
+                        <input type="date" id="rel-filtro-data-fim">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Produto (contém)</label>
+                        <input type="text" id="rel-filtro-produto" placeholder="Ex: ISCA ANIMAL">
+                    </div>
+
+                    <div class="form-group">
+                        <label>ID Cliente</label>
+                        <input type="text" id="rel-filtro-cliente" placeholder="Ex: 7866">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Busca livre</label>
+                        <input type="text" id="rel-filtro-busca" placeholder="Protocolo, nome, código...">
+                    </div>
+                </div>
+
+                <div class="relatorio-acoes">
+                    <button class="btn btn-primary" onclick="carregarRelatorio()">
+                        <i class="fas fa-search"></i> Filtrar
+                    </button>
+                    <button class="btn btn-back" onclick="limparFiltrosRelatorio()">
+                        <i class="fas fa-times"></i> Limpar Filtros
+                    </button>
+                    <button class="btn btn-success" onclick="exportarExcel()">
+                        <i class="fas fa-file-excel"></i> Exportar Excel
+                    </button>
+
+                    <label class="agregacao-toggle" id="agregacaoToggle" onclick="toggleAgregacao()">
+                        <input type="checkbox" id="chk-agregar">
+                        <span class="label"><i class="fas fa-layer-group"></i> Agregar por produto</span>
+                    </label>
                 </div>
             </div>
 
-            <div class="preview-table-wrapper" id="tableProdutos">
-                <table class="preview-table" id="tableProdutosContent"></table>
+            <!-- RESUMO -->
+            <div class="section" id="resumoSection" style="display:none;">
+                <div class="section-title">
+                    <i class="fas fa-chart-pie"></i> Resumo
+                </div>
+                <div class="resumo-grid" id="resumoGrid"></div>
             </div>
 
-            <div class="btn-group">
-                <button class="btn btn-success" id="btnImportarProdutos" disabled>
-                    <i class="fas fa-file-import"></i> Importar Produtos
-                </button>
-                <button class="btn btn-back" onclick="resetarProdutos()">
-                    <i class="fas fa-times"></i> Limpar
-                </button>
-                <button class="btn btn-danger" onclick="limparTabela('produtos_cj')">
-                    <i class="fas fa-trash"></i> Apagar Todos Produtos
-                </button>
+            <!-- TABELA -->
+            <div class="section">
+                <div class="section-title">
+                    <i class="fas fa-table"></i> Chamados
+                    <span id="rel-contador" style="font-size:0.85rem; color:#6b7a8a; font-weight:500; margin-left:auto;">
+                        0 registros
+                    </span>
+                </div>
+
+                <div class="relatorio-tabela-wrapper">
+                    <table class="relatorio-tabela" id="relatorioTabela">
+                        <thead id="relatorioThead"></thead>
+                        <tbody id="relatorioTbody">
+                            <tr><td colspan="20" style="text-align:center; padding:30px; color:#94a3b8;">
+                                <i class="fas fa-spinner fa-pulse fa-2x"></i>
+                                <p style="margin-top:8px;">Carregando...</p>
+                            </td></tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
+
+        </div><!-- /tab-relatorio -->
+
+    </div><!-- /container -->
+
+    <!-- MODAL DETALHE -->
+    <div class="modal-overlay" id="modalDetalhe" onclick="fecharModal(event)">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <button class="btn-fechar" onclick="fecharModal()"><i class="fas fa-times"></i></button>
+            <h2><i class="fas fa-file-alt" style="color:#f8b81f;"></i> Detalhe do Chamado</h2>
+            <div id="modalBody"></div>
         </div>
-
     </div>
 
+    <!-- FOOTER -->
     <footer>
-        <p><i class="fas fa-certificate"></i> Marine Fishing - Painel Admin</p>
-        <p style="font-size: 0.8rem; opacity: 0.6; margin-top: 6px;">Sistema de Garantia · CJ</p>
+        <p><i class="fas fa-fish"></i> Marine Fishing <i class="fas fa-fish"></i> — Projeto CJ © 2025</p>
     </footer>
 
     <script>
         // ================================================================
-        // CONFIG
+        // ESTADO GLOBAL
         // ================================================================
-        const API_URL = window.location.origin + '/api';
+        let chamadosOriginais = [];
+        let chamadosFiltrados = [];
+        let chamadosVisiveis = [];
+        let agregarAtivo = false;
+        let ordenacao = { campo: 'data_criacao', direcao: 'desc' };
+        let dadosExcelClientes = [];
+        let dadosExcelProdutos = [];
 
-        let dadosClientes = null;
-        let dadosProdutos = null;
+        // ================================================================
+        // ABAS
+        // ================================================================
+        function mudarAba(aba, btn) {
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById('tab-' + aba).classList.add('active');
+            btn.classList.add('active');
 
-        // ================================================================
-        // CARREGAR ESTATÍSTICAS
-        // ================================================================
-        async function carregarStats() {
-            try {
-                const res = await fetch(`${API_URL}/admin/stats`);
-                const data = await res.json();
-                if (data.success) {
-                    document.getElementById('statClientes').textContent = data.clientes || 0;
-                    document.getElementById('statProdutos').textContent = data.produtos || 0;
-                    document.getElementById('statGarantias').textContent = data.garantias || 0;
-                }
-            } catch (e) {
-                console.error('Erro ao buscar stats:', e);
+            if (aba === 'relatorio' && chamadosOriginais.length === 0) {
+                carregarRelatorio();
             }
         }
 
         // ================================================================
-        // LER ARQUIVO XLSX
-        // ================================================================
-        function lerXLSX(file) {
-            return new Promise((resolve, reject) => {
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    try {
-                        const data = new Uint8Array(e.target.result);
-                        const workbook = XLSX.read(data, { type: 'array' });
-                        const sheetName = workbook.SheetNames[0];
-                        const sheet = workbook.Sheets[sheetName];
-                        const json = XLSX.utils.sheet_to_json(sheet);
-                        resolve(json);
-                    } catch (err) {
-                        reject(err);
-                    }
-                };
-                reader.onerror = reject;
-                reader.readAsArrayBuffer(file);
-            });
-        }
-
-        // ================================================================
-        // RENDERIZAR PREVIEW DA TABELA
-        // ================================================================
-        function renderPreview(containerId, dados, maxRows = 10) {
-            const container = document.getElementById(containerId);
-            if (!dados || dados.length === 0) {
-                container.innerHTML = '<tr><td>Sem dados</td></tr>';
-                return;
-            }
-
-            const colunas = Object.keys(dados[0]);
-            let html = '<thead><tr>';
-            colunas.forEach(col => {
-                html += `<th>${col}</th>`;
-            });
-            html += '</tr></thead><tbody>';
-
-            dados.slice(0, maxRows).forEach(row => {
-                html += '<tr>';
-                colunas.forEach(col => {
-                    const valor = row[col] !== undefined && row[col] !== null ? row[col] : '';
-                    html += `<td>${valor}</td>`;
-                });
-                html += '</tr>';
-            });
-
-            html += '</tbody>';
-            container.innerHTML = html;
-        }
-
-        // ================================================================
-        // CLIENTES
+        // IMPORTAÇÃO - CLIENTES
         // ================================================================
         const dropClientes = document.getElementById('dropClientes');
         const fileClientes = document.getElementById('fileClientes');
 
         dropClientes.addEventListener('click', () => fileClientes.click());
-
-        dropClientes.addEventListener('dragover', (e) => {
+        dropClientes.addEventListener('dragover', e => {
             e.preventDefault();
             dropClientes.classList.add('dragover');
         });
-
-        dropClientes.addEventListener('dragleave', () => {
-            dropClientes.classList.remove('dragover');
-        });
-
-        dropClientes.addEventListener('drop', (e) => {
+        dropClientes.addEventListener('dragleave', () => dropClientes.classList.remove('dragover'));
+        dropClientes.addEventListener('drop', e => {
             e.preventDefault();
             dropClientes.classList.remove('dragover');
-            if (e.dataTransfer.files.length) {
-                processarClientes(e.dataTransfer.files[0]);
-            }
+            if (e.dataTransfer.files.length) processarClientes(e.dataTransfer.files[0]);
+        });
+        fileClientes.addEventListener('change', e => {
+            if (e.target.files.length) processarClientes(e.target.files[0]);
         });
 
-        fileClientes.addEventListener('change', (e) => {
-            if (e.target.files.length) {
-                processarClientes(e.target.files[0]);
-            }
-        });
+        function processarClientes(file) {
+            const reader = new FileReader();
+            reader.onload = e => {
+                const data = new Uint8Array(e.target.result);
+                const workbook = XLSX.read(data, { type: 'array' });
+                const sheet = workbook.Sheets[workbook.SheetNames[0]];
+                const json = XLSX.utils.sheet_to_json(sheet, { defval: '' });
 
-        async function processarClientes(file) {
-            try {
-                if (!file.name.match(/\.(xlsx|xls)$/i)) {
-                    Swal.fire('Erro', 'Envie apenas arquivos .xlsx ou .xls', 'error');
-                    return;
-                }
-
-                const dados = await lerXLSX(file);
-                dadosClientes = dados;
+                dadosExcelClientes = json;
 
                 document.getElementById('nomeArquivoClientes').textContent = file.name;
-                document.getElementById('totalClientes').textContent = dados.length;
+                document.getElementById('totalClientes').textContent = json.length;
                 document.getElementById('previewClientes').classList.add('show');
 
-                renderPreview('tableClientesContent', dados);
-                document.getElementById('tableClientes').classList.add('show');
-                document.getElementById('btnImportarClientes').disabled = false;
-
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Arquivo carregado!',
-                    text: `${dados.length} linhas encontradas. Clique em "Importar Clientes" para confirmar.`,
-                    timer: 2500,
-                    showConfirmButton: false,
-                    toast: true,
-                    position: 'top'
+                const preview = json.slice(0, 5);
+                const colunas = Object.keys(json[0] || {});
+                let html = '<thead><tr>' + colunas.map(c => `<th>${c}</th>`).join('') + '</tr></thead><tbody>';
+                preview.forEach(row => {
+                    html += '<tr>' + colunas.map(c => `<td>${row[c]}</td>`).join('') + '</tr>';
                 });
+                html += '</tbody>';
+                document.getElementById('tableClientesContent').innerHTML = html;
+                document.getElementById('tableClientes').classList.add('show');
 
-            } catch (e) {
-                console.error(e);
-                Swal.fire('Erro', 'Erro ao ler arquivo: ' + e.message, 'error');
-            }
+                document.getElementById('btnImportarClientes').disabled = false;
+            };
+            reader.readAsArrayBuffer(file);
         }
 
         document.getElementById('btnImportarClientes').addEventListener('click', async () => {
-            if (!dadosClientes || dadosClientes.length === 0) {
-                Swal.fire('Aviso', 'Nenhum dado carregado', 'warning');
-                return;
-            }
+            if (!dadosExcelClientes.length) return;
 
             const btn = document.getElementById('btnImportarClientes');
             btn.disabled = true;
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Importando...';
+            btn.innerHTML = '<i class="fas fa-spinner fa-pulse"></i> Importando...';
 
             try {
-                const res = await fetch(`${API_URL}/admin/importar-clientes`, {
+                const resp = await fetch('/api/admin/importar-clientes', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ dados: dadosClientes })
+                    body: JSON.stringify({ dados: dadosExcelClientes })
                 });
-
-                const result = await res.json();
+                const result = await resp.json();
 
                 if (result.success) {
                     Swal.fire({
                         icon: 'success',
-                        title: '✅ Clientes importados!',
-                        html: `
-                            <div style="text-align:left;">
-                                <p><strong>Inseridos:</strong> ${result.inseridos}</p>
-                                <p><strong>Atualizados:</strong> ${result.atualizados}</p>
-                                <p><strong>Ignorados:</strong> ${result.ignorados}</p>
-                                <p><strong>Total:</strong> ${result.total}</p>
-                            </div>
-                        `,
-                        confirmButtonText: 'OK',
-                        confirmButtonColor: '#10b981'
+                        title: 'Clientes importados!',
+                        text: `${result.total || dadosExcelClientes.length} registros processados.`,
+                        timer: 2500,
+                        showConfirmButton: false
                     });
-
                     resetarClientes();
-                    carregarStats();
                 } else {
-                    Swal.fire('Erro', result.error || 'Erro ao importar', 'error');
+                    throw new Error(result.error || 'Erro desconhecido');
                 }
-            } catch (e) {
-                Swal.fire('Erro', 'Erro na importação: ' + e.message, 'error');
+            } catch (err) {
+                Swal.fire('Erro', err.message, 'error');
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-file-import"></i> Importar Clientes';
             }
-
-            btn.disabled = false;
-            btn.innerHTML = '<i class="fas fa-file-import"></i> Importar Clientes';
         });
 
         function resetarClientes() {
-            dadosClientes = null;
-            document.getElementById('fileClientes').value = '';
+            dadosExcelClientes = [];
+            fileClientes.value = '';
             document.getElementById('previewClientes').classList.remove('show');
             document.getElementById('tableClientes').classList.remove('show');
             document.getElementById('btnImportarClientes').disabled = true;
         }
 
         // ================================================================
-        // PRODUTOS
+        // IMPORTAÇÃO - PRODUTOS
         // ================================================================
         const dropProdutos = document.getElementById('dropProdutos');
         const fileProdutos = document.getElementById('fileProdutos');
 
         dropProdutos.addEventListener('click', () => fileProdutos.click());
-
-        dropProdutos.addEventListener('dragover', (e) => {
+        dropProdutos.addEventListener('dragover', e => {
             e.preventDefault();
             dropProdutos.classList.add('dragover');
         });
-
-        dropProdutos.addEventListener('dragleave', () => {
-            dropProdutos.classList.remove('dragover');
-        });
-
-        dropProdutos.addEventListener('drop', (e) => {
+        dropProdutos.addEventListener('dragleave', () => dropProdutos.classList.remove('dragover'));
+        dropProdutos.addEventListener('drop', e => {
             e.preventDefault();
             dropProdutos.classList.remove('dragover');
-            if (e.dataTransfer.files.length) {
-                processarProdutos(e.dataTransfer.files[0]);
-            }
+            if (e.dataTransfer.files.length) processarProdutos(e.dataTransfer.files[0]);
+        });
+        fileProdutos.addEventListener('change', e => {
+            if (e.target.files.length) processarProdutos(e.target.files[0]);
         });
 
-        fileProdutos.addEventListener('change', (e) => {
-            if (e.target.files.length) {
-                processarProdutos(e.target.files[0]);
-            }
-        });
+        function processarProdutos(file) {
+            const reader = new FileReader();
+            reader.onload = e => {
+                const data = new Uint8Array(e.target.result);
+                const workbook = XLSX.read(data, { type: 'array' });
+                const sheet = workbook.Sheets[workbook.SheetNames[0]];
+                const json = XLSX.utils.sheet_to_json(sheet, { defval: '' });
 
-        async function processarProdutos(file) {
-            try {
-                if (!file.name.match(/\.(xlsx|xls)$/i)) {
-                    Swal.fire('Erro', 'Envie apenas arquivos .xlsx ou .xls', 'error');
-                    return;
-                }
-
-                const dados = await lerXLSX(file);
-                dadosProdutos = dados;
+                dadosExcelProdutos = json;
 
                 document.getElementById('nomeArquivoProdutos').textContent = file.name;
-                document.getElementById('totalProdutos').textContent = dados.length;
+                document.getElementById('totalProdutos').textContent = json.length;
                 document.getElementById('previewProdutos').classList.add('show');
 
-                renderPreview('tableProdutosContent', dados);
-                document.getElementById('tableProdutos').classList.add('show');
-                document.getElementById('btnImportarProdutos').disabled = false;
-
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Arquivo carregado!',
-                    text: `${dados.length} linhas encontradas.`,
-                    timer: 2500,
-                    showConfirmButton: false,
-                    toast: true,
-                    position: 'top'
+                const preview = json.slice(0, 5);
+                const colunas = Object.keys(json[0] || {});
+                let html = '<thead><tr>' + colunas.map(c => `<th>${c}</th>`).join('') + '</tr></thead><tbody>';
+                preview.forEach(row => {
+                    html += '<tr>' + colunas.map(c => `<td>${row[c]}</td>`).join('') + '</tr>';
                 });
+                html += '</tbody>';
+                document.getElementById('tableProdutosContent').innerHTML = html;
+                document.getElementById('tableProdutos').classList.add('show');
 
-            } catch (e) {
-                console.error(e);
-                Swal.fire('Erro', 'Erro ao ler arquivo: ' + e.message, 'error');
-            }
+                document.getElementById('btnImportarProdutos').disabled = false;
+            };
+            reader.readAsArrayBuffer(file);
         }
 
         document.getElementById('btnImportarProdutos').addEventListener('click', async () => {
-            if (!dadosProdutos || dadosProdutos.length === 0) {
-                Swal.fire('Aviso', 'Nenhum dado carregado', 'warning');
-                return;
-            }
+            if (!dadosExcelProdutos.length) return;
 
             const btn = document.getElementById('btnImportarProdutos');
             btn.disabled = true;
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Importando...';
+            btn.innerHTML = '<i class="fas fa-spinner fa-pulse"></i> Importando...';
 
             try {
-                const res = await fetch(`${API_URL}/admin/importar-produtos`, {
+                const resp = await fetch('/api/admin/importar-produtos', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ dados: dadosProdutos })
+                    body: JSON.stringify({ dados: dadosExcelProdutos })
                 });
-
-                const result = await res.json();
+                const result = await resp.json();
 
                 if (result.success) {
                     Swal.fire({
                         icon: 'success',
-                        title: '✅ Produtos importados!',
-                        html: `
-                            <div style="text-align:left;">
-                                <p><strong>Inseridos:</strong> ${result.inseridos}</p>
-                                <p><strong>Atualizados:</strong> ${result.atualizados}</p>
-                                <p><strong>Ignorados:</strong> ${result.ignorados}</p>
-                                <p><strong>Total:</strong> ${result.total}</p>
-                            </div>
-                        `,
-                        confirmButtonText: 'OK',
-                        confirmButtonColor: '#10b981'
+                        title: 'Produtos importados!',
+                        text: `${result.total || dadosExcelProdutos.length} registros processados.`,
+                        timer: 2500,
+                        showConfirmButton: false
                     });
-
                     resetarProdutos();
-                    carregarStats();
                 } else {
-                    Swal.fire('Erro', result.error || 'Erro ao importar', 'error');
+                    throw new Error(result.error || 'Erro desconhecido');
                 }
-            } catch (e) {
-                Swal.fire('Erro', 'Erro na importação: ' + e.message, 'error');
+            } catch (err) {
+                Swal.fire('Erro', err.message, 'error');
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-file-import"></i> Importar Produtos';
             }
-
-            btn.disabled = false;
-            btn.innerHTML = '<i class="fas fa-file-import"></i> Importar Produtos';
         });
 
         function resetarProdutos() {
-            dadosProdutos = null;
-            document.getElementById('fileProdutos').value = '';
+            dadosExcelProdutos = [];
+            fileProdutos.value = '';
             document.getElementById('previewProdutos').classList.remove('show');
             document.getElementById('tableProdutos').classList.remove('show');
             document.getElementById('btnImportarProdutos').disabled = true;
         }
 
         // ================================================================
-        // LIMPAR TABELA
+        // LIMPAR TABELAS
         // ================================================================
         async function limparTabela(tabela) {
-            const nome = tabela === 'clientes_cj' ? 'clientes' : 'produtos';
-
             const confirm = await Swal.fire({
-                title: '⚠️ Tem certeza?',
-                text: `Todos os ${nome} serão apagados permanentemente!`,
+                title: 'Tem certeza?',
+                text: `Isso vai apagar TODOS os registros de ${tabela}.`,
                 icon: 'warning',
                 showCancelButton: true,
-                confirmButtonText: 'Sim, apagar',
-                cancelButtonText: 'Cancelar',
                 confirmButtonColor: '#ef4444',
-                cancelButtonColor: '#6b7a8a'
+                confirmButtonText: 'Sim, apagar!',
+                cancelButtonText: 'Cancelar'
             });
 
             if (!confirm.isConfirmed) return;
 
             try {
-                const res = await fetch(`${API_URL}/admin/limpar/${tabela}`, { method: 'DELETE' });
-                const result = await res.json();
+                const resp = await fetch(`/api/admin/limpar/${tabela}`, { method: 'DELETE' });
+                const result = await resp.json();
 
                 if (result.success) {
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Apagado!',
-                        text: result.mensagem,
-                        timer: 2000,
-                        showConfirmButton: false,
-                        toast: true,
-                        position: 'top'
-                    });
-                    carregarStats();
+                    Swal.fire('Apagado!', `Tabela ${tabela} foi limpa.`, 'success');
                 } else {
-                    Swal.fire('Erro', result.error, 'error');
+                    throw new Error(result.error);
                 }
-            } catch (e) {
-                Swal.fire('Erro', e.message, 'error');
+            } catch (err) {
+                Swal.fire('Erro', err.message, 'error');
             }
         }
 
         // ================================================================
-        // INICIALIZAÇÃO
+        // RELATÓRIO
         // ================================================================
-        carregarStats();
-        setInterval(carregarStats, 15000);
-    </script>
+        async function carregarRelatorio() {
+            const tbody = document.getElementById('relatorioTbody');
+            tbody.innerHTML = '<tr><td colspan="20" style="text-align:center; padding:30px; color:#94a3b8;"><i class="fas fa-spinner fa-pulse fa-2x"></i><p style="margin-top:8px;">Carregando...</p></td></tr>';
 
+            try {
+                const resp = await fetch('/api/admin/relatorio-chamados');
+                const result = await resp.json();
+
+                if (!result.success) throw new Error(result.error);
+
+                chamadosOriginais = result.chamados || [];
+
+                const vendedores = [...new Set(chamadosOriginais.map(c => c.vendedor).filter(Boolean))].sort();
+                const selVend = document.getElementById('rel-filtro-vendedor');
+                selVend.innerHTML = '<option value="">Todos</option>' +
+                    vendedores.map(v => `<option value="${v}">${v}</option>`).join('');
+
+                aplicarFiltros();
+            } catch (err) {
+                tbody.innerHTML = `<tr><td colspan="20" style="text-align:center; padding:30px; color:#ef4444;">
+                    <i class="fas fa-exclamation-triangle fa-2x"></i>
+                    <p style="margin-top:8px;">Erro: ${err.message}</p>
+                </td></tr>`;
+            }
+        }
+
+        function aplicarFiltros() {
+            const vendedor = document.getElementById('rel-filtro-vendedor').value;
+            const status = document.getElementById('rel-filtro-status').value;
+            const dataInicio = document.getElementById('rel-filtro-data-inicio').value;
+            const dataFim = document.getElementById('rel-filtro-data-fim').value;
+            const produto = document.getElementById('rel-filtro-produto').value.toLowerCase();
+            const cliente = document.getElementById('rel-filtro-cliente').value.trim();
+            const busca = document.getElementById('rel-filtro-busca').value.toLowerCase();
+
+            chamadosFiltrados = chamadosOriginais.filter(c => {
+                if (vendedor && c.vendedor !== vendedor) return false;
+                if (status && c.status !== status) return false;
+                if (dataInicio && c.data_criacao && c.data_criacao.slice(0, 10) < dataInicio) return false;
+                if (dataFim && c.data_criacao && c.data_criacao.slice(0, 10) > dataFim) return false;
+                if (produto) {
+                    const txt = ((c.produto || '') + ' ' + (c.descricao_produto || '')).toLowerCase();
+                    if (!txt.includes(produto)) return false;
+                }
+                if (cliente && String(c.id_cliente || '') !== cliente) return false;
+                if (busca) {
+                    const txt = [
+                        c.protocolo, c.cliente_nome, c.produto, c.codigo_produto,
+                        c.id_cliente, c.nota_marine, c.descricao_defeito, c.vendedor
+                    ].join(' ').toLowerCase();
+                    if (!txt.includes(busca)) return false;
+                }
+                return true;
+            });
+
+            chamadosFiltrados.sort((a, b) => {
+                const va = a[ordenacao.campo] ?? '';
+                const vb = b[ordenacao.campo] ?? '';
+                if (va < vb) return ordenacao.direcao === 'asc' ? -1 : 1;
+                if (va > vb) return ordenacao.direcao === 'asc' ? 1 : -1;
+                return 0;
+            });
+
+            renderizarResumo();
+            renderizarTabela();
+        }
+
+        function toggleAgregacao() {
+            agregarAtivo = !agregarAtivo;
+            document.getElementById('chk-agregar').checked = agregarAtivo;
+            document.getElementById('agregacaoToggle').classList.toggle('active', agregarAtivo);
+            renderizarTabela();
+        }
+
+        function renderizarResumo() {
+            const section = document.getElementById('resumoSection');
+            section.style.display = 'block';
+
+            const total = chamadosFiltrados.length;
+            const pend = chamadosFiltrados.filter(c => c.status === 'Pendente').length;
+            const analise = chamadosFiltrados.filter(c => c.status === 'Em Análise').length;
+            const aprov = chamadosFiltrados.filter(c => c.status === 'Aprovado').length;
+            const recus = chamadosFiltrados.filter(c => c.status === 'Recusado').length;
+            const reab = chamadosFiltrados.filter(c => c.reaberto == 1 || c.reaberto === true).length;
+
+            document.getElementById('resumoGrid').innerHTML = `
+                <div class="resumo-card">
+                    <div class="num">${total}</div>
+                    <div class="lab">Total</div>
+                </div>
+                <div class="resumo-card pendente">
+                    <div class="num">${pend}</div>
+                    <div class="lab">Pendentes</div>
+                </div>
+                <div class="resumo-card analise">
+                    <div class="num">${analise}</div>
+                    <div class="lab">Em Análise</div>
+                </div>
+                <div class="resumo-card aprovado">
+                    <div class="num">${aprov}</div>
+                    <div class="lab">Aprovados</div>
+                </div>
+                <div class="resumo-card recusado">
+                    <div class="num">${recus}</div>
+                    <div class="lab">Recusados</div>
+                </div>
+                <div class="resumo-card">
+                    <div class="num">${reab}</div>
+                    <div class="lab">Reabertos</div>
+                </div>
+            `;
+        }
+
+        function renderizarTabela() {
+            const thead = document.getElementById('relatorioThead');
+            const tbody = document.getElementById('relatorioTbody');
+
+            const colunas = [
+                { key: 'protocolo', label: 'Protocolo' },
+                { key: 'data_criacao', label: 'Data' },
+                { key: 'vendedor', label: 'Vendedor' },
+                { key: 'id_cliente', label: 'ID Cliente' },
+                { key: 'cliente_nome', label: 'Nome Cliente' },
+                { key: 'codigo_produto', label: 'Cód. Produto' },
+                { key: 'descricao_produto', label: 'Descrição Produto' },
+                { key: 'nota_marine', label: 'Nota Marine' },
+                { key: 'status', label: 'Status' },
+                { key: 'decisao_tecnico', label: 'Decisão Técnico' }
+            ];
+
+            if (agregarAtivo) {
+                const grupos = {};
+                chamadosFiltrados.forEach(c => {
+                    const chave = (c.codigo_produto || '') + '|' + (c.descricao_produto || c.produto || '');
+                    if (!grupos[chave]) {
+                        grupos[chave] = {
+                            codigo_produto: c.codigo_produto,
+                            descricao_produto: c.descricao_produto || c.produto,
+                            quantidade: 0,
+                            clientes: new Set(),
+                            vendedores: new Set(),
+                            status: {},
+                            chamados: []
+                        };
+                    }
+                    const g = grupos[chave];
+                    g.quantidade++;
+                    g.clientes.add(c.cliente_nome || c.id_cliente);
+                    g.vendedores.add(c.vendedor);
+                    g.status[c.status] = (g.status[c.status] || 0) + 1;
+                    g.chamados.push(c);
+                });
+
+                const arr = Object.values(grupos).sort((a, b) => b.quantidade - a.quantidade);
+
+                thead.innerHTML = `
+                    <tr>
+                        <th>Cód. Produto</th>
+                        <th>Descrição Produto</th>
+                        <th>Qtd. Chamados</th>
+                        <th>Clientes Distintos</th>
+                        <th>Vendedores</th>
+                        <th>Status</th>
+                        <th>Alerta</th>
+                    </tr>
+                `;
+
+                tbody.innerHTML = arr.map(g => {
+                    let alertaClasse = '';
+                    let alertaBadge = '';
+                    if (g.quantidade >= 10) {
+                        alertaClasse = 'alerta-critico';
+                        alertaBadge = '<span class="badge-alerta vermelho"><i class="fas fa-exclamation-triangle"></i> CRÍTICO</span>';
+                    } else if (g.quantidade >= 5) {
+                        alertaClasse = 'alerta-produto';
+                        alertaBadge = '<span class="badge-alerta amarelo"><i class="fas fa-exclamation-circle"></i> ATENÇÃO</span>';
+                    }
+
+                    const statusStr = Object.entries(g.status).map(([k, v]) => `${k}: ${v}`).join(' | ');
+
+                    return `
+                        <tr class="${alertaClasse}">
+                            <td><strong>${g.codigo_produto || '—'}</strong></td>
+                            <td>${g.descricao_produto || '—'}</td>
+                            <td><strong style="font-size:1.1rem;">${g.quantidade}</strong></td>
+                            <td>${g.clientes.size}</td>
+                            <td>${[...g.vendedores].join(', ')}</td>
+                            <td style="font-size:0.7rem;">${statusStr}</td>
+                            <td>${alertaBadge}</td>
+                        </tr>
+                    `;
+                }).join('');
+
+                document.getElementById('rel-contador').textContent = `${arr.length} produtos agregados`;
+                chamadosVisiveis = arr;
+
+            } else {
+                thead.innerHTML = `
+                    <tr>
+                        ${colunas.map(c => `
+                            <th onclick="ordenarPor('${c.key}')" class="${ordenacao.campo === c.key ? 'sorted' : ''}">
+                                ${c.label}
+                                <i class="fas fa-sort sort-icon"></i>
+                            </th>
+                        `).join('')}
+                        <th>Ações</th>
+                    </tr>
+                `;
+
+                if (chamadosFiltrados.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="20" style="text-align:center; padding:30px; color:#94a3b8;">Nenhum chamado encontrado.</td></tr>';
+                    document.getElementById('rel-contador').textContent = '0 registros';
+                    chamadosVisiveis = [];
+                    return;
+                }
+
+                const contProduto = {};
+                chamadosFiltrados.forEach(c => {
+                    const k = c.codigo_produto || c.produto || '';
+                    contProduto[k] = (contProduto[k] || 0) + 1;
+                });
+
+                tbody.innerHTML = chamadosFiltrados.map(c => {
+                    const chaveProd = c.codigo_produto || c.produto || '';
+                    const qtd = contProduto[chaveProd] || 0;
+                    let alertaClasse = '';
+                    if (qtd >= 10) alertaClasse = 'alerta-critico';
+                    else if (qtd >= 5) alertaClasse = 'alerta-produto';
+
+                    const statusClass = c.status === 'Em Análise' ? 'analise' : (c.status || 'Pendente');
+
+                    return `
+                        <tr class="${alertaClasse}">
+                            <td><strong>${c.protocolo || '—'}</strong></td>
+                            <td>${c.data_criacao ? new Date(c.data_criacao).toLocaleDateString('pt-BR') : '—'}</td>
+                            <td>${c.vendedor || '—'}</td>
+                            <td>${c.id_cliente || '—'}</td>
+                            <td>${c.cliente_nome || '—'}</td>
+                            <td>${c.codigo_produto || '—'}</td>
+                            <td>${c.descricao_produto || c.produto || '—'}</td>
+                            <td>${c.nota_marine || '—'}</td>
+                            <td><span class="status-badge status-${statusClass}">${c.status || 'Pendente'}</span></td>
+                            <td>${c.decisao_tecnico || '—'}</td>
+                            <td>
+                                <button class="btn btn-primary" style="padding:6px 12px; font-size:0.7rem;" onclick="verDetalhe(${c.id})">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    `;
+                }).join('');
+
+                document.getElementById('rel-contador').textContent = `${chamadosFiltrados.length} registros`;
+                chamadosVisiveis = chamadosFiltrados;
+            }
+        }
+
+        function ordenarPor(campo) {
+            if (ordenacao.campo === campo) {
+                ordenacao.direcao = ordenacao.direcao === 'asc' ? 'desc' : 'asc';
+            } else {
+                ordenacao.campo = campo;
+                ordenacao.direcao = 'asc';
+            }
+            aplicarFiltros();
+        }
+
+        function verDetalhe(id) {
+            const c = chamadosOriginais.find(x => x.id === id);
+            if (!c) return;
+
+            const campos = [
+                ['Protocolo', c.protocolo],
+                ['Data Criação', c.data_criacao ? new Date(c.data_criacao).toLocaleString('pt-BR') : '—'],
+                ['Vendedor (chamado)', c.vendedor],
+                ['ID Cliente', c.id_cliente],
+                ['Nome Cliente', c.cliente_nome],
+                ['Vendedor do Cliente', c.vendedor_cliente],
+                ['Produto', c.produto],
+                ['Código Produto', c.codigo_produto],
+                ['Descrição Produto', c.descricao_produto],
+                ['Nota Marine', c.nota_marine],
+                ['Teste Receber', c.teste_receber],
+                ['Teste Venda', c.teste_venda],
+                ['Tempo de Uso', c.tempo_uso],
+                ['Descrição do Defeito', c.descricao_defeito],
+                ['Capacidade da Loja', c.capacidade_loja],
+                ['Status', c.status],
+                ['Decisão Técnico', c.decisao_tecnico],
+                ['Reaberto', c.reaberto == 1 || c.reaberto === true ? 'Sim' : 'Não'],
+                ['Reaberto em', c.reaberto_em],
+                ['Motivo Reabertura', c.motivo_reabertura],
+                ['Última Atualização', c.data_atualizacao]
+            ];
+
+            document.getElementById('modalBody').innerHTML = campos.map(([label, val]) => `
+                <div class="campo">
+                    <div class="label">${label}</div>
+                    <div class="value">${val || '—'}</div>
+                </div>
+            `).join('');
+
+            document.getElementById('modalDetalhe').classList.add('active');
+        }
+
+        function fecharModal(e) {
+            if (e && e.target && e.target.id !== 'modalDetalhe' && e.type === 'click') return;
+            document.getElementById('modalDetalhe').classList.remove('active');
+        }
+
+        function limparFiltrosRelatorio() {
+            document.getElementById('rel-filtro-vendedor').value = '';
+            document.getElementById('rel-filtro-status').value = '';
+            document.getElementById('rel-filtro-data-inicio').value = '';
+            document.getElementById('rel-filtro-data-fim').value = '';
+            document.getElementById('rel-filtro-produto').value = '';
+            document.getElementById('rel-filtro-cliente').value = '';
+            document.getElementById('rel-filtro-busca').value = '';
+            aplicarFiltros();
+        }
+
+        // ================================================================
+        // EXPORTAR EXCEL
+        // ================================================================
+        function exportarExcel() {
+            if (!chamadosVisiveis.length) {
+                Swal.fire('Atenção', 'Nada para exportar. Filtre primeiro.', 'warning');
+                return;
+            }
+
+            let dados;
+
+            if (agregarAtivo) {
+                dados = chamadosVisiveis.map(g => ({
+                    'Código Produto': g.codigo_produto,
+                    'Descrição Produto': g.descricao_produto,
+                    'Qtd. Chamados': g.quantidade,
+                    'Clientes Distintos': g.clientes.size,
+                    'Vendedores': [...g.vendedores].join(', '),
+                    'Status': Object.entries(g.status).map(([k, v]) => `${k}: ${v}`).join(' | '),
+                    'Alerta': g.quantidade >= 10 ? 'CRÍTICO' : (g.quantidade >= 5 ? 'ATENÇÃO' : '')
+                }));
+            } else {
+                dados = chamadosVisiveis.map(c => ({
+                    'Protocolo': c.protocolo,
+                    'Data': c.data_criacao ? new Date(c.data_criacao).toLocaleDateString('pt-BR') : '',
+                    'Vendedor': c.vendedor,
+                    'ID Cliente': c.id_cliente,
+                    'Nome Cliente': c.cliente_nome,
+                    'Código Produto': c.codigo_produto,
+                    'Descrição Produto': c.descricao_produto || c.produto,
+                    'Nota Marine': c.nota_marine,
+                    'Status': c.status,
+                    'Decisão Técnico': c.decisao_tecnico,
+                    'Reaberto': (c.reaberto == 1 || c.reaberto === true) ? 'Sim' : 'Não'
+                }));
+            }
+
+            const ws = XLSX.utils.json_to_sheet(dados);
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, agregarAtivo ? 'Produtos Agregados' : 'Chamados');
+
+            const nomeArq = `relatorio_cj_${new Date().toISOString().slice(0, 10)}.xlsx`;
+            XLSX.writeFile(wb, nomeArq);
+        }
+
+        // ================================================================
+        // INIT
+        // ================================================================
+        document.querySelectorAll('.relatorio-filtros input, .relatorio-filtros select').forEach(el => {
+            el.addEventListener('keypress', e => {
+                if (e.key === 'Enter') aplicarFiltros();
+            });
+            el.addEventListener('change', () => aplicarFiltros());
+        });
+    </script>
 </body>
 </html>
