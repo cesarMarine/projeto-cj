@@ -1266,12 +1266,12 @@
 
             <div class="form-group">
                 <label><span data-i18n="label_tempo_uso">Tempo de uso até apresentar o problema</span> <span class="required">*</span></label>
-                <select id="tempoUso">
-                    <option value="" data-i18n="selecione">Selecione...</option>
-                    <option value="Nunca usado" data-i18n="nunca_usado">Nunca usado</option>
-                    <option value="De 1 a 6 meses" data-i18n="de_1_a_6">De 1 a 6 meses</option>
-                    <option value="Mais de 6 meses" data-i18n="mais_6">Mais de 6 meses</option>
-                </select>
+<select id="tempoUso">
+    <option value="">Selecione...</option>
+    <option value="0 a 3 meses" data-i18n="de_0_a_3">0 a 3 meses</option>
+    <option value="3 a 6 meses" data-i18n="de_3_a_6">3 a 6 meses</option>
+    <option value="Mais de 6 meses" data-i18n="mais_6">Mais de 6 meses</option>
+</select>
             </div>
 
             <div class="form-actions">
@@ -1449,12 +1449,12 @@
 
                 <div class="form-group">
                     <label><span data-i18n="label_tempo_uso">Tempo de uso até apresentar o problema</span> <span class="required">*</span></label>
-                    <select id="reabrirTempoUso">
-                        <option value="" data-i18n="selecione">Selecione...</option>
-                        <option value="Nunca usado" data-i18n="nunca_usado">Nunca usado</option>
-                        <option value="De 1 a 6 meses" data-i18n="de_1_a_6">De 1 a 6 meses</option>
-                        <option value="Mais de 6 meses" data-i18n="mais_6">Mais de 6 meses</option>
-                    </select>
+<select id="reabrirTempoUso">
+    <option value="" data-i18n="selecione">Selecione...</option>
+    <option value="0 a 3 meses" data-i18n="de_0_a_3">0 a 3 meses</option>
+    <option value="3 a 6 meses" data-i18n="de_3_a_6">3 a 6 meses</option>
+    <option value="Mais de 6 meses" data-i18n="mais_6">Mais de 6 meses</option>
+</select>
                 </div>
 
                 <div class="form-group">
@@ -1705,9 +1705,9 @@
                 label_tempo_uso: "Tiempo de uso hasta presentar el problema",
                 sim: "Sí",
                 nao: "No",
-                nunca_usado: "Nunca usado",
-                de_1_a_6: "De 1 a 6 meses",
-                mais_6: "Más de 6 meses",
+               // nunca_usado: "Nunca usado",
+                //de_1_a_6: "De 1 a 6 meses",
+                //mais_6: "Más de 6 meses",
                 titulo_defeito: "Defecto y Adjuntos",
                 passo_4_de_5: "Paso 4 de 5",
                 label_descricao_defeito: "¿Cómo ocurrió el defecto?",
@@ -2577,87 +2577,75 @@
         // ENVIO DO CHAMADO
         // ================================================================
         async function submitChamado() {
-            const btn = document.querySelector('.btn-submit');
-            btn.disabled = true;
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+    const btn = document.querySelector('.btn-submit');
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
 
-            try {
-                const arquivosBase64 = [];
-                for (const arquivo of arquivosUpload) {
-                    arquivosBase64.push({
-                        nome: arquivo.name,
-                        tamanho: arquivo.tamanho,
-                        tipo: arquivo.type,
-                        dataUrl: arquivo.dataUrl
-                    });
-                }
+    try {
+        const formData = new FormData();
 
-                const notasBase64 = [];
-                for (const file of notaClienteFiles) {
-                    const base64 = await fileParaBase64(file);
-                    notasBase64.push({
-                        nome: file.name,
-                        tamanho: file.size,
-                        tipo: file.type,
-                        dataUrl: base64
-                    });
-                }
+        // Campos de texto
+        formData.append('vendedor', document.getElementById('selectVendedor').value);
+        formData.append('produto', selectedProduct ? selectedProduct.id : '');
+        formData.append('codigo_produto', produtoEncontrado ? produtoEncontrado.codigo : '');
+        formData.append('descricao_produto', produtoEncontrado ? produtoEncontrado.descricao : '');
+        formData.append('cliente_id', clienteEncontrado ? clienteEncontrado.id_cliente : '');
+        formData.append('cliente_nome', clienteEncontrado ? clienteEncontrado.cliente_nome : '');
+        formData.append('nota_marine', document.getElementById('numeroNotaMarine').value);
+        formData.append('teste_receber', document.getElementById('testeReceber').value);
+        formData.append('teste_venda', document.getElementById('testeVenda').value);
+        formData.append('tempo_uso', document.getElementById('tempoUso').value);
+        formData.append('descricao_defeito', document.getElementById('descricaoDefeito').value);
+        formData.append('capacidade_loja', document.getElementById('capacidadeLoja').value);
 
-                const dados = {
-                    vendedor: document.getElementById('selectVendedor').value,
-                    produto: selectedProduct ? selectedProduct.id : 'N/A',
-                    codigo_produto: produtoEncontrado ? produtoEncontrado.codigo : 'N/A',
-                    descricao_produto: produtoEncontrado ? produtoEncontrado.descricao : 'N/A',
-                    cliente: clienteEncontrado,
-                    notaMarine: document.getElementById('numeroNotaMarine').value,
-                    testeReceber: document.getElementById('testeReceber').value,
-                    testeVenda: document.getElementById('testeVenda').value,
-                    tempoUso: document.getElementById('tempoUso').value,
-                    descricaoDefeito: document.getElementById('descricaoDefeito').value,
-                    capacidadeLoja: document.getElementById('capacidadeLoja').value,
-                    arquivos: arquivosBase64,
-                    notasCliente: notasBase64
-                };
-
-                const response = await fetch(`${API_URL}/novo`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(dados)
-                });
-
-                const result = await response.json();
-
-                if (result.success) {
-                    const vendedor = document.getElementById('selectVendedor').value;
-                    if (vendedor) await carregarChamadosVendedor(vendedor);
-
-                    Swal.fire({
-                        title: t('chamado_criado_titulo'),
-                        html: `
-                            <div style="text-align:center;">
-                                <i class="fas fa-check-circle" style="font-size:48px;color:#10b981;"></i>
-                                <p style="font-size:20px;font-weight:700;margin-top:10px;">${selectedProduct ? t(selectedProduct.tKey) : ''}</p>
-                                <p style="color:#0d3b66;font-size:24px;font-weight:800;">${result.protocolo}</p>
-                                <p style="color:#64748b;font-size:14px;">${t('cliente_label')}: ${clienteEncontrado ? clienteEncontrado.cliente_nome : 'N/A'}</p>
-                                <p style="color:#64748b;font-size:14px;">${t('produto_label')}: ${produtoEncontrado ? produtoEncontrado.codigo + ' - ' + produtoEncontrado.descricao : 'N/A'}</p>
-                                <p style="color:#64748b;font-size:14px;">${t('arquivos_enviados')}: ${result.arquivos || 0}</p>
-                            </div>
-                        `,
-                        icon: 'success',
-                        confirmButtonText: t('chamado_criado_ok'),
-                        confirmButtonColor: '#10b981'
-                    }).then(() => resetarFormulario());
-                } else {
-                    showAlert('error', '❌ ' + (result.error || t('erro')));
-                }
-            } catch (error) {
-                showAlert('error', '❌ ' + t('erro_enviar') + error.message);
-            }
-
-            btn.disabled = false;
-            btn.innerHTML = `<i class="fas fa-paper-plane"></i> ${t('botao_enviar')}`;
+        // Arquivos (File direto, sem base64)
+        for (const item of arquivosUpload) {
+            formData.append('arquivos', item.file);
         }
 
+        // Notas do cliente
+        for (const file of notaClienteFiles) {
+            formData.append('notasCliente', file);
+        }
+
+        const response = await fetch(`${API_URL}/novo`, {
+            method: 'POST',
+            body: formData
+            // ⚠️ NÃO colocar Content-Type! O fetch define sozinho
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+            const vendedor = document.getElementById('selectVendedor').value;
+            if (vendedor) await carregarChamadosVendedor(vendedor);
+
+            Swal.fire({
+                title: t('chamado_criado_titulo'),
+                html: `
+                    <div style="text-align:center;">
+                        <i class="fas fa-check-circle" style="font-size:48px;color:#10b981;"></i>
+                        <p style="font-size:20px;font-weight:700;margin-top:10px;">${selectedProduct ? t(selectedProduct.tKey) : ''}</p>
+                        <p style="color:#0d3b66;font-size:24px;font-weight:800;">${result.protocolo}</p>
+                        <p style="color:#64748b;font-size:14px;">${t('cliente_label')}: ${clienteEncontrado ? clienteEncontrado.cliente_nome : 'N/A'}</p>
+                        <p style="color:#64748b;font-size:14px;">${t('produto_label')}: ${produtoEncontrado ? produtoEncontrado.codigo + ' - ' + produtoEncontrado.descricao : 'N/A'}</p>
+                        <p style="color:#64748b;font-size:14px;">${t('arquivos_enviados')}: ${result.arquivos || 0}</p>
+                    </div>
+                `,
+                icon: 'success',
+                confirmButtonText: t('chamado_criado_ok'),
+                confirmButtonColor: '#10b981'
+            }).then(() => resetarFormulario());
+        } else {
+            showAlert('error', '❌ ' + (result.error || t('erro')));
+        }
+    } catch (error) {
+        showAlert('error', '❌ ' + t('erro_enviar') + error.message);
+    }
+
+    btn.disabled = false;
+    btn.innerHTML = `<i class="fas fa-paper-plane"></i> ${t('botao_enviar')}`;
+}
         function resetarFormulario() {
             document.querySelectorAll('.step').forEach(s => s.classList.remove('active', 'completed'));
             document.querySelector('.step[data-step="1"]').classList.add('active');

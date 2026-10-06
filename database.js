@@ -15,6 +15,16 @@ function converterPlaceholders(sql) {
     return sql.replace(/\?/g, () => `$${++i}`);
 }
 
+// Prepara os parâmetros: converte objetos/arrays em JSON string (pro jsonb)
+function prepararParams(params) {
+    if (!Array.isArray(params)) return [];
+    return params.map(p => {
+        if (p === null || p === undefined) return null;
+        if (typeof p === 'object') return JSON.stringify(p);
+        return p;
+    });
+}
+
 export async function openDb() {
     if (dbWrapper) return dbWrapper;
 
@@ -41,17 +51,17 @@ export async function openDb() {
 
     dbWrapper = {
         all: async (sql, params = []) => {
-            const result = await pool.query(converterPlaceholders(sql), params);
+            const result = await pool.query(converterPlaceholders(sql), prepararParams(params));
             return result.rows;
         },
 
         get: async (sql, params = []) => {
-            const result = await pool.query(converterPlaceholders(sql), params);
+            const result = await pool.query(converterPlaceholders(sql), prepararParams(params));
             return result.rows[0];
         },
 
         run: async (sql, params = []) => {
-            const result = await pool.query(converterPlaceholders(sql), params);
+            const result = await pool.query(converterPlaceholders(sql), prepararParams(params));
             return {
                 changes: result.rowCount,
                 lastID: result.rows[0]?.id
@@ -63,7 +73,7 @@ export async function openDb() {
         },
 
         query: async (sql, params = []) => {
-            const result = await pool.query(converterPlaceholders(sql), params);
+            const result = await pool.query(converterPlaceholders(sql), prepararParams(params));
             return result.rows;
         },
 
@@ -71,7 +81,7 @@ export async function openDb() {
             const pgSql = converterPlaceholders(sql);
             return {
                 run: async (params = []) => {
-                    const result = await pool.query(pgSql, params);
+                    const result = await pool.query(pgSql, prepararParams(params));
                     return {
                         changes: result.rowCount,
                         lastID: result.rows[0]?.id

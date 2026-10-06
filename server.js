@@ -4,6 +4,8 @@ import cors from 'cors';
 import path from 'path';
 import fs from 'fs';
 import XLSX from 'xlsx';
+import multer from 'multer';
+import { createClient } from '@supabase/supabase-js';
 import { fileURLToPath } from 'url';
 import openDb from './database.js';
 
@@ -11,7 +13,25 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
-const PORT = 3200;
+const PORT = process.env.PORT || 3200;
+
+// ===== SUPABASE (para storage) =====
+const SUPABASE_URL = process.env.SUPABASE_URL;
+const SUPABASE_KEY = process.env.SUPABASE_KEY;
+let supabase = null;
+
+if (SUPABASE_URL && SUPABASE_KEY) {
+    supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+    console.log('✅ Supabase client configurado');
+} else {
+    console.warn('⚠️ SUPABASE_URL ou SUPABASE_KEY não configurados — uploads vão falhar');
+}
+
+// ===== MULTER (upload em memória) =====
+const upload = multer({
+    storage: multer.memoryStorage(),
+    limits: { fileSize: 100 * 1024 * 1024 } // 100MB
+});
 
 // ===== MIDDLEWARES =====
 app.use(cors());
@@ -33,29 +53,52 @@ if (!fs.existsSync(uploadsDir)) {
 // 🏠 ROTAS DE PÁGINAS
 // ================================================================
 
-// Admin
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'admin.html'));
 });
 
-// Garantia (vendedor)
 app.get('/garantia', (req, res) => {
     res.sendFile(path.join(__dirname, 'garantia.html'));
 });
 
-// Técnico
-// Técnico
 app.get('/tecnico', (req, res) => {
     res.sendFile(path.join(__dirname, 'tecnico.html'));
 });
+
 app.get('/angelo', (req, res) => {
     res.sendFile(path.join(__dirname, 'tecnico.html'));
 });
 
-// Healthcheck
 app.get('/api/teste', (req, res) => {
     res.json({ success: true, mensagem: 'Servidor funcionando!', timestamp: new Date().toISOString() });
 });
+
+// ================================================================
+// 📤 UPLOAD PARA SUPABASE STORAGE
+// ================================================================
+async function uploadArquivoSupabase(buffer, nomeOriginal, mimetype, prefixo = 'arq') {
+    if (!supabase) throw new Error('Supabase não configurado');
+
+    const timestamp = Date.now();
+    const random = Math.random().toString(36).substring(2, 8);
+    const nomeLimpo = nomeOriginal.replace(/[^a-zA-Z0-9_.-]/g, '_');
+    const fileName = `${prefixo}/${timestamp}_${random}_${nomeLimpo}`;
+
+    const { error } = await supabase.storage
+        .from('anexos-chamados-cj')
+        .upload(fileName, buffer, {
+            contentType: mimetype,
+            upsert: true
+        });
+
+    if (error) throw new Error(`Erro upload: ${error.message}`);
+
+    const { data } = supabase.storage
+        .from('anexos-chamados-cj')
+        .getPublicUrl(fileName);
+
+    return data.publicUrl;
+}
 
 // ================================================================
 // 📥 ADMIN - IMPORTAÇÃO DE PLANILHAS
@@ -77,8 +120,6 @@ app.post('/api/admin/importar-clientes', async (req, res) => {
         let atualizados = 0;
         let ignorados = 0;
 
-        //await db.run('BEGIN TRANSACTION');
-
         const stmt = await db.prepare(`
             INSERT INTO clientes_cj (codigo_cli, nome_cli, vendedor)
             VALUES (?, ?, ?)
@@ -98,7 +139,6 @@ app.post('/api/admin/importar-clientes', async (req, res) => {
             }
 
             const existe = await db.get('SELECT id FROM clientes_cj WHERE codigo_cli = ?', [codigo]);
-
             await stmt.run([codigo, nome, vendedor]);
 
             if (existe) atualizados++;
@@ -106,7 +146,6 @@ app.post('/api/admin/importar-clientes', async (req, res) => {
         }
 
         await stmt.finalize();
-       // await db.run('COMMIT');
 
         res.json({
             success: true,
@@ -139,8 +178,6 @@ app.post('/api/admin/importar-produtos', async (req, res) => {
         let atualizados = 0;
         let ignorados = 0;
 
-        //await db.run('BEGIN TRANSACTION');
-
         const stmt = await db.prepare(`
             INSERT INTO produtos_cj (codigo, codigo_cj, descricao)
             VALUES (?, ?, ?)
@@ -160,7 +197,6 @@ app.post('/api/admin/importar-produtos', async (req, res) => {
             }
 
             const existe = await db.get('SELECT id FROM produtos_cj WHERE codigo_cj = ?', [codigoCj]);
-
             await stmt.run([codigo, codigoCj, descricao]);
 
             if (existe) atualizados++;
@@ -168,7 +204,6 @@ app.post('/api/admin/importar-produtos', async (req, res) => {
         }
 
         await stmt.finalize();
-        //await db.run('COMMIT');
 
         res.json({
             success: true,
@@ -192,7 +227,6 @@ app.post('/api/admin/importar-produtos', async (req, res) => {
 app.get('/api/admin/stats', async (req, res) => {
     try {
         const db = await openDb();
-
         const totalClientes = await db.get('SELECT COUNT(*) as total FROM clientes_cj');
         const totalProdutos = await db.get('SELECT COUNT(*) as total FROM produtos_cj');
         const totalChamados = await db.get('SELECT COUNT(*) as total FROM chamados_cj');
@@ -220,7 +254,6 @@ app.delete('/api/admin/limpar/:tabela', async (req, res) => {
 
         const db = await openDb();
         await db.run(`DELETE FROM ${tabela}`);
-
         res.json({ success: true, mensagem: `Tabela ${tabela} limpa com sucesso!` });
     } catch (error) {
         res.status(500).json({ success: false, error: error.message });
@@ -231,7 +264,6 @@ app.delete('/api/admin/limpar/:tabela', async (req, res) => {
 // 🔍 BUSCA DE CLIENTES E PRODUTOS
 // ================================================================
 
-// Buscar cliente por código
 app.get('/api/garantia/buscar-cliente-exato/:id', async (req, res) => {
     try {
         const db = await openDb();
@@ -257,7 +289,6 @@ app.get('/api/garantia/buscar-cliente-exato/:id', async (req, res) => {
     }
 });
 
-// Buscar cliente por termo (nome ou código)
 app.get('/api/garantia/buscar-cliente/:termo', async (req, res) => {
     try {
         const db = await openDb();
@@ -279,7 +310,6 @@ app.get('/api/garantia/buscar-cliente/:termo', async (req, res) => {
     }
 });
 
-// Buscar cliente unificado
 app.get('/api/garantia/buscar-cliente-unificado/:termo', async (req, res) => {
     try {
         const db = await openDb();
@@ -301,7 +331,6 @@ app.get('/api/garantia/buscar-cliente-unificado/:termo', async (req, res) => {
     }
 });
 
-// Buscar produto
 app.get('/api/garantia/buscar-produto/:codigo', async (req, res) => {
     try {
         const db = await openDb();
@@ -323,7 +352,6 @@ app.get('/api/garantia/buscar-produto/:codigo', async (req, res) => {
     }
 });
 
-// Verificar produto
 app.get('/api/garantia/verificar-produto/:codigo', async (req, res) => {
     try {
         const db = await openDb();
@@ -346,12 +374,14 @@ app.get('/api/garantia/verificar-produto/:codigo', async (req, res) => {
 });
 
 // ================================================================
-// 📋 CHAMADOS
+// 📋 CRIAR NOVO CHAMADO (COM UPLOAD DE ARQUIVOS)
 // ================================================================
-
-// Criar novo chamado
-// Criar novo chamado
-app.post('/api/garantia/novo', async (req, res) => {
+app.post('/api/garantia/novo',
+    upload.fields([
+        { name: 'arquivos', maxCount: 5 },
+        { name: 'notasCliente', maxCount: 10 }
+    ]),
+    async (req, res) => {
     try {
         const db = await openDb();
         const dados = req.body;
@@ -364,34 +394,105 @@ app.post('/api/garantia/novo', async (req, res) => {
         const random = String(Math.floor(Math.random() * 9999)).padStart(4, '0');
         const protocolo = 'GAR-' + data + '-' + random;
 
-        const result = await db.run(`
+        // Processa uploads
+        const arquivosUrls = [];
+        const notasUrls = [];
+
+        if (req.files && req.files['arquivos']) {
+            for (const file of req.files['arquivos']) {
+                try {
+                    const url = await uploadArquivoSupabase(
+                        file.buffer,
+                        file.originalname,
+                        file.mimetype,
+                        `cj/${protocolo}/fotos`
+                    );
+                    arquivosUrls.push({
+                        nome: file.originalname,
+                        url: url,
+                        tipo: file.mimetype,
+                        tamanho: file.size,
+                        categoria: 'foto_video'
+                    });
+                } catch (err) {
+                    console.error('❌ Erro upload foto/vídeo:', err.message);
+                }
+            }
+        }
+
+        if (req.files && req.files['notasCliente']) {
+            for (const file of req.files['notasCliente']) {
+                try {
+                    const url = await uploadArquivoSupabase(
+                        file.buffer,
+                        file.originalname,
+                        file.mimetype,
+                        `cj/${protocolo}/notas`
+                    );
+                    notasUrls.push({
+                        nome: file.originalname,
+                        url: url,
+                        tipo: file.mimetype,
+                        tamanho: file.size,
+                        categoria: 'nota_cliente'
+                    });
+                } catch (err) {
+                    console.error('❌ Erro upload nota:', err.message);
+                }
+            }
+        }
+
+        const todosArquivos = [...arquivosUrls, ...notasUrls];
+        const conversaInicial = [{
+            id: 'msg_' + Date.now(),
+            remetente: 'Sistema',
+            tipo: 'tecnico',
+            mensagem: `Chamado criado com ${todosArquivos.length} arquivo(s) anexado(s).`,
+            data: new Date().toLocaleString('pt-BR'),
+            timestamp: Date.now(),
+            lida: false
+        }];
+
+        // Busca o vendedor do cliente
+        const clienteInfo = await db.get(
+            'SELECT vendedor FROM clientes_cj WHERE codigo_cli = ?',
+            [dados.cliente_id || '']
+        );
+
+        await db.run(`
             INSERT INTO chamados_cj (
                 protocolo, vendedor, id_cliente, cliente_nome, vendedor_cliente,
                 produto, codigo_produto, descricao_produto, nota_marine,
                 teste_receber, teste_venda, tempo_uso,
-                descricao_defeito, capacidade_loja, status, origem
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'Pendente', 'CJ')
+                descricao_defeito, capacidade_loja, status, origem,
+                arquivos_json, conversa
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'Pendente', 'CJ', ?, ?)
         `, [
             protocolo,
             dados.vendedor,
-            dados.cliente?.id_cliente || '',
-            dados.cliente?.cliente_nome || '',
-            dados.cliente?.vendedor || '',
+            dados.cliente_id || '',
+            dados.cliente_nome || '',
+            clienteInfo?.vendedor || '',
             dados.produto || '',
             dados.codigo_produto || '',
             dados.descricao_produto || '',
-            dados.notaMarine || '',
-            dados.testeReceber || '',
-            dados.testeVenda || '',
-            dados.tempoUso || '',
-            dados.descricaoDefeito || '',
-            dados.capacidadeLoja || ''
+            dados.nota_marine || '',
+            dados.teste_receber || '',
+            dados.teste_venda || '',
+            dados.tempo_uso || '',
+            dados.descricao_defeito || '',
+            dados.capacidade_loja || '',
+            todosArquivos,
+            conversaInicial
         ]);
+
+        const novoId = await db.get('SELECT id FROM chamados_cj WHERE protocolo = ?', [protocolo]);
 
         res.json({
             success: true,
             protocolo,
-            id: result.lastID,
+            id: novoId?.id,
+            arquivos: todosArquivos.length,
             mensagem: 'Chamado criado com sucesso!'
         });
 
@@ -400,7 +501,10 @@ app.post('/api/garantia/novo', async (req, res) => {
         res.status(500).json({ success: false, error: error.message });
     }
 });
-// Listar chamados de um vendedor
+
+// ================================================================
+// 📋 LISTAR CHAMADOS DE UM VENDEDOR
+// ================================================================
 app.get('/api/garantia/vendedor/:vendedor', async (req, res) => {
     try {
         const db = await openDb();
@@ -410,36 +514,44 @@ app.get('/api/garantia/vendedor/:vendedor', async (req, res) => {
             SELECT 
                 id, protocolo, vendedor, id_cliente, cliente_nome, vendedor_cliente,
                 produto, codigo_produto, descricao_produto, nota_marine,
-                status,
-                data_criacao,
-                decisao_tecnico
+                status, data_criacao, decisao_tecnico,
+                conversa, arquivos_json
             FROM chamados_cj
             WHERE vendedor = ?
             ORDER BY data_criacao DESC
         `, [vendedor]);
 
-        res.json({ success: true, chamados });
+        const chamadosComNaoLidas = chamados.map(c => {
+            let naoLidas = 0;
+            try {
+                const conversa = Array.isArray(c.conversa) ? c.conversa : JSON.parse(c.conversa || '[]');
+                naoLidas = conversa.filter(m => m.tipo === 'tecnico' && !m.lida).length;
+            } catch(e) {}
+            return { ...c, msg_nao_lidas: naoLidas };
+        });
+
+        res.json({ success: true, chamados: chamadosComNaoLidas });
     } catch (error) {
         res.status(500).json({ success: false, error: error.message });
     }
 });
 
-// Listar todos os chamados (técnico)
-// Listar todos os chamados (técnico) - aceita filtro por origem
+// ================================================================
+// 📋 LISTAR TODOS OS CHAMADOS (TÉCNICO) - aceita filtro por origem
+// ================================================================
 app.get('/api/garantia/todos', async (req, res) => {
     try {
         const db = await openDb();
-        const { origem } = req.query; // 'CJ' ou 'MARINE' (ou vazio pra todos)
+        const { origem } = req.query;
 
         let sql = `
             SELECT 
                 id, protocolo, vendedor, id_cliente, cliente_nome, vendedor_cliente,
                 produto, codigo_produto, descricao_produto, nota_marine, status,
-                data_criacao, decisao_tecnico, conversa,
+                data_criacao, decisao_tecnico, conversa, arquivos_json,
                 reaberto, reaberto_em, motivo_reabertura, origem
             FROM chamados_cj
         `;
-        let params = [];
 
         if (origem === 'CJ') {
             sql += ` WHERE origem = 'CJ'`;
@@ -449,14 +561,16 @@ app.get('/api/garantia/todos', async (req, res) => {
 
         sql += ` ORDER BY data_criacao DESC`;
 
-        const chamados = await db.all(sql, params);
-
+        const chamados = await db.all(sql);
         res.json({ success: true, chamados });
     } catch (error) {
         res.status(500).json({ success: false, error: error.message });
     }
 });
-// Buscar detalhes de um chamado
+
+// ================================================================
+// 📋 BUSCAR DETALHES DE UM CHAMADO (COM ARQUIVOS)
+// ================================================================
 app.get('/api/garantia/detalhe/:protocolo', async (req, res) => {
     try {
         const db = await openDb();
@@ -470,19 +584,23 @@ app.get('/api/garantia/detalhe/:protocolo', async (req, res) => {
             return res.status(404).json({ success: false, error: 'Chamado não encontrado' });
         }
 
-        const arquivos = await db.all(`
-            SELECT id, tipo, nome_original, nome_arquivo, caminho, tamanho, data_upload
-            FROM chamados_cj_arquivos
-            WHERE chamado_id = ?
-        `, [chamado.id]);
+        // Arquivos vêm do campo arquivos_json (array de objetos com URL)
+        let arquivos = [];
+        try {
+            arquivos = Array.isArray(chamado.arquivos_json)
+                ? chamado.arquivos_json
+                : JSON.parse(chamado.arquivos_json || '[]');
+        } catch(e) { arquivos = []; }
 
-        res.json({ success: true, garantia: chamado, arquivos: arquivos || [] });
+        res.json({ success: true, garantia: chamado, arquivos: arquivos });
     } catch (error) {
         res.status(500).json({ success: false, error: error.message });
     }
 });
 
-// Atualizar status
+// ================================================================
+// 📋 ATUALIZAR STATUS
+// ================================================================
 app.put('/api/garantia/status/:protocolo', async (req, res) => {
     try {
         const db = await openDb();
@@ -597,7 +715,7 @@ app.post('/api/garantia/mensagem/:protocolo', async (req, res) => {
 
         let conversa = [];
         try {
-            conversa = JSON.parse(result.conversa || '[]');
+            conversa = Array.isArray(result.conversa) ? result.conversa : JSON.parse(result.conversa || '[]');
         } catch (e) { conversa = []; }
 
         const novaMensagem = {
@@ -615,7 +733,7 @@ app.post('/api/garantia/mensagem/:protocolo', async (req, res) => {
         await db.run(`
             UPDATE chamados_cj SET conversa = ?, data_atualizacao = CURRENT_TIMESTAMP
             WHERE protocolo = ?
-        `, [JSON.stringify(conversa), req.params.protocolo]);
+        `, [conversa, req.params.protocolo]);
 
         res.json({ success: true, novaMensagem });
     } catch (error) {
@@ -632,7 +750,9 @@ app.put('/api/garantia/mensagens-lidas/:protocolo', async (req, res) => {
         if (!result) return res.status(404).json({ success: false, error: 'Chamado não encontrado' });
 
         let conversa = [];
-        try { conversa = JSON.parse(result.conversa || '[]'); } catch (e) { conversa = []; }
+        try {
+            conversa = Array.isArray(result.conversa) ? result.conversa : JSON.parse(result.conversa || '[]');
+        } catch (e) { conversa = []; }
 
         const tipoOp = tipoUsuario === 'vendedor' ? 'tecnico' : 'vendedor';
         conversa = conversa.map(msg => {
@@ -640,8 +760,7 @@ app.put('/api/garantia/mensagens-lidas/:protocolo', async (req, res) => {
             return msg;
         });
 
-        await db.run('UPDATE chamados_cj SET conversa = ? WHERE protocolo = ?', [JSON.stringify(conversa), req.params.protocolo]);
-
+        await db.run('UPDATE chamados_cj SET conversa = ? WHERE protocolo = ?', [conversa, req.params.protocolo]);
         res.json({ success: true });
     } catch (error) {
         res.status(500).json({ success: false, error: error.message });
@@ -659,7 +778,9 @@ app.get('/api/garantia/notificacoes/:vendedor', async (req, res) => {
 
         const comNaoLidas = chamados.map(c => {
             let conversa = [];
-            try { conversa = JSON.parse(c.conversa || '[]'); } catch (e) {}
+            try {
+                conversa = Array.isArray(c.conversa) ? c.conversa : JSON.parse(c.conversa || '[]');
+            } catch (e) {}
             const naoLidas = conversa.filter(m => m.tipo === 'tecnico' && !m.lida).length;
             return { ...c, nao_lidas: naoLidas };
         }).filter(c => c.nao_lidas > 0);
@@ -671,7 +792,7 @@ app.get('/api/garantia/notificacoes/:vendedor', async (req, res) => {
 });
 
 // ================================================================
-// 📊 ADMIN - RELATÓRIO DE CHAMADOS (para tela admin)
+// 📊 ADMIN - RELATÓRIO DE CHAMADOS
 // ================================================================
 app.get('/api/admin/relatorio-chamados', async (req, res) => {
     try {
@@ -679,7 +800,7 @@ app.get('/api/admin/relatorio-chamados', async (req, res) => {
 
         const {
             vendedor, status, data_inicio, data_fim, busca, produto, cliente,
-            origem  // 'CJ', 'MARINE' ou vazio
+            origem
         } = req.query;
 
         let sql = `
@@ -694,7 +815,6 @@ app.get('/api/admin/relatorio-chamados', async (req, res) => {
         `;
 
         const wheres = [];
-        const params = [];
 
         if (origem === 'CJ') {
             wheres.push(`origem = 'CJ'`);
@@ -708,9 +828,8 @@ app.get('/api/admin/relatorio-chamados', async (req, res) => {
 
         sql += ` ORDER BY data_criacao DESC`;
 
-        const chamados = await db.all(sql, params);
+        const chamados = await db.all(sql);
 
-        // Filtros em memória
         let filtrados = chamados;
 
         if (vendedor) filtrados = filtrados.filter(c => c.vendedor === vendedor);
@@ -723,8 +842,22 @@ app.get('/api/admin/relatorio-chamados', async (req, res) => {
             );
         }
         if (cliente) filtrados = filtrados.filter(c => String(c.id_cliente) === String(cliente));
-        if (data_inicio) filtrados = filtrados.filter(c => c.data_criacao && c.data_criacao.slice(0, 10) >= data_inicio);
-        if (data_fim) filtrados = filtrados.filter(c => c.data_criacao && c.data_criacao.slice(0, 10) <= data_fim);
+        if (data_inicio) {
+            filtrados = filtrados.filter(c => {
+                const d = c.data_criacao instanceof Date
+                    ? c.data_criacao.toISOString().slice(0, 10)
+                    : (c.data_criacao || '').slice(0, 10);
+                return d >= data_inicio;
+            });
+        }
+        if (data_fim) {
+            filtrados = filtrados.filter(c => {
+                const d = c.data_criacao instanceof Date
+                    ? c.data_criacao.toISOString().slice(0, 10)
+                    : (c.data_criacao || '').slice(0, 10);
+                return d <= data_fim;
+            });
+        }
         if (busca) {
             const b = busca.toLowerCase();
             filtrados = filtrados.filter(c =>
@@ -741,24 +874,6 @@ app.get('/api/admin/relatorio-chamados', async (req, res) => {
 
     } catch (error) {
         console.error('❌ Erro no relatório:', error);
-        res.status(500).json({ success: false, error: error.message });
-    }
-});
-// ================================================================
-// 🗑️ ADMIN - LIMPAR TABELAS
-// ================================================================
-app.delete('/api/admin/limpar/:tabela', async (req, res) => {
-    try {
-        const { tabela } = req.params;
-        const permitidas = ['clientes_cj', 'produtos_cj'];
-        if (!permitidas.includes(tabela)) {
-            return res.status(400).json({ success: false, error: 'Tabela não permitida' });
-        }
-        const db = await openDb();
-        await db.run(`DELETE FROM ${tabela}`);
-        res.json({ success: true, mensagem: `Tabela ${tabela} limpa` });
-    } catch (error) {
-        console.error('❌ Erro ao limpar:', error);
         res.status(500).json({ success: false, error: error.message });
     }
 });
