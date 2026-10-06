@@ -618,120 +618,34 @@
 
     <div class="container">
 
-        <!-- ABAS PRINCIPAIS -->
+        <!-- ABAS PRINCIPAIS - RELATÓRIO PRIMEIRO -->
         <div class="tabs">
-            <button class="tab-btn active" onclick="mudarAba('importacao', this)">
-                <i class="fas fa-file-import"></i> Importação
-            </button>
-            <button class="tab-btn" onclick="mudarAba('relatorio', this)">
+            <button class="tab-btn active" onclick="mudarAba('relatorio', this)">
                 <i class="fas fa-chart-bar"></i> Relatório Geral
             </button>
+            <button class="tab-btn" onclick="mudarAba('importacao', this)">
+                <i class="fas fa-file-import"></i> Importação
+            </button>
         </div>
 
-        <!-- ==================== ABA 1: IMPORTAÇÃO ==================== -->
-        <div class="tab-content active" id="tab-importacao">
-
-            <div class="section">
-                <div class="section-title">
-                    <i class="fas fa-users"></i> Importar Clientes
-                </div>
-                <div class="section-desc">
-                    Faça upload da planilha <strong>CLIENTES.xlsx</strong>.
-                    Colunas: <code>Código_cli</code>, <code>nome_cli</code>, <code>vendedor</code>.
-                </div>
-
-                <div class="drop-zone" id="dropClientes">
-                    <i class="fas fa-cloud-upload-alt"></i>
-                    <p>Arraste o arquivo aqui ou clique para selecionar</p>
-                    <small>Apenas .xlsx ou .xls</small>
-                    <input type="file" id="fileClientes" accept=".xlsx,.xls" style="display:none">
-                </div>
-
-                <div class="preview-info" id="previewClientes">
-                    <h4><i class="fas fa-file-excel"></i> Pré-visualização</h4>
-                    <div class="info-row">
-                        <span><strong>Arquivo:</strong> <span id="nomeArquivoClientes">—</span></span>
-                        <span><strong>Linhas:</strong> <span id="totalClientes">0</span></span>
-                    </div>
-                </div>
-
-                <div class="preview-table-wrapper" id="tableClientes">
-                    <table class="preview-table" id="tableClientesContent"></table>
-                </div>
-
-                <div class="btn-group">
-                    <button class="btn btn-primary" id="btnImportarClientes" disabled>
-                        <i class="fas fa-file-import"></i> Importar Clientes
-                    </button>
-                    <button class="btn btn-back" onclick="resetarClientes()">
-                        <i class="fas fa-times"></i> Limpar
-                    </button>
-                    <button class="btn btn-danger" onclick="limparTabela('clientes_cj')">
-                        <i class="fas fa-trash"></i> Apagar Todos
-                    </button>
-                </div>
-            </div>
-
-            <div class="section">
-                <div class="section-title">
-                    <i class="fas fa-box"></i> Importar Produtos
-                </div>
-                <div class="section-desc">
-                    Faça upload da planilha <strong>Planilha de Produtos Gerais.xlsx</strong>.
-                    Colunas: <code>Código</code>, <code>Código_CJ</code>, <code>Descrição - Casa Japon</code>.
-                </div>
-
-                <div class="drop-zone" id="dropProdutos">
-                    <i class="fas fa-cloud-upload-alt"></i>
-                    <p>Arraste o arquivo aqui ou clique para selecionar</p>
-                    <small>Apenas .xlsx ou .xls</small>
-                    <input type="file" id="fileProdutos" accept=".xlsx,.xls" style="display:none">
-                </div>
-
-                <div class="preview-info" id="previewProdutos">
-                    <h4><i class="fas fa-file-excel"></i> Pré-visualização</h4>
-                    <div class="info-row">
-                        <span><strong>Arquivo:</strong> <span id="nomeArquivoProdutos">—</span></span>
-                        <span><strong>Linhas:</strong> <span id="totalProdutos">0</span></span>
-                    </div>
-                </div>
-
-                <div class="preview-table-wrapper" id="tableProdutos">
-                    <table class="preview-table" id="tableProdutosContent"></table>
-                </div>
-
-                <div class="btn-group">
-                    <button class="btn btn-success" id="btnImportarProdutos" disabled>
-                        <i class="fas fa-file-import"></i> Importar Produtos
-                    </button>
-                    <button class="btn btn-back" onclick="resetarProdutos()">
-                        <i class="fas fa-times"></i> Limpar
-                    </button>
-                    <button class="btn btn-danger" onclick="limparTabela('produtos_cj')">
-                        <i class="fas fa-trash"></i> Apagar Todos
-                    </button>
-                </div>
-            </div>
-        </div>
-
-        <!-- ==================== ABA 2: RELATÓRIO ==================== -->
-        <div class="tab-content" id="tab-relatorio">
+        <!-- ==================== ABA 1: RELATÓRIO (agora é a primeira) ==================== -->
+        <div class="tab-content active" id="tab-relatorio">
 
             <!-- SUB-ABAS (EMPRESAS) -->
             <div class="subtabs" id="subtabs">
-    <button class="subtab-btn casajapon active" onclick="mudarSubAba('CJ', this)">
-        <i class="fas fa-store"></i> CASA JAPON
-        <span class="count-badge" id="badge-cj">0</span>
-    </button>
-    <button class="subtab-btn marine" onclick="mudarSubAba('MARINE', this)">
-        <i class="fas fa-fish"></i> MARINE BR
-        <span class="count-badge" id="badge-marine">0</span>
-    </button>
-    <button class="subtab-btn geral" onclick="mudarSubAba('GERAL', this)">
-        <i class="fas fa-globe"></i> GERAL
-        <span class="count-badge" id="badge-geral">0</span>
-    </button>
-</div>
+                <button class="subtab-btn casajapon active" onclick="mudarSubAba('CJ', this)">
+                    <i class="fas fa-store"></i> CASA JAPON
+                    <span class="count-badge" id="badge-cj">0</span>
+                </button>
+                <button class="subtab-btn marine" onclick="mudarSubAba('MARINE', this)">
+                    <i class="fas fa-fish"></i> MARINE BR
+                    <span class="count-badge" id="badge-marine">0</span>
+                </button>
+                <button class="subtab-btn geral" onclick="mudarSubAba('GERAL', this)">
+                    <i class="fas fa-globe"></i> GERAL
+                    <span class="count-badge" id="badge-geral">0</span>
+                </button>
+            </div>
 
             <!-- FILTROS -->
             <div class="section">
@@ -835,6 +749,92 @@
 
         </div><!-- /tab-relatorio -->
 
+        <!-- ==================== ABA 2: IMPORTAÇÃO ==================== -->
+        <div class="tab-content" id="tab-importacao">
+
+            <div class="section">
+                <div class="section-title">
+                    <i class="fas fa-users"></i> Importar Clientes
+                </div>
+                <div class="section-desc">
+                    Faça upload da planilha <strong>CLIENTES.xlsx</strong>.
+                    Colunas: <code>Código_cli</code>, <code>nome_cli</code>, <code>vendedor</code>.
+                </div>
+
+                <div class="drop-zone" id="dropClientes">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <p>Arraste o arquivo aqui ou clique para selecionar</p>
+                    <small>Apenas .xlsx ou .xls</small>
+                    <input type="file" id="fileClientes" accept=".xlsx,.xls" style="display:none">
+                </div>
+
+                <div class="preview-info" id="previewClientes">
+                    <h4><i class="fas fa-file-excel"></i> Pré-visualização</h4>
+                    <div class="info-row">
+                        <span><strong>Arquivo:</strong> <span id="nomeArquivoClientes">—</span></span>
+                        <span><strong>Linhas:</strong> <span id="totalClientes">0</span></span>
+                    </div>
+                </div>
+
+                <div class="preview-table-wrapper" id="tableClientes">
+                    <table class="preview-table" id="tableClientesContent"></table>
+                </div>
+
+                <div class="btn-group">
+                    <button class="btn btn-primary" id="btnImportarClientes" disabled>
+                        <i class="fas fa-file-import"></i> Importar Clientes
+                    </button>
+                    <button class="btn btn-back" onclick="resetarClientes()">
+                        <i class="fas fa-times"></i> Limpar
+                    </button>
+                    <button class="btn btn-danger" onclick="limparTabela('clientes_cj')">
+                        <i class="fas fa-trash"></i> Apagar Todos
+                    </button>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">
+                    <i class="fas fa-box"></i> Importar Produtos
+                </div>
+                <div class="section-desc">
+                    Faça upload da planilha <strong>Planilha de Produtos Gerais.xlsx</strong>.
+                    Colunas: <code>Código</code>, <code>Código_CJ</code>, <code>Descrição - Casa Japon</code>.
+                </div>
+
+                <div class="drop-zone" id="dropProdutos">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <p>Arraste o arquivo aqui ou clique para selecionar</p>
+                    <small>Apenas .xlsx ou .xls</small>
+                    <input type="file" id="fileProdutos" accept=".xlsx,.xls" style="display:none">
+                </div>
+
+                <div class="preview-info" id="previewProdutos">
+                    <h4><i class="fas fa-file-excel"></i> Pré-visualização</h4>
+                    <div class="info-row">
+                        <span><strong>Arquivo:</strong> <span id="nomeArquivoProdutos">—</span></span>
+                        <span><strong>Linhas:</strong> <span id="totalProdutos">0</span></span>
+                    </div>
+                </div>
+
+                <div class="preview-table-wrapper" id="tableProdutos">
+                    <table class="preview-table" id="tableProdutosContent"></table>
+                </div>
+
+                <div class="btn-group">
+                    <button class="btn btn-success" id="btnImportarProdutos" disabled>
+                        <i class="fas fa-file-import"></i> Importar Produtos
+                    </button>
+                    <button class="btn btn-back" onclick="resetarProdutos()">
+                        <i class="fas fa-times"></i> Limpar
+                    </button>
+                    <button class="btn btn-danger" onclick="limparTabela('produtos_cj')">
+                        <i class="fas fa-trash"></i> Apagar Todos
+                    </button>
+                </div>
+            </div>
+        </div><!-- /tab-importacao -->
+
     </div><!-- /container -->
 
     <div class="modal-overlay" id="modalDetalhe" onclick="fecharModal(event)">
@@ -853,9 +853,9 @@
         // ================================================================
         // ESTADO GLOBAL
         // ================================================================
-        let chamadosOriginais = [];   // todos (carregados uma vez)
-        let chamadosFiltrados = [];   // após filtro de empresa + campos
-        let chamadosVisiveis = [];    // após agregação
+        let chamadosOriginais = [];
+        let chamadosFiltrados = [];
+        let chamadosVisiveis = [];
         let agregarAtivo = false;
         let ordenacao = { campo: 'data_criacao', direcao: 'desc' };
         let dadosExcelClientes = [];
@@ -1061,22 +1061,18 @@
             tbody.innerHTML = '<tr><td colspan="20" style="text-align:center; padding:30px; color:#94a3b8;"><i class="fas fa-spinner fa-pulse fa-2x"></i><p style="margin-top:8px;">Carregando...</p></td></tr>';
 
             try {
-                // Carrega TODOS os chamados (sem filtro de origem)
                 const resp = await fetch('/api/admin/relatorio-chamados');
                 const result = await resp.json();
                 if (!result.success) throw new Error(result.error);
 
                 chamadosOriginais = result.chamados || [];
 
-                // Popula vendedores
                 const vendedores = [...new Set(chamadosOriginais.map(c => c.vendedor).filter(Boolean))].sort();
                 const selVend = document.getElementById('rel-filtro-vendedor');
                 selVend.innerHTML = '<option value="">Todos</option>' +
                     vendedores.map(v => `<option value="${v}">${v}</option>`).join('');
 
-                // Atualiza badges das sub-abas
                 atualizarBadges();
-
                 aplicarFiltros();
             } catch (err) {
                 tbody.innerHTML = `<tr><td colspan="20" style="text-align:center; padding:30px; color:#ef4444;">
@@ -1095,21 +1091,21 @@
             const cliente = document.getElementById('rel-filtro-cliente').value.trim();
             const busca = document.getElementById('rel-filtro-busca').value.toLowerCase();
 
-            // 1. Filtra por EMPRESA (sub-aba)
             let base = chamadosOriginais;
             if (subAbaAtual === 'MARINE') {
                 base = base.filter(c => !c.origem || c.origem !== 'CJ');
             } else if (subAbaAtual === 'CJ') {
                 base = base.filter(c => c.origem === 'CJ');
             }
-            // GERAL → mantém todos
 
-            // 2. Filtra pelos campos
             chamadosFiltrados = base.filter(c => {
                 if (vendedor && c.vendedor !== vendedor) return false;
                 if (status && c.status !== status) return false;
-                if (dataInicio && c.data_criacao && c.data_criacao.slice(0, 10) < dataInicio) return false;
-                if (dataFim && c.data_criacao && c.data_criacao.slice(0, 10) > dataFim) return false;
+
+                const dtC = c.data_criacao ? (typeof c.data_criacao === 'string' ? c.data_criacao.slice(0, 10) : new Date(c.data_criacao).toISOString().slice(0, 10)) : '';
+                if (dataInicio && dtC < dataInicio) return false;
+                if (dataFim && dtC > dataFim) return false;
+
                 if (produto) {
                     const txt = ((c.produto || '') + ' ' + (c.descricao_produto || '')).toLowerCase();
                     if (!txt.includes(produto)) return false;
@@ -1221,7 +1217,6 @@
                 return;
             }
 
-            // Modo normal
             const colunasComOrigem = mostrarOrigem ? [...colunas.slice(0, 2), { key: 'origem_label', label: 'Empresa' }, ...colunas.slice(2)] : colunas;
 
             thead.innerHTML = `<tr>
@@ -1256,9 +1251,13 @@
                     ? `<td><span class="origem-badge ${isCJ ? 'origem-cj' : 'origem-marine'}">${isCJ ? 'CASA JAPON' : 'MARINE BR'}</span></td>`
                     : '';
 
+                const dataFormatada = c.data_criacao
+                    ? new Date(c.data_criacao).toLocaleDateString('pt-BR')
+                    : '—';
+
                 return `<tr class="${alertaClasse}">
                     <td><strong>${c.protocolo || '—'}</strong></td>
-                    <td>${c.data_criacao ? new Date(c.data_criacao).toLocaleDateString('pt-BR') : '—'}</td>
+                    <td>${dataFormatada}</td>
                     ${origemHtml}
                     <td>${c.vendedor || '—'}</td>
                     <td>${c.id_cliente || '—'}</td>
@@ -1332,26 +1331,51 @@
             aplicarFiltros();
         }
 
+        // ================================================================
+        // EXPORTAR EXCEL (AGORA COM DATA)
+        // ================================================================
         function exportarExcel() {
             if (!chamadosVisiveis.length) { Swal.fire('Atenção', 'Nada para exportar. Filtre primeiro.', 'warning'); return; }
             let dados;
             if (agregarAtivo) {
-                dados = chamadosVisiveis.map(g => ({
-                    'Código Produto': g.codigo_produto, 'Descrição Produto': g.descricao_produto,
-                    'Qtd. Chamados': g.quantidade, 'Clientes Distintos': g.clientes.size,
-                    'Vendedores': [...g.vendedores].join(', '),
-                    'Status': Object.entries(g.status).map(([k, v]) => `${k}: ${v}`).join(' | '),
-                    'Alerta': g.quantidade >= 10 ? 'CRÍTICO' : (g.quantidade >= 5 ? 'ATENÇÃO' : '')
-                }));
+                dados = chamadosVisiveis.map(g => {
+                    const datas = g.chamados.map(c => c.data_criacao ? new Date(c.data_criacao) : null).filter(Boolean);
+                    const primeiraData = datas.length ? new Date(Math.min(...datas)).toLocaleDateString('pt-BR') : '';
+                    const ultimaData = datas.length ? new Date(Math.max(...datas)).toLocaleDateString('pt-BR') : '';
+
+                    return {
+                        'Código Produto': g.codigo_produto,
+                        'Descrição Produto': g.descricao_produto,
+                        'Qtd. Chamados': g.quantidade,
+                        'Primeira Ocorrência': primeiraData,
+                        'Última Ocorrência': ultimaData,
+                        'Clientes Distintos': g.clientes.size,
+                        'Vendedores': [...g.vendedores].join(', '),
+                        'Status': Object.entries(g.status).map(([k, v]) => `${k}: ${v}`).join(' | '),
+                        'Alerta': g.quantidade >= 10 ? 'CRÍTICO' : (g.quantidade >= 5 ? 'ATENÇÃO' : '')
+                    };
+                });
             } else {
                 dados = chamadosVisiveis.map(c => ({
                     'Empresa': c.origem === 'CJ' ? 'CASA JAPON' : 'MARINE BR',
                     'Protocolo': c.protocolo,
-                    'Data': c.data_criacao ? new Date(c.data_criacao).toLocaleDateString('pt-BR') : '',
-                    'Vendedor': c.vendedor, 'ID Cliente': c.id_cliente, 'Nome Cliente': c.cliente_nome,
-                    'Código Produto': c.codigo_produto, 'Descrição Produto': c.descricao_produto || c.produto,
-                    'Nota Marine': c.nota_marine, 'Status': c.status, 'Decisão Técnico': c.decisao_tecnico,
-                    'Reaberto': (c.reaberto == 1 || c.reaberto === true) ? 'Sim' : 'Não'
+                    'Data': c.data_criacao ? new Date(c.data_criacao).toLocaleString('pt-BR') : '',
+                    'Vendedor': c.vendedor,
+                    'ID Cliente': c.id_cliente,
+                    'Nome Cliente': c.cliente_nome,
+                    'Código Produto': c.codigo_produto,
+                    'Descrição Produto': c.descricao_produto || c.produto,
+                    'Nota Marine': c.nota_marine,
+                    'Teste Receber': c.teste_receber,
+                    'Teste Venda': c.teste_venda,
+                    'Tempo Uso': c.tempo_uso,
+                    'Defeito': c.descricao_defeito,
+                    'Capacidade Loja': c.capacidade_loja,
+                    'Status': c.status,
+                    'Decisão Técnico': c.decisao_tecnico,
+                    'Reaberto': (c.reaberto == 1 || c.reaberto === true) ? 'Sim' : 'Não',
+                    'Motivo Reabertura': c.motivo_reabertura || '',
+                    'Última Atualização': c.data_atualizacao ? new Date(c.data_atualizacao).toLocaleString('pt-BR') : ''
                 }));
             }
             const ws = XLSX.utils.json_to_sheet(dados);
@@ -1364,6 +1388,13 @@
         document.querySelectorAll('.relatorio-filtros input, .relatorio-filtros select').forEach(el => {
             el.addEventListener('keypress', e => { if (e.key === 'Enter') aplicarFiltros(); });
             el.addEventListener('change', () => aplicarFiltros());
+        });
+
+        // ================================================================
+        // INIT — Como o relatório já está ativo, carrega automaticamente
+        // ================================================================
+        document.addEventListener('DOMContentLoaded', () => {
+            carregarRelatorio();
         });
     </script>
 </body>
