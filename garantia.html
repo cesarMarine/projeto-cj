@@ -2700,9 +2700,13 @@
                 document.getElementById('chatProtocolo').textContent = chamadoAtualChat.protocolo;
                 document.getElementById('chatCliente').textContent = `${t('cliente_label')}: ${chamadoAtualChat.cliente_nome} • ${chamadoAtualChat.produto}`;
 
-                let conversa = [];
-                try { conversa = JSON.parse(chamadoAtualChat.conversa || '[]'); } catch(e) {}
-                carregarMensagens(conversa);
+let conversa = [];
+try {
+    conversa = Array.isArray(chamadoAtualChat.conversa) 
+        ? chamadoAtualChat.conversa 
+        : JSON.parse(chamadoAtualChat.conversa || '[]');
+} catch(e) { conversa = []; }
+carregarMensagens(conversa);;
 
                 const decisao = chamadoAtualChat.decisao_tecnico || '';
                 const decisaoEl = document.getElementById('decisaoTecnicoDisplay');
@@ -2716,8 +2720,27 @@
                     </div>`;
                 }
 
-                await marcarMensagensLidas(protocolo, 'vendedor');
-                document.getElementById('chatInput').value = '';
+await marcarMensagensLidas(protocolo, 'vendedor');
+
+// Recarrega os detalhes pra pegar o 'lida: true' atualizado
+try {
+    const respAtual = await fetch(`${API_URL}/detalhe/${protocolo}`);
+    const dataAtual = await respAtual.json();
+    if (dataAtual.success) {
+        chamadoAtualChat = dataAtual.garantia;
+        let conversaAtual = [];
+        try {
+            conversaAtual = Array.isArray(chamadoAtualChat.conversa)
+                ? chamadoAtualChat.conversa
+                : JSON.parse(chamadoAtualChat.conversa || '[]');
+        } catch(e) { conversaAtual = []; }
+        carregarMensagens(conversaAtual);
+    }
+} catch(e) {
+    console.error('Erro ao recarregar conversa:', e);
+}
+
+document.getElementById('chatInput').value = '';
                 document.getElementById('chatInput').focus();
                 const container = document.getElementById('chatContainer');
                 container.scrollTop = container.scrollHeight;
@@ -2727,29 +2750,42 @@
             }
         }
 
-        function carregarMensagens(conversa) {
-            const container = document.getElementById('chatContainer');
-            if (!conversa || conversa.length === 0) {
-                container.innerHTML = `<div style="text-align:center;padding:30px;color:#94a3b8;">
-                    <i class="fas fa-comment-dots" style="font-size:30px;margin-bottom:10px;opacity:0.3;"></i>
-                    <p>${t('nenhuma_msg')}</p>
-                    <p style="font-size:0.8rem;">${t('envie_msg_iniciar')}</p>
-                </div>`;
-                return;
-            }
-            container.innerHTML = conversa.map(msg => {
-                const isVendedor = msg.tipo === 'vendedor';
-                const classe = isVendedor ? 'vendedor' : 'tecnico';
-                const remetenteNome = isVendedor ? t('vc_label') : (msg.remetente || 'Técnico');
-                const hora = msg.data || new Date(msg.timestamp).toLocaleString(idiomaAtual === 'es' ? 'es-PY' : 'pt-BR');
-                return `<div class="mensagem ${classe}">
-                    <div class="remetente">${remetenteNome}</div>
-                    <div class="bubble">${msg.mensagem}${!msg.lida && !isVendedor ? `<span class="badge-nao-lida">${t('nova')}</span>` : ''}</div>
-                    <div class="hora">${hora}</div>
-                </div>`;
-            }).join('');
-            container.scrollTop = container.scrollHeight;
+function carregarMensagens(conversa) {
+    const container = document.getElementById('chatContainer');
+
+    // Normaliza: aceita array OU string JSON
+    let lista = [];
+    try {
+        if (Array.isArray(conversa)) {
+            lista = conversa;
+        } else if (typeof conversa === 'string') {
+            lista = JSON.parse(conversa || '[]');
         }
+    } catch(e) { lista = []; }
+
+    if (!lista || lista.length === 0) {
+        container.innerHTML = `<div style="text-align:center;padding:30px;color:#94a3b8;">
+            <i class="fas fa-comment-dots" style="font-size:30px;margin-bottom:10px;opacity:0.3;"></i>
+            <p>${t('nenhuma_msg')}</p>
+            <p style="font-size:0.8rem;">${t('envie_msg_iniciar')}</p>
+        </div>`;
+        return;
+    }
+
+    container.innerHTML = lista.map(msg => {
+        const isVendedor = msg.tipo === 'vendedor';
+        const classe = isVendedor ? 'vendedor' : 'tecnico';
+        const remetenteNome = isVendedor ? t('vc_label') : (msg.remetente || 'Técnico');
+        const hora = msg.data || (msg.timestamp ? new Date(msg.timestamp).toLocaleString(idiomaAtual === 'es' ? 'es-PY' : 'pt-BR') : '');
+        return `<div class="mensagem ${classe}">
+            <div class="remetente">${remetenteNome}</div>
+            <div class="bubble">${msg.mensagem}${!msg.lida && !isVendedor ? `<span class="badge-nao-lida">${t('nova')}</span>` : ''}</div>
+            <div class="hora">${hora}</div>
+        </div>`;
+    }).join('');
+
+    container.scrollTop = container.scrollHeight;
+}
 
         function fecharChat() {
             document.getElementById('modalChat').classList.remove('active');
@@ -2775,10 +2811,16 @@
                 });
                 const data = await response.json();
                 if (data.success) {
-                    const conversaAtual = JSON.parse(chamadoAtualChat.conversa || '[]');
-                    conversaAtual.push(data.novaMensagem);
-                    chamadoAtualChat.conversa = JSON.stringify(conversaAtual);
-                    carregarMensagens(chamadoAtualChat.conversa);
+    let conversaAtual = [];
+    try {
+        conversaAtual = Array.isArray(chamadoAtualChat.conversa)
+            ? [...chamadoAtualChat.conversa]
+            : JSON.parse(chamadoAtualChat.conversa || '[]');
+    } catch(e) { conversaAtual = []; }
+    
+    conversaAtual.push(data.novaMensagem);
+    chamadoAtualChat.conversa = conversaAtual;
+    carregarMensagens(conversaAtual);
                     input.value = '';
                     input.focus();
                     if (vendedorAtual) carregarChamadosVendedor(vendedorAtual);
