@@ -64,7 +64,6 @@
 
         .container { max-width: 1400px; margin: 32px auto; padding: 0 24px; }
 
-        /* ABAS PRINCIPAIS */
         .tabs {
             display: flex;
             gap: 8px;
@@ -109,7 +108,6 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* SUB-ABAS (empresas) */
         .subtabs {
             display: flex;
             gap: 6px;
@@ -160,7 +158,6 @@
 
         .subtab-btn.active .count-badge { background: rgba(255, 255, 255, 0.3); }
 
-        /* SECTION */
         .section {
             background: white;
             border-radius: 24px;
@@ -183,7 +180,6 @@
 
         .section-desc { font-size: 0.85rem; color: #6b7a8a; margin-bottom: 20px; }
 
-        /* DROP ZONE */
         .drop-zone {
             border: 3px dashed #d5dce6;
             border-radius: 16px;
@@ -217,7 +213,6 @@
         .drop-zone p { font-weight: 600; color: #0d3b66; margin-bottom: 4px; }
         .drop-zone small { color: #94a3b8; font-size: 0.8rem; }
 
-        /* PREVIEW */
         .preview-info {
             background: #f0f7ff;
             border-radius: 12px;
@@ -281,7 +276,6 @@
         .preview-table tr:nth-child(even) { background: #fafcff; }
         .preview-table tr:hover { background: #f0f7ff; }
 
-        /* BOTÕES */
         .btn-group { display: flex; gap: 12px; flex-wrap: wrap; }
 
         .btn {
@@ -322,7 +316,6 @@
         .btn-back { background: #e8edf3; color: #1a2a3a; }
         .btn-back:hover:not(:disabled) { background: #d5dce6; transform: translateY(-2px); }
 
-        /* RELATÓRIO */
         .relatorio-filtros {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
@@ -524,12 +517,12 @@
             padding: 20px;
         }
 
-        .modal-overlay.active { display: flex; }
+        .modal-overlay.active { display: flex; animation: fadeIn 0.3s ease; }
 
         .modal-content {
             background: white;
             border-radius: 24px;
-            max-width: 800px;
+            max-width: 900px;
             width: 100%;
             max-height: 90vh;
             overflow-y: auto;
@@ -539,15 +532,20 @@
         }
 
         .modal-content .btn-fechar {
-            position: absolute;
-            top: 16px; right: 16px;
+            position: sticky;
+            top: 0;
+            float: right;
             background: #e8edf3;
             border: none;
-            width: 36px; height: 36px;
+            width: 40px; height: 40px;
             border-radius: 50%;
-            font-size: 16px;
+            font-size: 18px;
             cursor: pointer;
             transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
         }
 
         .modal-content .btn-fechar:hover { background: #ef4444; color: white; }
@@ -556,6 +554,12 @@
             font-size: 1.3rem;
             color: #0d3b66;
             margin-bottom: 16px;
+        }
+
+        .modal-content .modal-body-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px 24px;
         }
 
         .modal-content .campo { margin-bottom: 12px; }
@@ -572,6 +576,108 @@
             font-weight: 600;
             color: #1a2a3a;
             font-size: 0.95rem;
+            word-break: break-word;
+        }
+
+        .modal-content .campo.full { grid-column: 1 / -1; }
+
+        /* ARQUIVOS NO MODAL */
+        .modal-arquivos {
+            grid-column: 1 / -1;
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 2px solid #e8edf3;
+        }
+
+        .modal-arquivos h4 {
+            font-size: 0.85rem;
+            color: #0d3b66;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .arquivos-grupo { margin-bottom: 16px; }
+
+        .arquivos-grupo h5 {
+            font-size: 0.75rem;
+            color: #6b7a8a;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .arquivos-grid-modal {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 12px;
+        }
+
+        .arquivo-item-modal {
+            background: #f8fafc;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 2px solid #e8edf3;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .arquivo-item-modal:hover {
+            border-color: #f8b81f;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+        }
+
+        .arquivo-thumb-modal {
+            height: 110px;
+            background: #e8edf3;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .arquivo-thumb-modal img,
+        .arquivo-thumb-modal video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .arquivo-item-modal:hover .arquivo-thumb-modal img {
+            transform: scale(1.05);
+        }
+
+        .arquivo-info-modal { padding: 8px 10px; background: white; }
+
+        .arquivo-nome {
+            font-size: 0.65rem;
+            color: #475569;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            font-weight: 500;
+        }
+
+        .arquivo-badge-modal {
+            font-size: 0.55rem;
+            color: #94a3b8;
+            text-transform: uppercase;
+            font-weight: 600;
+            margin-top: 4px;
+            display: block;
+        }
+
+        .swal-image-preview {
+            border-radius: 12px;
+            max-height: 80vh !important;
+            object-fit: contain;
         }
 
         footer {
@@ -592,107 +698,12 @@
             .relatorio-filtros { grid-template-columns: 1fr; }
             .relatorio-acoes { flex-direction: column; align-items: stretch; }
             .modal-content { padding: 20px; }
+            .modal-content .modal-body-grid { grid-template-columns: 1fr; }
             .subtabs { width: 100%; }
             .subtab-btn { flex: 1; justify-content: center; padding: 10px 12px; font-size: 0.75rem; }
+            .arquivos-grid-modal { grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); }
+            .arquivo-thumb-modal { height: 90px; }
         }
-        /* ============================================================ */
-/* ARQUIVOS NO MODAL */
-/* ============================================================ */
-.modal-arquivos {
-    margin-top: 16px;
-    padding-top: 16px;
-    border-top: 2px solid #e8edf3;
-}
-
-.modal-arquivos h4 {
-    font-size: 0.85rem;
-    color: #0d3b66;
-    margin-bottom: 12px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.arquivos-grupo {
-    margin-bottom: 16px;
-}
-
-.arquivos-grupo h5 {
-    font-size: 0.75rem;
-    color: #6b7a8a;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    margin-bottom: 8px;
-    font-weight: 600;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-}
-
-.arquivos-grid-modal {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-    gap: 12px;
-}
-
-.arquivo-item-modal {
-    background: #f8fafc;
-    border-radius: 12px;
-    overflow: hidden;
-    border: 2px solid #e8edf3;
-    transition: all 0.3s ease;
-    cursor: pointer;
-}
-
-.arquivo-item-modal:hover {
-    border-color: #f8b81f;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
-}
-
-.arquivo-thumb-modal {
-    height: 110px;
-    background: #e8edf3;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-}
-
-.arquivo-thumb-modal img,
-.arquivo-thumb-modal video {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 0.3s ease;
-}
-
-.arquivo-item-modal:hover .arquivo-thumb-modal img {
-    transform: scale(1.05);
-}
-
-.arquivo-info-modal {
-    padding: 8px 10px;
-    background: white;
-}
-
-.arquivo-nome {
-    font-size: 0.65rem;
-    color: #475569;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    font-weight: 500;
-}
-
-.arquivo-badge-modal {
-    font-size: 0.55rem;
-    color: #94a3b8;
-    text-transform: uppercase;
-    font-weight: 600;
-    margin-top: 4px;
-    display: block;
-}
     </style>
 </head>
 <body>
@@ -716,7 +727,6 @@
 
     <div class="container">
 
-        <!-- ABAS PRINCIPAIS - RELATÓRIO PRIMEIRO -->
         <div class="tabs">
             <button class="tab-btn active" onclick="mudarAba('relatorio', this)">
                 <i class="fas fa-chart-bar"></i> Relatório Geral
@@ -726,10 +736,8 @@
             </button>
         </div>
 
-        <!-- ==================== ABA 1: RELATÓRIO (agora é a primeira) ==================== -->
         <div class="tab-content active" id="tab-relatorio">
 
-            <!-- SUB-ABAS (EMPRESAS) -->
             <div class="subtabs" id="subtabs">
                 <button class="subtab-btn casajapon active" onclick="mudarSubAba('CJ', this)">
                     <i class="fas fa-store"></i> CASA JAPON
@@ -745,7 +753,6 @@
                 </button>
             </div>
 
-            <!-- FILTROS -->
             <div class="section">
                 <div class="section-title">
                     <i class="fas fa-filter"></i> Filtros
@@ -845,9 +852,8 @@
                 </div>
             </div>
 
-        </div><!-- /tab-relatorio -->
+        </div>
 
-        <!-- ==================== ABA 2: IMPORTAÇÃO ==================== -->
         <div class="tab-content" id="tab-importacao">
 
             <div class="section">
@@ -931,15 +937,15 @@
                     </button>
                 </div>
             </div>
-        </div><!-- /tab-importacao -->
+        </div>
 
-    </div><!-- /container -->
+    </div>
 
     <div class="modal-overlay" id="modalDetalhe" onclick="fecharModal(event)">
         <div class="modal-content" onclick="event.stopPropagation()">
             <button class="btn-fechar" onclick="fecharModal()"><i class="fas fa-times"></i></button>
             <h2><i class="fas fa-file-alt" style="color:#f8b81f;"></i> Detalhe do Chamado</h2>
-            <div id="modalBody"></div>
+            <div class="modal-body-grid" id="modalBody"></div>
         </div>
     </div>
 
@@ -948,9 +954,6 @@
     </footer>
 
     <script>
-        // ================================================================
-        // ESTADO GLOBAL
-        // ================================================================
         let chamadosOriginais = [];
         let chamadosFiltrados = [];
         let chamadosVisiveis = [];
@@ -958,25 +961,16 @@
         let ordenacao = { campo: 'data_criacao', direcao: 'desc' };
         let dadosExcelClientes = [];
         let dadosExcelProdutos = [];
-        let subAbaAtual = 'CJ';   // MARINE | CJ | GERAL
+        let subAbaAtual = 'CJ';
 
-        // ================================================================
-        // ABAS
-        // ================================================================
         function mudarAba(aba, btn) {
             document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
             document.getElementById('tab-' + aba).classList.add('active');
             btn.classList.add('active');
-
-            if (aba === 'relatorio' && chamadosOriginais.length === 0) {
-                carregarRelatorio();
-            }
+            if (aba === 'relatorio' && chamadosOriginais.length === 0) carregarRelatorio();
         }
 
-        // ================================================================
-        // SUB-ABAS (empresas)
-        // ================================================================
         function mudarSubAba(empresa, btn) {
             subAbaAtual = empresa;
             document.querySelectorAll('.subtab-btn').forEach(b => b.classList.remove('active'));
@@ -988,7 +982,6 @@
             const marine = chamadosOriginais.filter(c => !c.origem || c.origem !== 'CJ').length;
             const cj = chamadosOriginais.filter(c => c.origem === 'CJ').length;
             const geral = chamadosOriginais.length;
-
             document.getElementById('badge-marine').textContent = marine;
             document.getElementById('badge-cj').textContent = cj;
             document.getElementById('badge-geral').textContent = geral;
@@ -1379,164 +1372,176 @@
             aplicarFiltros();
         }
 
-async function verDetalhe(id) {
-    const c = chamadosOriginais.find(x => x.id === id);
-    if (!c) return;
-    const isCJ = c.origem === 'CJ';
+        // ================================================================
+        // VER DETALHE (COM ARQUIVOS)
+        // ================================================================
+        async function verDetalhe(id) {
+            console.log('🔍 verDetalhe chamado:', id);
 
-    // Abre o modal com loading
-    const modalBody = document.getElementById('modalBody');
-    modalBody.innerHTML = '<div style="text-align:center; padding:40px; color:#94a3b8;"><i class="fas fa-spinner fa-pulse fa-2x"></i><p style="margin-top:8px;">Carregando...</p></div>';
-    document.getElementById('modalDetalhe').classList.add('active');
+            const c = chamadosOriginais.find(x => String(x.id) === String(id));
+            if (!c) {
+                console.error('❌ Chamado não encontrado');
+                return;
+            }
+            console.log('✅ Chamado encontrado:', c.protocolo);
+            const isCJ = c.origem === 'CJ';
 
-    // Busca arquivos via API
-    let arquivos = [];
-    try {
-        const resp = await fetch(`/api/garantia/detalhe/${encodeURIComponent(c.protocolo)}`);
-        const result = await resp.json();
-        if (result.success) {
-            arquivos = result.arquivos || [];
-        }
-    } catch(e) {
-        console.error('Erro ao buscar arquivos:', e);
-    }
+            const modalBody = document.getElementById('modalBody');
+            modalBody.innerHTML = '<div style="text-align:center; padding:40px; color:#94a3b8; grid-column:1/-1;"><i class="fas fa-spinner fa-pulse fa-2x"></i><p style="margin-top:8px;">Carregando...</p></div>';
+            document.getElementById('modalDetalhe').classList.add('active');
 
-    // Monta HTML dos arquivos
-    let arquivosHtml = '';
-    if (arquivos.length > 0) {
-        const fotosVideos = arquivos.filter(a => a.categoria === 'foto_video' || !a.categoria);
-        const notas = arquivos.filter(a => a.categoria === 'nota_cliente');
-
-        const renderizarArquivo = (a) => {
-            const tipo = (a.tipo || '').toLowerCase();
-            const nomeLower = (a.nome || '').toLowerCase();
-            const url = a.url || a.dataUrl || '';
-
-            const isImage = tipo.startsWith('image/') || /\.(jpg|jpeg|png|gif|webp|bmp|jfif|svg)$/i.test(nomeLower);
-            const isVideo = tipo.startsWith('video/') || /\.(mp4|mov|avi|webm|mkv|3gp)$/i.test(nomeLower);
-            const isPdf = tipo === 'application/pdf' || nomeLower.endsWith('.pdf');
-
-            let thumb = '', badge = '📎', tipoAcao = 'outro';
-            if (isImage) {
-                thumb = `<img src="${url}" alt="${a.nome}" loading="lazy">`;
-                badge = '🖼️ Foto'; tipoAcao = 'image';
-            } else if (isVideo) {
-                thumb = `<video src="${url}" muted preload="metadata"></video>`;
-                badge = '🎥 Vídeo'; tipoAcao = 'video';
-            } else if (isPdf) {
-                thumb = `<i class="fas fa-file-pdf" style="font-size:3rem;color:#ef4444;"></i>`;
-                badge = '📄 PDF'; tipoAcao = 'pdf';
-            } else {
-                thumb = `<i class="fas fa-file" style="font-size:3rem;color:#94a3b8;"></i>`;
+            let arquivos = [];
+            try {
+                const url = `/api/garantia/detalhe/${encodeURIComponent(c.protocolo)}`;
+                console.log('🔍 Buscando:', url);
+                const resp = await fetch(url);
+                console.log('🔍 Status:', resp.status);
+                const result = await resp.json();
+                console.log('🔍 Result:', result);
+                if (result.success) arquivos = result.arquivos || [];
+            } catch(e) {
+                console.error('❌ Erro ao buscar arquivos:', e);
             }
 
-            return `
-                <div class="arquivo-item-modal" onclick="abrirArquivo('${url}', '${tipoAcao}')">
-                    <div class="arquivo-thumb-modal">${thumb}</div>
-                    <div class="arquivo-info-modal">
-                        <div class="arquivo-nome" title="${a.nome}">${a.nome || 'Arquivo'}</div>
-                        <span class="arquivo-badge-modal">${badge}</span>
+            console.log('🔍 Arquivos recebidos:', arquivos.length);
+
+            let arquivosHtml = '';
+            if (arquivos.length > 0) {
+                const fotosVideos = arquivos.filter(a => a.categoria === 'foto_video' || !a.categoria);
+                const notas = arquivos.filter(a => a.categoria === 'nota_cliente');
+
+                const renderizarArquivo = (a) => {
+                    const tipo = (a.tipo || '').toLowerCase();
+                    const nomeLower = (a.nome || '').toLowerCase();
+                    const url = a.url || a.dataUrl || '';
+
+                    const isImage = tipo.startsWith('image/') || /\.(jpg|jpeg|png|gif|webp|bmp|jfif|svg)$/i.test(nomeLower);
+                    const isVideo = tipo.startsWith('video/') || /\.(mp4|mov|avi|webm|mkv|3gp)$/i.test(nomeLower);
+                    const isPdf = tipo === 'application/pdf' || nomeLower.endsWith('.pdf');
+
+                    let thumb = '', badge = '📎', tipoAcao = 'outro';
+                    if (isImage) {
+                        thumb = `<img src="${url}" alt="${a.nome}" loading="lazy">`;
+                        badge = '🖼️ Foto'; tipoAcao = 'image';
+                    } else if (isVideo) {
+                        thumb = `<video src="${url}" muted preload="metadata"></video>`;
+                        badge = '🎥 Vídeo'; tipoAcao = 'video';
+                    } else if (isPdf) {
+                        thumb = `<i class="fas fa-file-pdf" style="font-size:3rem;color:#ef4444;"></i>`;
+                        badge = '📄 PDF'; tipoAcao = 'pdf';
+                    } else {
+                        thumb = `<i class="fas fa-file" style="font-size:3rem;color:#94a3b8;"></i>`;
+                    }
+
+                    return `
+                        <div class="arquivo-item-modal" onclick="abrirArquivo('${url}', '${tipoAcao}')">
+                            <div class="arquivo-thumb-modal">${thumb}</div>
+                            <div class="arquivo-info-modal">
+                                <div class="arquivo-nome" title="${a.nome}">${a.nome || 'Arquivo'}</div>
+                                <span class="arquivo-badge-modal">${badge}</span>
+                            </div>
+                        </div>
+                    `;
+                };
+
+                let secoesHtml = '';
+                if (fotosVideos.length > 0) {
+                    secoesHtml += `
+                        <div class="arquivos-grupo">
+                            <h5><i class="fas fa-camera"></i> Fotos / Vídeos (${fotosVideos.length})</h5>
+                            <div class="arquivos-grid-modal">${fotosVideos.map(renderizarArquivo).join('')}</div>
+                        </div>
+                    `;
+                }
+                if (notas.length > 0) {
+                    secoesHtml += `
+                        <div class="arquivos-grupo">
+                            <h5><i class="fas fa-file-invoice"></i> Notas do Cliente (${notas.length})</h5>
+                            <div class="arquivos-grid-modal">${notas.map(renderizarArquivo).join('')}</div>
+                        </div>
+                    `;
+                }
+
+                arquivosHtml = `
+                    <div class="modal-arquivos">
+                        <h4><i class="fas fa-paperclip"></i> Arquivos Anexados (${arquivos.length})</h4>
+                        ${secoesHtml}
                     </div>
-                </div>
-            `;
-        };
+                `;
+            } else {
+                arquivosHtml = `
+                    <div class="modal-arquivos">
+                        <h4><i class="fas fa-paperclip"></i> Arquivos Anexados</h4>
+                        <p style="color:#94a3b8; text-align:center; padding:20px;">
+                            <i class="fas fa-info-circle"></i> Nenhum arquivo anexado
+                            ${!isCJ ? '<br><small style="font-size:0.7rem;">(Chamados da Marine BR não têm arquivos disponíveis nesta tela)</small>' : ''}
+                        </p>
+                    </div>
+                `;
+            }
 
-        let secoesHtml = '';
-        if (fotosVideos.length > 0) {
-            secoesHtml += `
-                <div class="arquivos-grupo">
-                    <h5><i class="fas fa-camera"></i> Fotos / Vídeos (${fotosVideos.length})</h5>
-                    <div class="arquivos-grid-modal">${fotosVideos.map(renderizarArquivo).join('')}</div>
-                </div>
-            `;
+            const campos = [
+                ['Empresa', isCJ ? 'CASA JAPON' : 'MARINE BR'],
+                ['Protocolo', c.protocolo],
+                ['Data Criação', c.data_criacao ? new Date(c.data_criacao).toLocaleString('pt-BR') : '—'],
+                ['Vendedor (chamado)', c.vendedor],
+                ['ID Cliente', c.id_cliente],
+                ['Nome Cliente', c.cliente_nome],
+                ['Vendedor do Cliente', c.vendedor_cliente],
+                ['Produto', c.produto],
+                ['Código Produto', c.codigo_produto],
+                ['Descrição Produto', c.descricao_produto],
+                ['Nota Marine', c.nota_marine],
+                ['Teste Receber', c.teste_receber],
+                ['Teste Venda', c.teste_venda],
+                ['Tempo de Uso', c.tempo_uso],
+                ['Descrição do Defeito', c.descricao_defeito],
+                ['Capacidade da Loja', c.capacidade_loja],
+                ['Status', c.status],
+                ['Decisão Técnico', c.decisao_tecnico],
+                ['Reaberto', c.reaberto == 1 || c.reaberto === true ? 'Sim' : 'Não'],
+                ['Reaberto em', c.reaberto_em],
+                ['Motivo Reabertura', c.motivo_reabertura],
+                ['Última Atualização', c.data_atualizacao]
+            ];
+
+            modalBody.innerHTML = campos.map(([label, val]) => `
+                <div class="campo"><div class="label">${label}</div><div class="value">${val || '—'}</div></div>
+            `).join('') + arquivosHtml;
         }
-        if (notas.length > 0) {
-            secoesHtml += `
-                <div class="arquivos-grupo">
-                    <h5><i class="fas fa-file-invoice"></i> Notas do Cliente (${notas.length})</h5>
-                    <div class="arquivos-grid-modal">${notas.map(renderizarArquivo).join('')}</div>
-                </div>
-            `;
+
+        function abrirArquivo(url, tipo) {
+            if (tipo === 'pdf' || tipo === 'outro') {
+                window.open(url, '_blank');
+                return;
+            }
+            if (tipo === 'image') {
+                Swal.fire({
+                    imageUrl: url,
+                    imageAlt: 'Foto do chamado',
+                    width: '90%',
+                    showConfirmButton: true,
+                    confirmButtonText: 'Fechar',
+                    confirmButtonColor: '#0d3b66',
+                    background: '#1a1a1a',
+                    customClass: { image: 'swal-image-preview' }
+                });
+                return;
+            }
+            if (tipo === 'video') {
+                Swal.fire({
+                    html: `<video controls autoplay style="width:100%; max-height:80vh; border-radius:12px; background:#000;">
+                        <source src="${url}">
+                        Seu navegador não suporta vídeo.
+                    </video>`,
+                    width: '90%',
+                    showConfirmButton: true,
+                    confirmButtonText: 'Fechar',
+                    confirmButtonColor: '#0d3b66',
+                    background: '#1a1a1a'
+                });
+            }
         }
-
-        arquivosHtml = `
-            <div class="modal-arquivos">
-                <h4><i class="fas fa-paperclip"></i> Arquivos Anexados (${arquivos.length})</h4>
-                ${secoesHtml}
-            </div>
-        `;
-    } else {
-        arquivosHtml = `
-            <div class="modal-arquivos">
-                <h4><i class="fas fa-paperclip"></i> Arquivos Anexados</h4>
-                <p style="color:#94a3b8; text-align:center; padding:20px;">
-                    <i class="fas fa-info-circle"></i> Nenhum arquivo anexado
-                    ${!isCJ ? '<br><small style="font-size:0.7rem;">(Chamados da Marine BR não têm arquivos disponíveis nesta tela)</small>' : ''}
-                </p>
-            </div>
-        `;
-    }
-
-    const campos = [
-        ['Empresa', isCJ ? 'CASA JAPON' : 'MARINE BR'],
-        ['Protocolo', c.protocolo],
-        ['Data Criação', c.data_criacao ? new Date(c.data_criacao).toLocaleString('pt-BR') : '—'],
-        ['Vendedor (chamado)', c.vendedor],
-        ['ID Cliente', c.id_cliente],
-        ['Nome Cliente', c.cliente_nome],
-        ['Vendedor do Cliente', c.vendedor_cliente],
-        ['Produto', c.produto],
-        ['Código Produto', c.codigo_produto],
-        ['Descrição Produto', c.descricao_produto],
-        ['Nota Marine', c.nota_marine],
-        ['Teste Receber', c.teste_receber],
-        ['Teste Venda', c.teste_venda],
-        ['Tempo de Uso', c.tempo_uso],
-        ['Descrição do Defeito', c.descricao_defeito],
-        ['Capacidade da Loja', c.capacidade_loja],
-        ['Status', c.status],
-        ['Decisão Técnico', c.decisao_tecnico],
-        ['Reaberto', c.reaberto == 1 || c.reaberto === true ? 'Sim' : 'Não'],
-        ['Reaberto em', c.reaberto_em],
-        ['Motivo Reabertura', c.motivo_reabertura],
-        ['Última Atualização', c.data_atualizacao]
-    ];
-
-    modalBody.innerHTML = campos.map(([label, val]) => `
-        <div class="campo"><div class="label">${label}</div><div class="value">${val || '—'}</div></div>
-    `).join('') + arquivosHtml;
-}
-
-function abrirArquivo(url, tipo) {
-    if (tipo === 'pdf' || tipo === 'outro') {
-        window.open(url, '_blank');
-        return;
-    }
-    if (tipo === 'image') {
-        Swal.fire({
-            imageUrl: url,
-            imageAlt: 'Foto do chamado',
-            width: '90%',
-            showConfirmButton: true,
-            confirmButtonText: 'Fechar',
-            confirmButtonColor: '#0d3b66',
-            background: '#1a1a1a'
-        });
-        return;
-    }
-    if (tipo === 'video') {
-        Swal.fire({
-            html: `<video controls autoplay style="width:100%; max-height:80vh; border-radius:12px; background:#000;">
-                <source src="${url}">
-            </video>`,
-            width: '90%',
-            showConfirmButton: true,
-            confirmButtonText: 'Fechar',
-            confirmButtonColor: '#0d3b66',
-            background: '#1a1a1a'
-        });
-    }
-}
 
         function fecharModal(e) {
             if (e && e.target && e.target.id !== 'modalDetalhe' && e.type === 'click') return;
@@ -1554,9 +1559,6 @@ function abrirArquivo(url, tipo) {
             aplicarFiltros();
         }
 
-        // ================================================================
-        // EXPORTAR EXCEL (AGORA COM DATA)
-        // ================================================================
         function exportarExcel() {
             if (!chamadosVisiveis.length) { Swal.fire('Atenção', 'Nada para exportar. Filtre primeiro.', 'warning'); return; }
             let dados;
@@ -1613,9 +1615,6 @@ function abrirArquivo(url, tipo) {
             el.addEventListener('change', () => aplicarFiltros());
         });
 
-        // ================================================================
-        // INIT — Como o relatório já está ativo, carrega automaticamente
-        // ================================================================
         document.addEventListener('DOMContentLoaded', () => {
             carregarRelatorio();
         });
