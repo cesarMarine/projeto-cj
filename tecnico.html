@@ -534,6 +534,125 @@
 
         .modal-content .modal-body .campo.full { grid-column: 1 / -1; }
 
+        /* ARQUIVOS NO MODAL */
+        .modal-arquivos {
+            grid-column: 1 / -1;
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 2px solid #e8edf3;
+        }
+
+        .modal-arquivos h4 {
+            font-size: 0.85rem;
+            color: #0d3b66;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .arquivos-grupo {
+            margin-bottom: 16px;
+        }
+
+        .arquivos-grupo h5 {
+            font-size: 0.75rem;
+            color: #6b7a8a;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .arquivos-grid-modal {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 12px;
+        }
+
+        .arquivo-item-modal {
+            background: #f8fafc;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 2px solid #e8edf3;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .arquivo-item-modal:hover {
+            border-color: #f8b81f;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+        }
+
+        .arquivo-thumb-modal {
+            height: 110px;
+            background: #e8edf3;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .arquivo-thumb-modal img,
+        .arquivo-thumb-modal video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .arquivo-item-modal:hover .arquivo-thumb-modal img,
+        .arquivo-item-modal:hover .arquivo-thumb-modal video {
+            transform: scale(1.05);
+        }
+
+        .arquivo-thumb-modal i {
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .arquivo-item-modal:hover .arquivo-thumb-modal i {
+            transform: scale(1.1);
+        }
+
+        .arquivo-info-modal {
+            padding: 8px 10px;
+            background: white;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .arquivo-nome {
+            font-size: 0.65rem;
+            color: #475569;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            font-weight: 500;
+        }
+
+        .arquivo-badge-modal {
+            font-size: 0.55rem;
+            color: #94a3b8;
+            text-transform: uppercase;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+        }
+
+        .swal-image-preview {
+            border-radius: 12px;
+            max-height: 80vh !important;
+            object-fit: contain;
+        }
+
+        /* CHAT */
         .modal-chat {
             grid-column: 1 / -1;
             margin-top: 12px;
@@ -769,6 +888,8 @@
             .modal-content .modal-body { grid-template-columns: 1fr; }
             .subtabs { width: 100%; }
             .subtab-btn { flex: 1; justify-content: center; padding: 10px 12px; font-size: 0.8rem; }
+            .arquivos-grid-modal { grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); }
+            .arquivo-thumb-modal { height: 90px; }
         }
 
         @media (max-width: 480px) {
@@ -804,19 +925,17 @@
 
     <div class="container">
 
-        <!-- SUB-ABAS (EMPRESAS) -->
-<div class="subtabs">
-    <button class="subtab-btn casajapon active" onclick="mudarSubAba('CJ', this)">
-        <i class="fas fa-store"></i> CASA JAPON
-        <span class="count-badge" id="badge-cj">0</span>
-    </button>
-    <button class="subtab-btn marine" onclick="mudarSubAba('MARINE', this)">
-        <i class="fas fa-fish"></i> MARINE BR
-        <span class="count-badge" id="badge-marine">0</span>
-    </button>
-</div>
+        <div class="subtabs">
+            <button class="subtab-btn casajapon active" onclick="mudarSubAba('CJ', this)">
+                <i class="fas fa-store"></i> CASA JAPON
+                <span class="count-badge" id="badge-cj">0</span>
+            </button>
+            <button class="subtab-btn marine" onclick="mudarSubAba('MARINE', this)">
+                <i class="fas fa-fish"></i> MARINE BR
+                <span class="count-badge" id="badge-marine">0</span>
+            </button>
+        </div>
 
-        <!-- FILTROS -->
         <div class="filtros-section">
             <div class="filtros-grid">
                 <div class="form-group">
@@ -850,7 +969,6 @@
             </div>
         </div>
 
-        <!-- ESTATÍSTICAS -->
         <div class="stats-grid" id="statsGrid">
             <div class="stat-card" onclick="filtrarPorStatus('')" data-status="">
                 <i class="fas fa-list stat-icon"></i>
@@ -884,7 +1002,6 @@
             </div>
         </div>
 
-        <!-- LISTA -->
         <div class="chamados-section">
             <div class="chamados-header">
                 <h2>
@@ -904,7 +1021,6 @@
         </div>
     </div>
 
-    <!-- MODAL -->
     <div class="modal-overlay" id="modalDetalhes">
         <div class="modal-content">
             <button class="btn-fechar" onclick="fecharModal()"><i class="fas fa-times"></i></button>
@@ -926,13 +1042,17 @@
 
         const VENDEDORES = [
             'MARCIO', 'FELIPO', 'LEANDRO', 'JUNIOR', 'FABIO',
-            'RODRIGO', 'ANDRE', 'GILSON', 'GARCIA', 'ANDERSON', 'GUSTAVO'
+            'RODRIGO', 'ANDRE', 'GILSON', 'GARCIA', 'ANDERSON', 'GUSTAVO',
+            'AGUSTIN', 'ALBERTO DAVALOS', 'ARMANDO GIMENEZ', 'CHICO',
+            'GUIDO SOTELO', 'JUAN DAVID CABRERA', 'JULIO ELIAS', 'JULIO FERNANDO',
+            'OSCAR MARCELO', 'REINALDO GIMENEZ CUEVAS', 'RICARDO CHAVEZ',
+            'SEBASTIAN GONZALEZ', 'WALTER LOPEZ'
         ];
 
         let chamadosAtuais = [];
         let chamadoSelecionado = null;
         let filtroStatusAtual = '';
-       let subAbaAtual = 'CJ';   // MARINE | CJ
+        let subAbaAtual = 'CJ';
 
         function renderVendedores() {
             const select = document.getElementById('filtroVendedor');
@@ -1006,7 +1126,6 @@
 
                 chamadosAtuais = data.chamados || [];
 
-                // Atualiza badges
                 const marine = chamadosAtuais.filter(c => !c.origem || c.origem !== 'CJ').length;
                 const cj = chamadosAtuais.filter(c => c.origem === 'CJ').length;
                 document.getElementById('badge-marine').textContent = marine;
@@ -1024,7 +1143,7 @@
             let totalNaoLidas = 0;
             chamadosAtuais.forEach(c => {
                 try {
-                    const conversa = JSON.parse(c.conversa || '[]');
+                    const conversa = Array.isArray(c.conversa) ? c.conversa : JSON.parse(c.conversa || '[]');
                     const naoLidas = conversa.filter(msg => msg.tipo === 'vendedor' && !msg.lida).length;
                     totalNaoLidas += naoLidas;
                 } catch(e) {}
@@ -1042,7 +1161,6 @@
             const status = document.getElementById('filtroStatus').value;
             const busca = document.getElementById('filtroBusca').value.toLowerCase().trim();
 
-            // 1. Filtra por EMPRESA (sub-aba)
             let filtrados = chamadosAtuais;
             if (subAbaAtual === 'MARINE') {
                 filtrados = filtrados.filter(c => !c.origem || c.origem !== 'CJ');
@@ -1050,7 +1168,6 @@
                 filtrados = filtrados.filter(c => c.origem === 'CJ');
             }
 
-            // 2. Filtra pelos campos
             if (vendedor) filtrados = filtrados.filter(c => c.vendedor === vendedor);
             if (status) filtrados = filtrados.filter(c => c.status === status);
 
@@ -1083,13 +1200,20 @@
             container.innerHTML = chamados.map(c => {
                 let naoLidas = 0;
                 try {
-                    const conversa = JSON.parse(c.conversa || '[]');
+                    const conversa = Array.isArray(c.conversa) ? c.conversa : JSON.parse(c.conversa || '[]');
                     naoLidas = conversa.filter(msg => msg.tipo === 'vendedor' && !msg.lida).length;
                 } catch(e) {}
 
                 const codigoProduto = c.codigo_produto || '—';
                 const descricaoProduto = c.descricao_produto || c.produto || '—';
                 const reaberto = c.reaberto || 0;
+
+                // Conta arquivos
+                let qtdArquivos = 0;
+                try {
+                    const arqs = Array.isArray(c.arquivos_json) ? c.arquivos_json : JSON.parse(c.arquivos_json || '[]');
+                    qtdArquivos = arqs.length;
+                } catch(e) {}
 
                 return `
                     <div class="chamado-card" onclick="abrirModal('${c.protocolo}')">
@@ -1098,6 +1222,7 @@
                                 <i class="fas fa-hashtag"></i> ${c.protocolo}
                                 ${naoLidas > 0 ? `<span class="badge-msg">${naoLidas}</span>` : ''}
                                 ${reaberto > 0 ? `<span class="badge-reaberto"><i class="fas fa-undo"></i> ${reaberto}x</span>` : ''}
+                                ${qtdArquivos > 0 ? `<span style="font-size:0.7rem; color:#6b7a8a; margin-left:6px;"><i class="fas fa-paperclip"></i> ${qtdArquivos}</span>` : ''}
                             </span>
                             <span class="status ${getStatusClass(c.status)}">${c.status}</span>
                         </div>
@@ -1162,6 +1287,7 @@
                 }
 
                 chamadoSelecionado = data.garantia;
+                const arquivos = data.arquivos || [];
 
                 document.getElementById('modalProtocolo').textContent = chamadoSelecionado.protocolo;
                 const statusEl = document.getElementById('modalStatus');
@@ -1175,16 +1301,113 @@
                 const grupoProduto = chamadoSelecionado.produto || '—';
                 const reaberto = chamadoSelecionado.reaberto || 0;
 
+                // ============================================================
+                // MONTA HTML DOS ARQUIVOS
+                // ============================================================
+                let arquivosHtml = '';
+                if (arquivos.length > 0) {
+                    const fotosVideos = arquivos.filter(a => a.categoria === 'foto_video' || !a.categoria);
+                    const notas = arquivos.filter(a => a.categoria === 'nota_cliente');
+
+                    const renderizarArquivo = (a) => {
+                        const tipo = (a.tipo || '').toLowerCase();
+                        const nomeLower = (a.nome || '').toLowerCase();
+                        const url = a.url || a.dataUrl || '';
+
+                        const isImage = tipo.startsWith('image/') || /\.(jpg|jpeg|png|gif|webp|bmp|jfif|svg)$/i.test(nomeLower);
+                        const isVideo = tipo.startsWith('video/') || /\.(mp4|mov|avi|webm|mkv|3gp)$/i.test(nomeLower);
+                        const isPdf = tipo === 'application/pdf' || nomeLower.endsWith('.pdf');
+
+                        let thumb = '';
+                        let badge = '📎';
+                        let tipoAcao = 'outro';
+
+                        if (isImage) {
+                            thumb = `<img src="${url}" alt="${a.nome}" loading="lazy">`;
+                            badge = '🖼️ Foto';
+                            tipoAcao = 'image';
+                        } else if (isVideo) {
+                            thumb = `<video src="${url}" muted preload="metadata"></video>`;
+                            badge = '🎥 Vídeo';
+                            tipoAcao = 'video';
+                        } else if (isPdf) {
+                            thumb = `<i class="fas fa-file-pdf" style="font-size:3rem;color:#ef4444;"></i>`;
+                            badge = '📄 PDF';
+                            tipoAcao = 'pdf';
+                        } else {
+                            thumb = `<i class="fas fa-file" style="font-size:3rem;color:#94a3b8;"></i>`;
+                            badge = '📎 Arquivo';
+                        }
+
+                        return `
+                            <div class="arquivo-item-modal" onclick="abrirArquivo('${url}', '${tipoAcao}')">
+                                <div class="arquivo-thumb-modal">${thumb}</div>
+                                <div class="arquivo-info-modal">
+                                    <div class="arquivo-nome" title="${a.nome}">${a.nome || 'Arquivo'}</div>
+                                    <span class="arquivo-badge-modal">${badge}</span>
+                                </div>
+                            </div>
+                        `;
+                    };
+
+                    let secoesHtml = '';
+
+                    if (fotosVideos.length > 0) {
+                        secoesHtml += `
+                            <div class="arquivos-grupo">
+                                <h5><i class="fas fa-camera"></i> Fotos / Vídeos (${fotosVideos.length})</h5>
+                                <div class="arquivos-grid-modal">
+                                    ${fotosVideos.map(renderizarArquivo).join('')}
+                                </div>
+                            </div>
+                        `;
+                    }
+
+                    if (notas.length > 0) {
+                        secoesHtml += `
+                            <div class="arquivos-grupo">
+                                <h5><i class="fas fa-file-invoice"></i> Notas do Cliente (${notas.length})</h5>
+                                <div class="arquivos-grid-modal">
+                                    ${notas.map(renderizarArquivo).join('')}
+                                </div>
+                            </div>
+                        `;
+                    }
+
+                    arquivosHtml = `
+                        <div class="modal-arquivos">
+                            <h4><i class="fas fa-paperclip"></i> Arquivos Anexados (${arquivos.length})</h4>
+                            ${secoesHtml}
+                        </div>
+                    `;
+                } else {
+                    arquivosHtml = `
+                        <div class="modal-arquivos">
+                            <h4><i class="fas fa-paperclip"></i> Arquivos Anexados</h4>
+                            <p style="color:#94a3b8; text-align:center; padding:20px;">
+                                <i class="fas fa-info-circle"></i> Nenhum arquivo anexado
+                            </p>
+                        </div>
+                    `;
+                }
+
                 let conversa = [];
-                try { conversa = JSON.parse(chamadoSelecionado.conversa || '[]'); } catch(e) {}
+                try { conversa = Array.isArray(chamadoSelecionado.conversa) ? chamadoSelecionado.conversa : JSON.parse(chamadoSelecionado.conversa || '[]'); } catch(e) {}
                 const decisaoAtual = chamadoSelecionado.decisao_tecnico || '';
 
                 body.innerHTML = `
                     <div class="campo"><div class="label">Vendedor</div><div class="value">${chamadoSelecionado.vendedor}</div></div>
                     <div class="campo"><div class="label">Status</div><div class="value"><span class="status ${getStatusClass(chamadoSelecionado.status)}">${chamadoSelecionado.status}</span></div></div>
+
                     ${reaberto > 0 ? `<div class="campo" style="grid-column:1/-1; background:#f0f0ff; padding:8px 16px; border-radius:8px; border-left:4px solid #8b5cf6;">
-                        <div style="display:flex; align-items:center; gap:8px;"><i class="fas fa-undo" style="color:#8b5cf6;"></i><span style="font-weight:600;">Reaberto ${reaberto} vez(es)</span></div>
+                        <div style="display:flex; align-items:center; gap:8px;">
+                            <i class="fas fa-undo" style="color:#8b5cf6;"></i>
+                            <span style="font-weight:600;">Reaberto ${reaberto} vez(es)</span>
+                            ${chamadoSelecionado.reaberto_em ? `<span style="font-size:0.75rem; color:#6b7a8a;">- ${new Date(chamadoSelecionado.reaberto_em).toLocaleString('pt-BR')}</span>` : ''}
+                        </div>
+                        ${chamadoSelecionado.motivo_reabertura ? `<div style="font-size:0.75rem; color:#6b7a8a; margin-top:4px;">Motivo: ${chamadoSelecionado.motivo_reabertura}</div>` : ''}
                     </div>` : ''}
+
                     <div class="campo" style="grid-column:1/-1; background:#f0f7ff; padding:12px 16px; border-radius:12px; border-left:4px solid #f8b81f;">
                         <div class="label" style="color:#0d3b66;"><i class="fas fa-box"></i> Informações do Produto</div>
                         <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px 20px; margin-top:6px;">
@@ -1193,6 +1416,7 @@
                             <div style="grid-column:1/-1;"><div style="font-size:0.6rem; color:#94a3b8; text-transform:uppercase;">Descrição</div><div style="font-weight:600; color:#0d3b66;">${descricaoProduto}</div></div>
                         </div>
                     </div>
+
                     <div class="campo"><div class="label">ID Cliente</div><div class="value">${chamadoSelecionado.id_cliente}</div></div>
                     <div class="campo"><div class="label">Cliente</div><div class="value"><strong>${chamadoSelecionado.cliente_nome}</strong></div></div>
                     <div class="campo"><div class="label">Cidade / UF</div><div class="value">${chamadoSelecionado.cidade_uf || '—'}</div></div>
@@ -1203,6 +1427,8 @@
                     <div class="campo"><div class="label">Loja pode arrumar?</div><div class="value">${chamadoSelecionado.capacidade_loja}</div></div>
                     <div class="campo"><div class="label">Data de criação</div><div class="value">${chamadoSelecionado.data_criacao || ''}</div></div>
                     <div class="campo full"><div class="label">Descrição do defeito</div><div class="value">${chamadoSelecionado.descricao_defeito || 'Não informado'}</div></div>
+
+                    ${arquivosHtml}
 
                     <div class="modal-chat">
                         <h4><i class="fas fa-comment-dots"></i> Conversa com Vendedor</h4>
@@ -1239,6 +1465,41 @@
             } catch (error) {
                 Swal.fire('Erro', 'Erro ao carregar detalhes: ' + error.message, 'error');
                 fecharModal();
+            }
+        }
+
+        function abrirArquivo(url, tipo) {
+            if (tipo === 'pdf' || tipo === 'outro') {
+                window.open(url, '_blank');
+                return;
+            }
+
+            if (tipo === 'image') {
+                Swal.fire({
+                    imageUrl: url,
+                    imageAlt: 'Foto do chamado',
+                    width: '90%',
+                    showConfirmButton: true,
+                    confirmButtonText: 'Fechar',
+                    confirmButtonColor: '#0d3b66',
+                    background: '#1a1a1a',
+                    customClass: { image: 'swal-image-preview' }
+                });
+                return;
+            }
+
+            if (tipo === 'video') {
+                Swal.fire({
+                    html: `<video controls autoplay style="width:100%; max-height:80vh; border-radius:12px; background:#000;">
+                        <source src="${url}">
+                        Seu navegador não suporta vídeo.
+                    </video>`,
+                    width: '90%',
+                    showConfirmButton: true,
+                    confirmButtonText: 'Fechar',
+                    confirmButtonColor: '#0d3b66',
+                    background: '#1a1a1a'
+                });
             }
         }
 
