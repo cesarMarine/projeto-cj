@@ -1548,6 +1548,25 @@ app.get('/contato', (req, res) => {
     res.sendFile(path.join(__dirname, 'contato.html'));
 });
 
+
+// ================================================================
+// 👤 VENDEDORES ATIVOS (para o garantia.html — sem senhas)
+// ================================================================
+app.get('/api/garantia/vendedores-ativos', async (req, res) => {
+    try {
+        const db = await openDb();
+        const vendedores = await db.all(`
+            SELECT id, nome
+            FROM pessoas_cj
+            WHERE tipo = 'vendedor' AND ativo = TRUE
+            ORDER BY nome ASC
+        `);
+        res.json({ success: true, vendedores });
+    } catch (error) {
+        console.error('❌ Erro ao listar vendedores ativos:', error);
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
 // ================================================================
 // 🚀 INICIALIZAÇÃO
 // ================================================================

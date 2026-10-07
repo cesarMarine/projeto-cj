@@ -1873,21 +1873,9 @@
         const VENDEDOR_STORAGE_KEY = 'vendedor_selecionado';
 
         // Nomes dos vendedores (NÃO traduzir - são nomes próprios)
-        const VENDEDORES = [
-            'AGUSTIN',
-            'ALBERTO DAVALOS',
-            'ARMANDO GIMENEZ',
-            'CHICO',
-            'GUIDO SOTELO',
-            'JUAN DAVID CABRERA',
-            'JULIO ELIAS',
-            'JULIO FERNANDO',
-            'OSCAR MARCELO',
-            'REINALDO GIMENEZ CUEVAS',
-            'RICARDO CHAVEZ',
-            'SEBASTIAN GONZALEZ',
-            'WALTER LOPEZ'
-        ];
+        // Vendedores — vêm do banco (cadastrados no admin)
+// A variável é preenchida pela função carregarVendedoresDoBanco()
+let VENDEDORES = [];
 
         // Produtos - chave interna (NÃO muda) + chave de tradução + imagem
         const PRODUTOS = [
@@ -1954,44 +1942,91 @@
         // ================================================================
         // RENDER VENDEDORES
         // ================================================================
-        function renderVendedores() {
-            const select = document.getElementById('selectVendedor');
-            if (!select) return;
-            const valorAtual = select.value;
-            select.innerHTML = `<option value="">${t('selecione')}</option>`;
-            VENDEDORES.forEach(nome => {
-                const option = document.createElement('option');
-                option.value = nome;
-                option.textContent = nome;
-                select.appendChild(option);
-            });
+        async function renderVendedores() {
+    const select = document.getElementById('selectVendedor');
+    if (!select) return;
 
-            const vendedorSalvo = localStorage.getItem(VENDEDOR_STORAGE_KEY);
-            if (vendedorSalvo && VENDEDORES.includes(vendedorSalvo)) {
-                select.value = vendedorSalvo;
-                vendedorAtual = vendedorSalvo;
-                carregarChamadosVendedor(vendedorSalvo);
-            } else if (valorAtual) {
-                select.value = valorAtual;
-            }
+    // Mostra "Carregando..." enquanto busca
+    select.innerHTML = `<option value="">Carregando...</option>`;
+    select.disabled = true;
 
-            select.addEventListener('change', function() {
-                if (this.value) {
-                    localStorage.setItem(VENDEDOR_STORAGE_KEY, this.value);
-                    vendedorAtual = this.value;
-                    carregarChamadosVendedor(this.value);
-                } else {
-                    localStorage.removeItem(VENDEDOR_STORAGE_KEY);
-                    document.getElementById('chamadosList').innerHTML = `
-                        <div class="empty-state">
-                            <i class="fas fa-inbox"></i>
-                            <p>${t('selecione_vendedor_msg')}</p>
-                        </div>
-                    `;
-                    document.getElementById('qtdChamados').textContent = '0';
-                }
-            });
+    try {
+        // Busca vendedores ativos do banco
+        const resp = await fetch(`${window.location.origin}/api/garantia/vendedores-ativos`);
+        const data = await resp.json();
+
+        if (!data.success) {
+            throw new Error(data.error || 'Erro ao carregar vendedores');
         }
+
+        // Atualiza a lista global
+        VENDEDORES = (data.vendedores || []).map(v => v.nome);
+
+        // Monta o select
+        select.innerHTML = `<option value="">${t('selecione')}</option>`;
+        VENDEDORES.forEach(nome => {
+            const option = document.createElement('option');
+            option.value = nome;
+            option.textContent = nome;
+            select.appendChild(option);
+        });
+
+        select.disabled = false;
+
+        // Se não tiver vendedores cadastrados, mostra aviso
+        if (VENDEDORES.length === 0) {
+            select.innerHTML = `<option value="">Nenhum vendedor cadastrado</option>`;
+            select.disabled = true;
+            document.getElementById('chamadosList').innerHTML = `
+                <div class="empty-state">
+                    <i class="fas fa-user-slash"></i>
+                    <p>Nenhum vendedor cadastrado. Peça ao admin para cadastrar.</p>
+                </div>
+            `;
+            return;
+        }
+
+        // Restaura vendedor salvo (se ainda existir na lista)
+        const vendedorSalvo = localStorage.getItem(VENDEDOR_STORAGE_KEY);
+        if (vendedorSalvo && VENDEDORES.includes(vendedorSalvo)) {
+            select.value = vendedorSalvo;
+            vendedorAtual = vendedorSalvo;
+            carregarChamadosVendedor(vendedorSalvo);
+        }
+
+        // Evento de troca de vendedor
+        select.addEventListener('change', function() {
+            if (this.value) {
+                localStorage.setItem(VENDEDOR_STORAGE_KEY, this.value);
+                vendedorAtual = this.value;
+                carregarChamadosVendedor(this.value);
+            } else {
+                localStorage.removeItem(VENDEDOR_STORAGE_KEY);
+                document.getElementById('chamadosList').innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-inbox"></i>
+                        <p>${t('selecione_vendedor_msg')}</p>
+                    </div>
+                `;
+                document.getElementById('qtdChamados').textContent = '0';
+            }
+        });
+
+    } catch (error) {
+        console.error('❌ Erro ao carregar vendedores:', error);
+        select.innerHTML = `<option value="">Erro ao carregar</option>`;
+        select.disabled = true;
+        document.getElementById('chamadosList').innerHTML = `
+            <div class="empty-state">
+                <i class="fas fa-exclamation-triangle"></i>
+                <p>Erro ao carregar vendedores: ${error.message}</p>
+                <button class="btn btn-back" onclick="renderVendedores()" style="margin-top:12px;">
+                    <i class="fas fa-sync-alt"></i> Tentar novamente
+                </button>
+            </div>
+        `;
+    }
+}
 
         // ================================================================
         // UPLOAD NOTA CLIENTE (ABERTURA)
@@ -3246,17 +3281,17 @@ function carregarMensagens(conversa) {
         // ================================================================
         // INICIALIZAÇÃO
         // ================================================================
-        document.addEventListener('DOMContentLoaded', () => {
-            // Detecta idioma do navegador se não tiver salvo
-            const idiomaSalvo = localStorage.getItem('idioma_garantia');
-            const idiomaNavegador = navigator.language.startsWith('es') ? 'es' : 'pt';
-            const idiomaInicial = idiomaSalvo || idiomaNavegador;
+document.addEventListener('DOMContentLoaded', async () => {
+    // Detecta idioma do navegador se não tiver salvo
+    const idiomaSalvo = localStorage.getItem('idioma_garantia');
+    const idiomaNavegador = navigator.language.startsWith('es') ? 'es' : 'pt';
+    const idiomaInicial = idiomaSalvo || idiomaNavegador;
 
-            trocarIdioma(idiomaInicial);
+    trocarIdioma(idiomaInicial);
 
-            renderVendedores();
-            renderUploads();
-        });
+    renderUploads();
+    await renderVendedores();  // ← AGORA COM await
+});
     </script>
 
 </body>
