@@ -64,6 +64,7 @@
 
         .container { max-width: 1400px; margin: 32px auto; padding: 0 24px; }
 
+        /* ABAS PRINCIPAIS */
         .tabs {
             display: flex;
             gap: 8px;
@@ -108,6 +109,7 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
+        /* SUB-ABAS (empresas) */
         .subtabs {
             display: flex;
             gap: 6px;
@@ -158,6 +160,7 @@
 
         .subtab-btn.active .count-badge { background: rgba(255, 255, 255, 0.3); }
 
+        /* SECTION */
         .section {
             background: white;
             border-radius: 24px;
@@ -180,6 +183,53 @@
 
         .section-desc { font-size: 0.85rem; color: #6b7a8a; margin-bottom: 20px; }
 
+        /* FORMULÁRIOS */
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr auto;
+            gap: 12px;
+            align-items: end;
+            margin-bottom: 20px;
+        }
+
+        .form-grid.single {
+            grid-template-columns: 1fr auto;
+        }
+
+        .form-group { margin-bottom: 0; }
+
+        .form-group label {
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: #6b7a8a;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e8edf3;
+            border-radius: 12px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+            background: #fafcff;
+            color: #1a2a3a;
+            transition: all 0.2s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #f8b81f;
+            box-shadow: 0 0 0 4px rgba(248, 184, 31, 0.12);
+            background: white;
+        }
+
+        /* DROP ZONE */
         .drop-zone {
             border: 3px dashed #d5dce6;
             border-radius: 16px;
@@ -213,6 +263,7 @@
         .drop-zone p { font-weight: 600; color: #0d3b66; margin-bottom: 4px; }
         .drop-zone small { color: #94a3b8; font-size: 0.8rem; }
 
+        /* PREVIEW */
         .preview-info {
             background: #f0f7ff;
             border-radius: 12px;
@@ -276,6 +327,7 @@
         .preview-table tr:nth-child(even) { background: #fafcff; }
         .preview-table tr:hover { background: #f0f7ff; }
 
+        /* BOTÕES */
         .btn-group { display: flex; gap: 12px; flex-wrap: wrap; }
 
         .btn {
@@ -316,6 +368,82 @@
         .btn-back { background: #e8edf3; color: #1a2a3a; }
         .btn-back:hover:not(:disabled) { background: #d5dce6; transform: translateY(-2px); }
 
+        .btn-warning { background: #f59e0b; color: white; }
+        .btn-warning:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(245, 158, 11, 0.3); }
+
+        /* TABELA DE PESSOAS */
+        .pessoas-tabela-wrapper {
+            overflow-x: auto;
+            border-radius: 12px;
+            border: 1px solid #e8edf3;
+        }
+
+        .pessoas-tabela { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+
+        .pessoas-tabela th {
+            background: #0d3b66;
+            color: white;
+            padding: 12px 16px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .pessoas-tabela td {
+            padding: 12px 16px;
+            border-bottom: 1px solid #e8edf3;
+            color: #475569;
+            vertical-align: middle;
+        }
+
+        .pessoas-tabela tr:nth-child(even) { background: #fafcff; }
+        .pessoas-tabela tr:hover { background: #f0f7ff; }
+
+        .pessoas-tabela td.acoes {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        .btn-acao-mini {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .btn-acao-mini.editar { background: #dbeafe; color: #1e40af; }
+        .btn-acao-mini.editar:hover { background: #bfdbfe; }
+
+        .btn-acao-mini.senha { background: #fef3c7; color: #92400e; }
+        .btn-acao-mini.senha:hover { background: #fde68a; }
+
+        .btn-acao-mini.deletar { background: #fecaca; color: #991b1b; }
+        .btn-acao-mini.deletar:hover { background: #fca5a5; }
+
+        .btn-acao-mini.toggle { background: #e8edf3; color: #475569; }
+        .btn-acao-mini.toggle:hover { background: #cbd5e1; }
+
+        .badge-ativo {
+            display: inline-block;
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            font-weight: 700;
+        }
+
+        .badge-ativo.ativo { background: #d1fae5; color: #065f46; }
+        .badge-ativo.inativo { background: #fee2e2; color: #991b1b; }
+
+        /* RELATÓRIO */
         .relatorio-filtros {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
@@ -701,6 +829,7 @@
             .modal-content .modal-body-grid { grid-template-columns: 1fr; }
             .subtabs { width: 100%; }
             .subtab-btn { flex: 1; justify-content: center; padding: 10px 12px; font-size: 0.75rem; }
+            .form-grid, .form-grid.single { grid-template-columns: 1fr; }
             .arquivos-grid-modal { grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); }
             .arquivo-thumb-modal { height: 90px; }
         }
@@ -727,15 +856,23 @@
 
     <div class="container">
 
+        <!-- ABAS PRINCIPAIS -->
         <div class="tabs">
             <button class="tab-btn active" onclick="mudarAba('relatorio', this)">
                 <i class="fas fa-chart-bar"></i> Relatório Geral
+            </button>
+            <button class="tab-btn" onclick="mudarAba('vendedores', this)">
+                <i class="fas fa-user-tie"></i> Vendedores
+            </button>
+            <button class="tab-btn" onclick="mudarAba('contatos', this)">
+                <i class="fas fa-address-book"></i> Contatos
             </button>
             <button class="tab-btn" onclick="mudarAba('importacao', this)">
                 <i class="fas fa-file-import"></i> Importação
             </button>
         </div>
 
+        <!-- ==================== ABA 1: RELATÓRIO ==================== -->
         <div class="tab-content active" id="tab-relatorio">
 
             <div class="subtabs" id="subtabs">
@@ -854,6 +991,106 @@
 
         </div>
 
+        <!-- ==================== ABA 2: VENDEDORES ==================== -->
+        <div class="tab-content" id="tab-vendedores">
+
+            <div class="section">
+                <div class="section-title">
+                    <i class="fas fa-user-tie"></i> Vendedores
+                </div>
+                <div class="section-desc">
+                    Cadastre os vendedores que terão acesso à tela de abertura de chamados.
+                    Cada vendedor precisa de uma <strong>senha</strong> para acessar.
+                </div>
+
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Nome do Vendedor</label>
+                        <input type="text" id="vend-nome" placeholder="Ex: FELIPO" style="text-transform: uppercase;">
+                    </div>
+                    <div class="form-group">
+                        <label>Senha de Acesso</label>
+                        <input type="text" id="vend-senha" placeholder="Ex: marine123">
+                    </div>
+                    <button class="btn btn-primary" onclick="cadastrarVendedor()">
+                        <i class="fas fa-plus"></i> Cadastrar
+                    </button>
+                </div>
+
+                <div class="pessoas-tabela-wrapper">
+                    <table class="pessoas-tabela" id="tabelaVendedores">
+                        <thead>
+                            <tr>
+                                <th style="width: 60px;">ID</th>
+                                <th>Nome</th>
+                                <th style="width: 120px;">Senha</th>
+                                <th style="width: 100px;">Status</th>
+                                <th style="width: 280px;">Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabelaVendedoresBody">
+                            <tr><td colspan="5" style="text-align:center; padding:30px; color:#94a3b8;">
+                                <i class="fas fa-spinner fa-pulse fa-2x"></i>
+                                <p style="margin-top:8px;">Carregando...</p>
+                            </td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- ==================== ABA 3: CONTATOS ==================== -->
+        <div class="tab-content" id="tab-contatos">
+
+            <div class="section">
+                <div class="section-title">
+                    <i class="fas fa-address-book"></i> Contatos
+                </div>
+                <div class="section-desc">
+                    Cadastre as pessoas que podem ser <strong>chamadas pelo técnico</strong> em um chamado específico.
+                    Cada contato recebe um <strong>e-mail</strong> quando for envolvido em um caso.
+                    <br><strong>Não precisa de senha</strong> — o acesso é por link único no e-mail.
+                </div>
+
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Nome do Contato</label>
+                        <input type="text" id="cont-nome" placeholder="Ex: João (Depósito)">
+                    </div>
+                    <div class="form-group">
+                        <label>E-mail</label>
+                        <input type="email" id="cont-email" placeholder="Ex: joao@marinefishing.com.br">
+                    </div>
+                    <button class="btn btn-primary" onclick="cadastrarContato()">
+                        <i class="fas fa-plus"></i> Cadastrar
+                    </button>
+                </div>
+
+                <div class="pessoas-tabela-wrapper">
+                    <table class="pessoas-tabela" id="tabelaContatos">
+                        <thead>
+                            <tr>
+                                <th style="width: 60px;">ID</th>
+                                <th>Nome</th>
+                                <th>E-mail</th>
+                                <th style="width: 100px;">Status</th>
+                                <th style="width: 220px;">Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabelaContatosBody">
+                            <tr><td colspan="5" style="text-align:center; padding:30px; color:#94a3b8;">
+                                <i class="fas fa-spinner fa-pulse fa-2x"></i>
+                                <p style="margin-top:8px;">Carregando...</p>
+                            </td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- ==================== ABA 4: IMPORTAÇÃO ==================== -->
         <div class="tab-content" id="tab-importacao">
 
             <div class="section">
@@ -954,6 +1191,9 @@
     </footer>
 
     <script>
+        // ================================================================
+        // ESTADO GLOBAL
+        // ================================================================
         let chamadosOriginais = [];
         let chamadosFiltrados = [];
         let chamadosVisiveis = [];
@@ -963,14 +1203,29 @@
         let dadosExcelProdutos = [];
         let subAbaAtual = 'CJ';
 
+        // ================================================================
+        // ABAS
+        // ================================================================
         function mudarAba(aba, btn) {
             document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
             document.getElementById('tab-' + aba).classList.add('active');
             btn.classList.add('active');
-            if (aba === 'relatorio' && chamadosOriginais.length === 0) carregarRelatorio();
+
+            if (aba === 'relatorio' && chamadosOriginais.length === 0) {
+                carregarRelatorio();
+            }
+            if (aba === 'vendedores') {
+                carregarVendedores();
+            }
+            if (aba === 'contatos') {
+                carregarContatos();
+            }
         }
 
+        // ================================================================
+        // SUB-ABAS (empresas)
+        // ================================================================
         function mudarSubAba(empresa, btn) {
             subAbaAtual = empresa;
             document.querySelectorAll('.subtab-btn').forEach(b => b.classList.remove('active'));
@@ -982,9 +1237,386 @@
             const marine = chamadosOriginais.filter(c => !c.origem || c.origem !== 'CJ').length;
             const cj = chamadosOriginais.filter(c => c.origem === 'CJ').length;
             const geral = chamadosOriginais.length;
+
             document.getElementById('badge-marine').textContent = marine;
             document.getElementById('badge-cj').textContent = cj;
             document.getElementById('badge-geral').textContent = geral;
+        }
+
+        // ================================================================
+        // VENDEDORES
+        // ================================================================
+        async function carregarVendedores() {
+            const tbody = document.getElementById('tabelaVendedoresBody');
+            tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding:30px; color:#94a3b8;"><i class="fas fa-spinner fa-pulse fa-2x"></i><p style="margin-top:8px;">Carregando...</p></td></tr>';
+
+            try {
+                const resp = await fetch('/api/admin/vendedores');
+                const result = await resp.json();
+
+                if (!result.success) throw new Error(result.error);
+
+                const vendedores = result.vendedores || [];
+
+                if (vendedores.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding:30px; color:#94a3b8;"><i class="fas fa-inbox fa-2x" style="opacity:0.3;"></i><p style="margin-top:8px;">Nenhum vendedor cadastrado ainda</p></td></tr>';
+                    return;
+                }
+
+                tbody.innerHTML = vendedores.map(v => `
+                    <tr>
+                        <td><strong>#${v.id}</strong></td>
+                        <td><strong style="color:#0d3b66;">${v.nome}</strong></td>
+                        <td>
+                            <span style="font-family: monospace; background: #f0f4f8; padding: 4px 10px; border-radius: 6px; font-size: 0.8rem;">
+                                ${v.senha || '—'}
+                            </span>
+                        </td>
+                        <td>
+                            <span class="badge-ativo ${v.ativo ? 'ativo' : 'inativo'}">
+                                ${v.ativo ? '✅ Ativo' : '🚫 Inativo'}
+                            </span>
+                        </td>
+                        <td class="acoes">
+                            <button class="btn-acao-mini editar" onclick="editarVendedor(${v.id}, '${v.nome.replace(/'/g, "\\'")}')">
+                                <i class="fas fa-pen"></i> Nome
+                            </button>
+                            <button class="btn-acao-mini senha" onclick="resetarSenhaVendedor(${v.id}, '${v.nome.replace(/'/g, "\\'")}')">
+                                <i class="fas fa-key"></i> Senha
+                            </button>
+                            <button class="btn-acao-mini toggle" onclick="toggleAtivoVendedor(${v.id}, ${v.ativo})">
+                                <i class="fas fa-power-off"></i>
+                            </button>
+                            <button class="btn-acao-mini deletar" onclick="deletarVendedor(${v.id}, '${v.nome.replace(/'/g, "\\'")}')">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `).join('');
+            } catch (err) {
+                tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; padding:30px; color:#ef4444;"><i class="fas fa-exclamation-triangle fa-2x"></i><p style="margin-top:8px;">Erro: ${err.message}</p></td></tr>`;
+            }
+        }
+
+        async function cadastrarVendedor() {
+            const nome = document.getElementById('vend-nome').value.trim();
+            const senha = document.getElementById('vend-senha').value.trim();
+
+            if (!nome) return Swal.fire('Atenção', 'Digite o nome do vendedor', 'warning');
+            if (!senha) return Swal.fire('Atenção', 'Digite uma senha para o vendedor', 'warning');
+            if (senha.length < 4) return Swal.fire('Atenção', 'A senha precisa ter pelo menos 4 caracteres', 'warning');
+
+            try {
+                const resp = await fetch('/api/admin/vendedores', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ nome, senha })
+                });
+                const result = await resp.json();
+
+                if (result.success) {
+                    Swal.fire({ icon: 'success', title: 'Vendedor cadastrado!', text: result.mensagem, timer: 2000, showConfirmButton: false });
+                    document.getElementById('vend-nome').value = '';
+                    document.getElementById('vend-senha').value = '';
+                    carregarVendedores();
+                } else {
+                    Swal.fire('Erro', result.error, 'error');
+                }
+            } catch (err) {
+                Swal.fire('Erro', err.message, 'error');
+            }
+        }
+
+        async function editarVendedor(id, nomeAtual) {
+            const { value: novoNome } = await Swal.fire({
+                title: 'Editar Nome do Vendedor',
+                input: 'text',
+                inputValue: nomeAtual,
+                showCancelButton: true,
+                confirmButtonText: 'Salvar',
+                cancelButtonText: 'Cancelar',
+                confirmButtonColor: '#0d3b66',
+                inputValidator: (value) => {
+                    if (!value || !value.trim()) return 'Digite um nome';
+                }
+            });
+
+            if (!novoNome) return;
+
+            try {
+                const resp = await fetch(`/api/admin/vendedores/${id}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ nome: novoNome.trim() })
+                });
+                const result = await resp.json();
+
+                if (result.success) {
+                    Swal.fire({ icon: 'success', title: 'Nome atualizado!', timer: 1500, showConfirmButton: false });
+                    carregarVendedores();
+                } else {
+                    Swal.fire('Erro', result.error, 'error');
+                }
+            } catch (err) {
+                Swal.fire('Erro', err.message, 'error');
+            }
+        }
+
+        async function resetarSenhaVendedor(id, nome) {
+            const { value: novaSenha } = await Swal.fire({
+                title: `Nova senha para ${nome}`,
+                input: 'text',
+                inputPlaceholder: 'Digite a nova senha',
+                showCancelButton: true,
+                confirmButtonText: 'Salvar',
+                cancelButtonText: 'Cancelar',
+                confirmButtonColor: '#f59e0b',
+                inputValidator: (value) => {
+                    if (!value || !value.trim()) return 'Digite uma senha';
+                    if (value.trim().length < 4) return 'Mínimo 4 caracteres';
+                }
+            });
+
+            if (!novaSenha) return;
+
+            try {
+                const resp = await fetch(`/api/admin/vendedores/${id}/senha`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ senha: novaSenha.trim() })
+                });
+                const result = await resp.json();
+
+                if (result.success) {
+                    Swal.fire({ icon: 'success', title: 'Senha alterada!', timer: 1500, showConfirmButton: false });
+                    carregarVendedores();
+                } else {
+                    Swal.fire('Erro', result.error, 'error');
+                }
+            } catch (err) {
+                Swal.fire('Erro', err.message, 'error');
+            }
+        }
+
+        async function toggleAtivoVendedor(id, ativoAtual) {
+            try {
+                const resp = await fetch(`/api/admin/vendedores/${id}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ ativo: !ativoAtual })
+                });
+                const result = await resp.json();
+
+                if (result.success) {
+                    carregarVendedores();
+                } else {
+                    Swal.fire('Erro', result.error, 'error');
+                }
+            } catch (err) {
+                Swal.fire('Erro', err.message, 'error');
+            }
+        }
+
+        async function deletarVendedor(id, nome) {
+            const confirm = await Swal.fire({
+                title: 'Deletar vendedor?',
+                html: `Tem certeza que deseja deletar <strong>${nome}</strong>?<br><br>⚠️ Essa ação não pode ser desfeita.`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Sim, deletar',
+                cancelButtonText: 'Cancelar',
+                confirmButtonColor: '#ef4444'
+            });
+
+            if (!confirm.isConfirmed) return;
+
+            try {
+                const resp = await fetch(`/api/admin/vendedores/${id}`, { method: 'DELETE' });
+                const result = await resp.json();
+
+                if (result.success) {
+                    Swal.fire({ icon: 'success', title: 'Vendedor deletado!', timer: 1500, showConfirmButton: false });
+                    carregarVendedores();
+                } else {
+                    Swal.fire('Erro', result.error, 'error');
+                }
+            } catch (err) {
+                Swal.fire('Erro', err.message, 'error');
+            }
+        }
+
+        // ================================================================
+        // CONTATOS
+        // ================================================================
+        async function carregarContatos() {
+            const tbody = document.getElementById('tabelaContatosBody');
+            tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding:30px; color:#94a3b8;"><i class="fas fa-spinner fa-pulse fa-2x"></i><p style="margin-top:8px;">Carregando...</p></td></tr>';
+
+            try {
+                const resp = await fetch('/api/admin/contatos');
+                const result = await resp.json();
+
+                if (!result.success) throw new Error(result.error);
+
+                const contatos = result.contatos || [];
+
+                if (contatos.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding:30px; color:#94a3b8;"><i class="fas fa-inbox fa-2x" style="opacity:0.3;"></i><p style="margin-top:8px;">Nenhum contato cadastrado ainda</p></td></tr>';
+                    return;
+                }
+
+                tbody.innerHTML = contatos.map(c => `
+                    <tr>
+                        <td><strong>#${c.id}</strong></td>
+                        <td><strong style="color:#0d3b66;">${c.nome}</strong></td>
+                        <td>
+                            <a href="mailto:${c.email}" style="color: #2563eb; text-decoration: none;">
+                                <i class="fas fa-envelope"></i> ${c.email}
+                            </a>
+                        </td>
+                        <td>
+                            <span class="badge-ativo ${c.ativo ? 'ativo' : 'inativo'}">
+                                ${c.ativo ? '✅ Ativo' : '🚫 Inativo'}
+                            </span>
+                        </td>
+                        <td class="acoes">
+                            <button class="btn-acao-mini editar" onclick="editarContato(${c.id}, '${c.nome.replace(/'/g, "\\'")}', '${c.email.replace(/'/g, "\\'")}')">
+                                <i class="fas fa-pen"></i> Editar
+                            </button>
+                            <button class="btn-acao-mini toggle" onclick="toggleAtivoContato(${c.id}, ${c.ativo})">
+                                <i class="fas fa-power-off"></i>
+                            </button>
+                            <button class="btn-acao-mini deletar" onclick="deletarContato(${c.id}, '${c.nome.replace(/'/g, "\\'")}')">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `).join('');
+            } catch (err) {
+                tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; padding:30px; color:#ef4444;"><i class="fas fa-exclamation-triangle fa-2x"></i><p style="margin-top:8px;">Erro: ${err.message}</p></td></tr>`;
+            }
+        }
+
+        async function cadastrarContato() {
+            const nome = document.getElementById('cont-nome').value.trim();
+            const email = document.getElementById('cont-email').value.trim();
+
+            if (!nome) return Swal.fire('Atenção', 'Digite o nome do contato', 'warning');
+            if (!email) return Swal.fire('Atenção', 'Digite o e-mail do contato', 'warning');
+            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return Swal.fire('Atenção', 'E-mail inválido', 'warning');
+
+            try {
+                const resp = await fetch('/api/admin/contatos', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ nome, email })
+                });
+                const result = await resp.json();
+
+                if (result.success) {
+                    Swal.fire({ icon: 'success', title: 'Contato cadastrado!', text: result.mensagem, timer: 2000, showConfirmButton: false });
+                    document.getElementById('cont-nome').value = '';
+                    document.getElementById('cont-email').value = '';
+                    carregarContatos();
+                } else {
+                    Swal.fire('Erro', result.error, 'error');
+                }
+            } catch (err) {
+                Swal.fire('Erro', err.message, 'error');
+            }
+        }
+
+        async function editarContato(id, nomeAtual, emailAtual) {
+            const { value: formValues } = await Swal.fire({
+                title: 'Editar Contato',
+                html: `
+                    <div style="text-align: left; padding: 10px 0;">
+                        <label style="font-size: 0.75rem; font-weight: 600; color: #6b7a8a; text-transform: uppercase;">Nome</label>
+                        <input id="swal-nome" class="swal2-input" value="${nomeAtual.replace(/"/g, '&quot;')}" placeholder="Nome">
+                        <label style="font-size: 0.75rem; font-weight: 600; color: #6b7a8a; text-transform: uppercase; margin-top: 12px; display: block;">E-mail</label>
+                        <input id="swal-email" class="swal2-input" value="${emailAtual.replace(/"/g, '&quot;')}" placeholder="E-mail">
+                    </div>
+                `,
+                showCancelButton: true,
+                confirmButtonText: 'Salvar',
+                cancelButtonText: 'Cancelar',
+                confirmButtonColor: '#0d3b66',
+                focusConfirm: false,
+                preConfirm: () => {
+                    const nome = document.getElementById('swal-nome').value.trim();
+                    const email = document.getElementById('swal-email').value.trim();
+                    if (!nome) { Swal.showValidationMessage('Digite um nome'); return false; }
+                    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { Swal.showValidationMessage('E-mail inválido'); return false; }
+                    return { nome, email };
+                }
+            });
+
+            if (!formValues) return;
+
+            try {
+                const resp = await fetch(`/api/admin/contatos/${id}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(formValues)
+                });
+                const result = await resp.json();
+
+                if (result.success) {
+                    Swal.fire({ icon: 'success', title: 'Contato atualizado!', timer: 1500, showConfirmButton: false });
+                    carregarContatos();
+                } else {
+                    Swal.fire('Erro', result.error, 'error');
+                }
+            } catch (err) {
+                Swal.fire('Erro', err.message, 'error');
+            }
+        }
+
+        async function toggleAtivoContato(id, ativoAtual) {
+            try {
+                const resp = await fetch(`/api/admin/contatos/${id}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ ativo: !ativoAtual })
+                });
+                const result = await resp.json();
+
+                if (result.success) {
+                    carregarContatos();
+                } else {
+                    Swal.fire('Erro', result.error, 'error');
+                }
+            } catch (err) {
+                Swal.fire('Erro', err.message, 'error');
+            }
+        }
+
+        async function deletarContato(id, nome) {
+            const confirm = await Swal.fire({
+                title: 'Deletar contato?',
+                html: `Tem certeza que deseja deletar <strong>${nome}</strong>?<br><br>⚠️ Essa ação não pode ser desfeita.`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Sim, deletar',
+                cancelButtonText: 'Cancelar',
+                confirmButtonColor: '#ef4444'
+            });
+
+            if (!confirm.isConfirmed) return;
+
+            try {
+                const resp = await fetch(`/api/admin/contatos/${id}`, { method: 'DELETE' });
+                const result = await resp.json();
+
+                if (result.success) {
+                    Swal.fire({ icon: 'success', title: 'Contato deletado!', timer: 1500, showConfirmButton: false });
+                    carregarContatos();
+                } else {
+                    Swal.fire('Erro', result.error, 'error');
+                }
+            } catch (err) {
+                Swal.fire('Erro', err.message, 'error');
+            }
         }
 
         // ================================================================
@@ -1376,14 +2008,8 @@
         // VER DETALHE (COM ARQUIVOS)
         // ================================================================
         async function verDetalhe(id) {
-            console.log('🔍 verDetalhe chamado:', id);
-
             const c = chamadosOriginais.find(x => String(x.id) === String(id));
-            if (!c) {
-                console.error('❌ Chamado não encontrado');
-                return;
-            }
-            console.log('✅ Chamado encontrado:', c.protocolo);
+            if (!c) return;
             const isCJ = c.origem === 'CJ';
 
             const modalBody = document.getElementById('modalBody');
@@ -1392,18 +2018,12 @@
 
             let arquivos = [];
             try {
-                const url = `/api/garantia/detalhe/${encodeURIComponent(c.protocolo)}`;
-                console.log('🔍 Buscando:', url);
-                const resp = await fetch(url);
-                console.log('🔍 Status:', resp.status);
+                const resp = await fetch(`/api/garantia/detalhe/${encodeURIComponent(c.protocolo)}`);
                 const result = await resp.json();
-                console.log('🔍 Result:', result);
                 if (result.success) arquivos = result.arquivos || [];
             } catch(e) {
-                console.error('❌ Erro ao buscar arquivos:', e);
+                console.error('Erro ao buscar arquivos:', e);
             }
-
-            console.log('🔍 Arquivos recebidos:', arquivos.length);
 
             let arquivosHtml = '';
             if (arquivos.length > 0) {
@@ -1614,6 +2234,12 @@
             el.addEventListener('keypress', e => { if (e.key === 'Enter') aplicarFiltros(); });
             el.addEventListener('change', () => aplicarFiltros());
         });
+
+        // Permite Enter nos campos de cadastro de vendedor/contato
+        document.getElementById('vend-nome')?.addEventListener('keypress', e => { if (e.key === 'Enter') cadastrarVendedor(); });
+        document.getElementById('vend-senha')?.addEventListener('keypress', e => { if (e.key === 'Enter') cadastrarVendedor(); });
+        document.getElementById('cont-nome')?.addEventListener('keypress', e => { if (e.key === 'Enter') cadastrarContato(); });
+        document.getElementById('cont-email')?.addEventListener('keypress', e => { if (e.key === 'Enter') cadastrarContato(); });
 
         document.addEventListener('DOMContentLoaded', () => {
             carregarRelatorio();

@@ -980,6 +980,243 @@ app.post('/api/admin/sync-chamados', async (req, res) => {
 });
 
 // ================================================================
+// 👥 ADMIN - PESSOAS (VENDEDORES E CONTATOS)
+// ================================================================
+
+// ----- VENDEDORES -----
+
+// Listar vendedores
+app.get('/api/admin/vendedores', async (req, res) => {
+    try {
+        const db = await openDb();
+        const vendedores = await db.all(`
+            SELECT id, nome, senha, ativo, data_criacao, data_atualizacao
+            FROM pessoas_cj
+            WHERE tipo = 'vendedor'
+            ORDER BY nome ASC
+        `);
+        res.json({ success: true, vendedores });
+    } catch (error) {
+        console.error('❌ Erro ao listar vendedores:', error);
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+// Cadastrar vendedor
+app.post('/api/admin/vendedores', async (req, res) => {
+    try {
+        const { nome, senha } = req.body;
+
+        if (!nome || !senha) {
+            return res.status(400).json({ success: false, error: 'Nome e senha são obrigatórios' });
+        }
+
+        const db = await openDb();
+
+        // Verifica se já existe
+        const existe = await db.get(
+            'SELECT id FROM pessoas_cj WHERE tipo = ? AND LOWER(nome) = LOWER(?)',
+            ['vendedor', nome.trim()]
+        );
+
+        if (existe) {
+            return res.status(400).json({ success: false, error: 'Já existe um vendedor com esse nome' });
+        }
+
+        const result = await db.run(`
+            INSERT INTO pessoas_cj (tipo, nome, senha, ativo)
+            VALUES ('vendedor', ?, ?, TRUE)
+        `, [nome.trim(), senha.trim()]);
+
+        res.json({ success: true, mensagem: 'Vendedor cadastrado com sucesso!' });
+    } catch (error) {
+        console.error('❌ Erro ao cadastrar vendedor:', error);
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+// Editar vendedor (só o nome)
+app.put('/api/admin/vendedores/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { nome, ativo } = req.body;
+
+        const db = await openDb();
+
+        const campos = [];
+        const valores = [];
+
+        if (nome !== undefined) { campos.push('nome = ?'); valores.push(nome.trim()); }
+        if (ativo !== undefined) { campos.push('ativo = ?'); valores.push(ativo); }
+
+        if (campos.length === 0) {
+            return res.status(400).json({ success: false, error: 'Nada para atualizar' });
+        }
+
+        campos.push('data_atualizacao = CURRENT_TIMESTAMP');
+        valores.push(id);
+
+        await db.run(`
+            UPDATE pessoas_cj
+            SET ${campos.join(', ')}
+            WHERE id = ? AND tipo = 'vendedor'
+        `, valores);
+
+        res.json({ success: true, mensagem: 'Vendedor atualizado!' });
+    } catch (error) {
+        console.error('❌ Erro ao editar vendedor:', error);
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+// Resetar senha do vendedor
+app.put('/api/admin/vendedores/:id/senha', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { senha } = req.body;
+
+        if (!senha) {
+            return res.status(400).json({ success: false, error: 'Senha obrigatória' });
+        }
+
+        const db = await openDb();
+        await db.run(`
+            UPDATE pessoas_cj
+            SET senha = ?, data_atualizacao = CURRENT_TIMESTAMP
+            WHERE id = ? AND tipo = 'vendedor'
+        `, [senha.trim(), id]);
+
+        res.json({ success: true, mensagem: 'Senha alterada!' });
+    } catch (error) {
+        console.error('❌ Erro ao resetar senha:', error);
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+// Deletar vendedor
+app.delete('/api/admin/vendedores/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const db = await openDb();
+        await db.run(`DELETE FROM pessoas_cj WHERE id = ? AND tipo = 'vendedor'`, [id]);
+        res.json({ success: true, mensagem: 'Vendedor deletado!' });
+    } catch (error) {
+        console.error('❌ Erro ao deletar vendedor:', error);
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+// ----- CONTATOS -----
+
+// Listar contatos
+app.get('/api/admin/contatos', async (req, res) => {
+    try {
+        const db = await openDb();
+        const contatos = await db.all(`
+            SELECT id, nome, email, ativo, data_criacao, data_atualizacao
+            FROM pessoas_cj
+            WHERE tipo = 'contato'
+            ORDER BY nome ASC
+        `);
+        res.json({ success: true, contatos });
+    } catch (error) {
+        console.error('❌ Erro ao listar contatos:', error);
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+// Cadastrar contato
+app.post('/api/admin/contatos', async (req, res) => {
+    try {
+        const { nome, email } = req.body;
+
+        if (!nome || !email) {
+            return res.status(400).json({ success: false, error: 'Nome e e-mail são obrigatórios' });
+        }
+
+        // Valida e-mail básico
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+            return res.status(400).json({ success: false, error: 'E-mail inválido' });
+        }
+
+        const db = await openDb();
+
+        const existe = await db.get(
+            'SELECT id FROM pessoas_cj WHERE tipo = ? AND LOWER(email) = LOWER(?)',
+            ['contato', email.trim()]
+        );
+
+        if (existe) {
+            return res.status(400).json({ success: false, error: 'Já existe um contato com esse e-mail' });
+        }
+
+        await db.run(`
+            INSERT INTO pessoas_cj (tipo, nome, email, ativo)
+            VALUES ('contato', ?, ?, TRUE)
+        `, [nome.trim(), email.trim().toLowerCase()]);
+
+        res.json({ success: true, mensagem: 'Contato cadastrado com sucesso!' });
+    } catch (error) {
+        console.error('❌ Erro ao cadastrar contato:', error);
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+// Editar contato
+app.put('/api/admin/contatos/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { nome, email, ativo } = req.body;
+
+        const db = await openDb();
+
+        const campos = [];
+        const valores = [];
+
+        if (nome !== undefined) { campos.push('nome = ?'); valores.push(nome.trim()); }
+        if (email !== undefined) {
+            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                return res.status(400).json({ success: false, error: 'E-mail inválido' });
+            }
+            campos.push('email = ?');
+            valores.push(email.trim().toLowerCase());
+        }
+        if (ativo !== undefined) { campos.push('ativo = ?'); valores.push(ativo); }
+
+        if (campos.length === 0) {
+            return res.status(400).json({ success: false, error: 'Nada para atualizar' });
+        }
+
+        campos.push('data_atualizacao = CURRENT_TIMESTAMP');
+        valores.push(id);
+
+        await db.run(`
+            UPDATE pessoas_cj
+            SET ${campos.join(', ')}
+            WHERE id = ? AND tipo = 'contato'
+        `, valores);
+
+        res.json({ success: true, mensagem: 'Contato atualizado!' });
+    } catch (error) {
+        console.error('❌ Erro ao editar contato:', error);
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+// Deletar contato
+app.delete('/api/admin/contatos/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const db = await openDb();
+        await db.run(`DELETE FROM pessoas_cj WHERE id = ? AND tipo = 'contato'`, [id]);
+        res.json({ success: true, mensagem: 'Contato deletado!' });
+    } catch (error) {
+        console.error('❌ Erro ao deletar contato:', error);
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+// ================================================================
 // 🚀 INICIALIZAÇÃO
 // ================================================================
 
