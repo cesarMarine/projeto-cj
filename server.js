@@ -1229,13 +1229,17 @@ app.delete('/api/admin/contatos/:id', async (req, res) => {
 // ================================================================
 // 📤 CHAMAR CONTATO NO CASO (técnico → contato via e-mail)
 // ================================================================
+// ================================================================
+// 📤 CHAMAR CONTATO(S) NO CASO (técnico → contatos via e-mail)
+// ================================================================
 app.post('/api/garantia/chamar-contato/:protocolo', async (req, res) => {
     try {
         const { protocolo } = req.params;
-        const { contato_id, mensagem } = req.body;
+        const { contatos_ids, mensagem } = req.body;
 
-        if (!contato_id) {
-            return res.status(400).json({ success: false, error: 'Selecione um contato' });
+        // Validação — aceita array
+        if (!Array.isArray(contatos_ids) || contatos_ids.length === 0) {
+            return res.status(400).json({ success: false, error: 'Selecione pelo menos um contato' });
         }
 
         const db = await openDb();
@@ -1246,15 +1250,6 @@ app.post('/api/garantia/chamar-contato/:protocolo', async (req, res) => {
             return res.status(404).json({ success: false, error: 'Chamado não encontrado' });
         }
 
-        // Busca o contato
-        const contato = await db.get(
-            "SELECT id, nome, email FROM pessoas_cj WHERE id = ? AND tipo = 'contato' AND ativo = TRUE",
-            [contato_id]
-        );
-        if (!contato) {
-            return res.status(404).json({ success: false, error: 'Contato não encontrado ou inativo' });
-        }
-
         // Parse da lista de envolvidos
         let envolvidos = [];
         try {
@@ -1263,32 +1258,123 @@ app.post('/api/garantia/chamar-contato/:protocolo', async (req, res) => {
                 : JSON.parse(chamado.envolvidos || '[]');
         } catch(e) { envolvidos = []; }
 
-        // Verifica se já foi chamado antes (evita duplicar)
-        const jaEnvolvido = envolvidos.find(e => e.contato_id === contato.id && e.status === 'aguardando');
-        if (jaEnvolvido) {
-            return res.status(400).json({ 
-                success: false, 
-                error: 'Esse contato já foi chamado e ainda não respondeu. Aguarde a resposta dele.' 
-            });
+        const mensagemFinal = mensagem?.trim() || 'Você foi chamado para dar sua opinião neste caso.';
+        const baseUrl = process.env.BASE_URL || 'https://projeto-cj.onrender.com';
+
+        const enviados = [];
+        const erros = [];
+
+        // Loop — envia pra cada contato
+        for (const contatoId of contatos_ids) {
+            try {
+                // Busca o contato
+                const contato = await db.get(
+                    "SELECT id, nome, email FROM pessoas_cj WHERE id = ? AND tipo = 'contato' AND ativo = TRUE",
+                    [contatoId]
+                );
+
+                if (!contato) {
+                    erros.push({ contato_id: contatoId, erro: 'Contato não encontrado ou inativo' });
+                    continue;
+                }
+
+                // Verifica se já foi chamado e está aguardando
+                const jaAguardando = envolvidos.find(e => 
+                    e.contato_id === contato.id && e.status === 'aguardando'
+                );
+                if (jaAguardando) {
+                    erros.push({ contato_id: contatoId, nome: contato.nome, erro: 'Já convidado e aguardando resposta' });
+                    continue;
+                }
+
+                // Gera token único
+                const token = crypto.randomBytes(16).toString('hex');
+
+                // Adiciona na lista
+                const novoEnvolvido = {
+                    contato_id: contato.id,
+                    nome: contato.nome,
+                    email: contato.email,
+                    token,
+                    mensagem: mensagemFinal,
+                    resposta: null,
+                    status: 'aguardando',
+                    data_envio: new Date().toISOString(),
+                    data_resposta: null
+                };
+
+                envolvidos.push(novoEnvolvido);
+
+                // Link único
+                const link = `${baseUrl}/contato?chamado=${encodeURIComponent(protocolo)}&token=${token}`;
+
+                // Envia e-mail
+                if (resend) {
+                    try {
+                        const { data: emailData, error: emailError } = await resend.emails.send({
+                            from: RESEND_FROM,
+                            to: [contato.email],
+                            subject: `[${protocolo}] ${chamado.cliente_nome || ''} - ${chamado.produto || ''}`.trim(),
+                            html: `
+                                <div style="font-family: Arial, sans-serif; color: #1a2a3a; max-width: 600px; margin: 0 auto; border: 1px solid #e8edf3; border-radius: 12px; padding: 24px;">
+                                    <div style="background: linear-gradient(135deg, #0a2a4a 0%, #0d3b66 100%); padding: 16px 24px; border-radius: 8px; color: white; text-align: center; margin-bottom: 20px;">
+                                        <h2 style="margin: 0; font-size: 1.2rem;">📋 Você foi chamado em um caso</h2>
+                                    </div>
+                                    
+                                    <p>Olá, <strong>${contato.nome}</strong>!</p>
+                                    
+                                    <p>O técnico solicitou sua participação neste chamado:</p>
+                                    
+                                    <div style="background: #f8fafc; border-left: 4px solid #0d3b66; padding: 16px; border-radius: 6px; margin: 20px 0;">
+                                        <p style="margin: 0 0 8px 0;"><strong>📋 Protocolo:</strong> ${protocolo}</p>
+                                        <p style="margin: 0 0 8px 0;"><strong>👤 Cliente:</strong> ${chamado.cliente_nome || 'N/A'}</p>
+                                        <p style="margin: 0 0 8px 0;"><strong>🎣 Produto:</strong> ${chamado.produto || 'N/A'}</p>
+                                        <p style="margin: 0;"><strong>📝 Defeito:</strong> ${chamado.descricao_defeito || 'Não informado'}</p>
+                                    </div>
+                                    
+                                    <div style="background: #fffdf5; border: 2px dashed #f8b81f; border-radius: 8px; padding: 16px; margin: 20px 0;">
+                                        <p style="margin: 0; font-weight: bold; color: #0d3b66;">💬 Mensagem do Técnico:</p>
+                                        <p style="margin: 8px 0 0 0; color: #2d3f4f;">"${mensagemFinal}"</p>
+                                    </div>
+                                    
+                                    <div style="text-align: center; margin: 30px 0;">
+                                        <a href="${link}" style="background: #0d3b66; color: white; text-decoration: none; padding: 14px 32px; border-radius: 30px; font-weight: bold; display: inline-block;">
+                                            🔍 Ver Chamado e Responder
+                                        </a>
+                                    </div>
+                                    
+                                    <p style="font-size: 0.8rem; color: #6b7a8a;">Ou copie este link no navegador:</p>
+                                    <p style="font-size: 0.75rem; color: #2563eb; word-break: break-all;">${link}</p>
+                                    
+                                    <hr style="border: 0; border-top: 1px solid #e8edf3; margin-top: 24px;">
+                                    <p style="font-size: 0.8rem; color: #6b7a8a; text-align: center;">Marine Fishing — Assistência Técnica</p>
+                                </div>
+                            `
+                        });
+
+                        if (emailError) {
+                            console.error('❌ Resend REJEITOU para', contato.email, ':', JSON.stringify(emailError));
+                            // Remove da lista pra não ficar inconsistente
+                            envolvidos = envolvidos.filter(e => e.token !== token);
+                            erros.push({ contato_id: contatoId, nome: contato.nome, erro: 'Erro no envio: ' + (emailError.message || 'desconhecido') });
+                        } else {
+                            console.log(`📧 E-mail enviado para ${contato.email} — ID: ${emailData?.id}`);
+                            enviados.push({ id: contato.id, nome: contato.nome, email: contato.email });
+                        }
+                    } catch (emailErr) {
+                        console.error('❌ Erro ao enviar e-mail:', emailErr.message);
+                        envolvidos = envolvidos.filter(e => e.token !== token);
+                        erros.push({ contato_id: contatoId, nome: contato.nome, erro: emailErr.message });
+                    }
+                } else {
+                    // Sem Resend configurado, adiciona mesmo assim
+                    enviados.push({ id: contato.id, nome: contato.nome, email: contato.email });
+                }
+            } catch (errContato) {
+                console.error('❌ Erro ao processar contato', contatoId, ':', errContato.message);
+                erros.push({ contato_id: contatoId, erro: errContato.message });
+            }
         }
-
-        // Gera token único
-        const token = crypto.randomBytes(16).toString('hex');
-
-        // Adiciona na lista
-        const novoEnvolvido = {
-            contato_id: contato.id,
-            nome: contato.nome,
-            email: contato.email,
-            token,
-            mensagem: mensagem?.trim() || 'Você foi chamado para dar sua opinião neste caso.',
-            resposta: null,
-            status: 'aguardando',
-            data_envio: new Date().toISOString(),
-            data_resposta: null
-        };
-
-        envolvidos.push(novoEnvolvido);
 
         // Salva no banco
         await db.run(
@@ -1296,68 +1382,25 @@ app.post('/api/garantia/chamar-contato/:protocolo', async (req, res) => {
             [envolvidos, protocolo]
         );
 
-        // Monta o link mágico
-        const baseUrl = process.env.BASE_URL || 'https://projeto-cj.onrender.com';
-        const link = `${baseUrl}/contato?chamado=${encodeURIComponent(protocolo)}&token=${token}`;
-
-        // Envia e-mail
-        if (resend) {
-            try {
-                await resend.emails.send({
-                    from: RESEND_FROM,
-                    to: [contato.email],
-                    subject: `[${protocolo}] ${chamado.cliente_nome || ''} - ${chamado.produto || ''}`.trim(),
-                    html: `
-                        <div style="font-family: Arial, sans-serif; color: #1a2a3a; max-width: 600px; margin: 0 auto; border: 1px solid #e8edf3; border-radius: 12px; padding: 24px;">
-                            <div style="background: linear-gradient(135deg, #0a2a4a 0%, #0d3b66 100%); padding: 16px 24px; border-radius: 8px; color: white; text-align: center; margin-bottom: 20px;">
-                                <h2 style="margin: 0; font-size: 1.2rem;">📋 Você foi chamado em um caso</h2>
-                            </div>
-                            
-                            <p>Olá, <strong>${contato.nome}</strong>!</p>
-                            
-                            <p>O técnico solicitou sua participação neste chamado:</p>
-                            
-                            <div style="background: #f8fafc; border-left: 4px solid #0d3b66; padding: 16px; border-radius: 6px; margin: 20px 0;">
-                                <p style="margin: 0 0 8px 0;"><strong>📋 Protocolo:</strong> ${protocolo}</p>
-                                <p style="margin: 0 0 8px 0;"><strong>👤 Cliente:</strong> ${chamado.cliente_nome || 'N/A'}</p>
-                                <p style="margin: 0 0 8px 0;"><strong>🎣 Produto:</strong> ${chamado.produto || 'N/A'}</p>
-                                <p style="margin: 0;"><strong>📝 Defeito:</strong> ${chamado.descricao_defeito || 'Não informado'}</p>
-                            </div>
-                            
-                            <div style="background: #fffdf5; border: 2px dashed #f8b81f; border-radius: 8px; padding: 16px; margin: 20px 0;">
-                                <p style="margin: 0; font-weight: bold; color: #0d3b66;">💬 Mensagem do Técnico:</p>
-                                <p style="margin: 8px 0 0 0; color: #2d3f4f;">"${novoEnvolvido.mensagem}"</p>
-                            </div>
-                            
-                            <div style="text-align: center; margin: 30px 0;">
-                                <a href="${link}" style="background: #0d3b66; color: white; text-decoration: none; padding: 14px 32px; border-radius: 30px; font-weight: bold; display: inline-block;">
-                                    🔍 Ver Chamado e Responder
-                                </a>
-                            </div>
-                            
-                            <p style="font-size: 0.8rem; color: #6b7a8a;">Ou copie este link no navegador:</p>
-                            <p style="font-size: 0.75rem; color: #2563eb; word-break: break-all;">${link}</p>
-                            
-                            <hr style="border: 0; border-top: 1px solid #e8edf3; margin-top: 24px;">
-                            <p style="font-size: 0.8rem; color: #6b7a8a; text-align: center;">Marine Fishing — Assistência Técnica</p>
-                        </div>
-                    `
-                });
-                console.log(`📧 E-mail enviado para ${contato.email}`);
-            } catch (emailErr) {
-                console.error('❌ Erro ao enviar e-mail:', emailErr.message);
-                // Não trava — o chamado já foi atualizado no banco
-            }
+        // Monta resposta
+        let msg = '';
+        if (enviados.length > 0) {
+            msg += `✅ ${enviados.length} e-mail(s) enviado(s): ${enviados.map(e => e.nome).join(', ')}`;
+        }
+        if (erros.length > 0) {
+            if (msg) msg += '\n';
+            msg += `⚠️ ${erros.length} erro(s): ${erros.map(e => `${e.nome || e.contato_id} (${e.erro})`).join(', ')}`;
         }
 
         res.json({
-            success: true,
-            mensagem: `Contato ${contato.nome} chamado com sucesso!`,
-            envolvido: novoEnvolvido
+            success: enviados.length > 0,
+            mensagem: msg,
+            enviados,
+            erros
         });
 
     } catch (error) {
-        console.error('❌ Erro ao chamar contato:', error);
+        console.error('❌ Erro ao chamar contatos:', error);
         res.status(500).json({ success: false, error: error.message });
     }
 });

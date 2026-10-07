@@ -846,182 +846,262 @@
         /* ============================================================ */
         /* 📤 CHAMAR CONTATO */
         /* ============================================================ */
-        .modal-contatos {
-            grid-column: 1 / -1;
-            margin-top: 16px;
-            padding-top: 16px;
-            border-top: 2px solid #e8edf3;
-        }
+        /* ============================================================ */
+/* 📤 CHAMAR CONTATO */
+/* ============================================================ */
+.modal-contatos {
+    grid-column: 1 / -1;
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 2px solid #e8edf3;
+}
 
-        .modal-contatos h4 {
-            font-size: 0.85rem;
-            color: #0d3b66;
-            margin-bottom: 12px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
+.modal-contatos h4 {
+    font-size: 0.85rem;
+    color: #0d3b66;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
 
-        .chamar-form {
-            background: #f0f9ff;
-            border-radius: 14px;
-            padding: 16px 18px;
-            border-left: 4px solid #0ea5e9;
-            margin-bottom: 16px;
-        }
+.chamar-form {
+    background: #f0f9ff;
+    border-radius: 14px;
+    padding: 16px 18px;
+    border-left: 4px solid #0ea5e9;
+    margin-bottom: 16px;
+}
 
-        .chamar-form .form-row {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 12px;
-            margin-bottom: 12px;
-        }
+.chamar-form label.titulo-sec {
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: #0369a1;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    display: block;
+    margin-bottom: 8px;
+}
 
-        .chamar-form label {
-            font-size: 0.7rem;
-            font-weight: 600;
-            color: #0369a1;
-            text-transform: uppercase;
-            letter-spacing: 0.3px;
-            display: block;
-            margin-bottom: 4px;
-        }
+.contatos-checkbox-lista {
+    background: white;
+    border-radius: 10px;
+    border: 2px solid #bae6fd;
+    padding: 8px 12px;
+    max-height: 200px;
+    overflow-y: auto;
+    margin-bottom: 14px;
+}
 
-        .chamar-form select,
-        .chamar-form textarea {
-            width: 100%;
-            padding: 10px 14px;
-            border: 2px solid #bae6fd;
-            border-radius: 10px;
-            font-family: 'Inter', sans-serif;
-            font-size: 0.85rem;
-            background: white;
-            color: #1a2a3a;
-        }
+.contato-checkbox-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 4px;
+    border-bottom: 1px solid #f0f9ff;
+    cursor: pointer;
+    transition: background 0.2s;
+}
 
-        .chamar-form select:focus,
-        .chamar-form textarea:focus {
-            outline: none;
-            border-color: #0ea5e9;
-            box-shadow: 0 0 0 4px rgba(14, 165, 233, 0.12);
-        }
+.contato-checkbox-item:last-child {
+    border-bottom: none;
+}
 
-        .chamar-form textarea {
-            resize: vertical;
-            min-height: 60px;
-        }
+.contato-checkbox-item:hover:not(.bloqueado) {
+    background: #f0f9ff;
+    border-radius: 6px;
+}
 
-        .chamar-form .btn-chamar {
-            background: linear-gradient(135deg, #0ea5e9, #0284c7);
-            color: white;
-            border: none;
-            padding: 10px 24px;
-            border-radius: 10px;
-            font-weight: 600;
-            font-size: 0.85rem;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            transition: all 0.2s;
-        }
+.contato-checkbox-item.bloqueado {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background: #fef3c7;
+    border-radius: 6px;
+}
 
-        .chamar-form .btn-chamar:hover { transform: translateY(-2px); box-shadow: 0 4px 16px rgba(14, 165, 233, 0.4); }
-        .chamar-form .btn-chamar:disabled { opacity: 0.5; cursor: not-allowed; transform: none !important; }
+.contato-checkbox-item input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+    accent-color: #0ea5e9;
+    flex-shrink: 0;
+}
 
-        /* LISTA DE ENVOLVIDOS */
-        .envolvidos-lista {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
+.contato-checkbox-item.bloqueado input[type="checkbox"] {
+    cursor: not-allowed;
+}
 
-        .envolvido-card {
-            background: #f8fafc;
-            border-radius: 12px;
-            padding: 14px 18px;
-            border-left: 4px solid #94a3b8;
-            transition: all 0.3s;
-        }
+.contato-checkbox-item .info {
+    flex: 1;
+    min-width: 0;
+}
 
-        .envolvido-card.aguardando { border-left-color: #f59e0b; background: #fffbeb; }
-        .envolvido-card.respondeu { border-left-color: #10b981; background: #f0fdf4; }
+.contato-checkbox-item .nome {
+    font-weight: 600;
+    color: #0d3b66;
+    font-size: 0.85rem;
+    display: block;
+}
 
-        .envolvido-card .top {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin-bottom: 8px;
-        }
+.contato-checkbox-item .email {
+    font-size: 0.7rem;
+    color: #6b7a8a;
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
 
-        .envolvido-card .nome {
-            font-weight: 700;
-            color: #0d3b66;
-            font-size: 0.9rem;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
+.contato-checkbox-item .badge {
+    font-size: 0.6rem;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 10px;
+    background: #fef3c7;
+    color: #92400e;
+    white-space: nowrap;
+}
 
-        .envolvido-card .badge-status {
-            font-size: 0.65rem;
-            font-weight: 700;
-            padding: 3px 10px;
-            border-radius: 12px;
-        }
+.chamar-form textarea {
+    width: 100%;
+    padding: 10px 14px;
+    border: 2px solid #bae6fd;
+    border-radius: 10px;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.85rem;
+    background: white;
+    color: #1a2a3a;
+    resize: vertical;
+    min-height: 60px;
+    margin-bottom: 12px;
+}
 
-        .badge-status.aguardando { background: #fef3c7; color: #92400e; }
-        .badge-status.respondeu { background: #d1fae5; color: #065f46; }
+.chamar-form textarea:focus {
+    outline: none;
+    border-color: #0ea5e9;
+    box-shadow: 0 0 0 4px rgba(14, 165, 233, 0.12);
+}
 
-        .envolvido-card .msg-tecnico {
-            background: white;
-            border-radius: 8px;
-            padding: 10px 14px;
-            font-size: 0.8rem;
-            color: #475569;
-            border-left: 3px solid #0ea5e9;
-            margin-bottom: 8px;
-        }
+.chamar-form .btn-chamar {
+    background: linear-gradient(135deg, #0ea5e9, #0284c7);
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 0.85rem;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.2s;
+    width: 100%;
+    justify-content: center;
+}
 
-        .envolvido-card .msg-tecnico .quem {
-            font-size: 0.6rem;
-            text-transform: uppercase;
-            color: #0369a1;
-            font-weight: 700;
-            margin-bottom: 3px;
-        }
+.chamar-form .btn-chamar:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(14, 165, 233, 0.4);
+}
 
-        .envolvido-card .msg-resposta {
-            background: #ecfdf5;
-            border-radius: 8px;
-            padding: 10px 14px;
-            font-size: 0.8rem;
-            color: #065f46;
-            border-left: 3px solid #10b981;
-            margin-bottom: 8px;
-        }
+.chamar-form .btn-chamar:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none !important;
+}
 
-        .envolvido-card .msg-resposta .quem {
-            font-size: 0.6rem;
-            text-transform: uppercase;
-            color: #047857;
-            font-weight: 700;
-            margin-bottom: 3px;
-        }
+.envolvidos-lista {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
 
-        .envolvido-card .data {
-            font-size: 0.65rem;
-            color: #94a3b8;
-        }
+.envolvido-card {
+    background: #f8fafc;
+    border-radius: 12px;
+    padding: 14px 18px;
+    border-left: 4px solid #94a3b8;
+    transition: all 0.3s;
+}
 
-        .sem-contatos {
-            text-align: center;
-            padding: 20px;
-            color: #94a3b8;
-            font-size: 0.85rem;
-        }
+.envolvido-card.aguardando { border-left-color: #f59e0b; background: #fffbeb; }
+.envolvido-card.respondeu { border-left-color: #10b981; background: #f0fdf4; }
+
+.envolvido-card .top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.envolvido-card .nome {
+    font-weight: 700;
+    color: #0d3b66;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.envolvido-card .badge-status {
+    font-size: 0.65rem;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 12px;
+}
+
+.badge-status.aguardando { background: #fef3c7; color: #92400e; }
+.badge-status.respondeu { background: #d1fae5; color: #065f46; }
+
+.envolvido-card .msg-tecnico {
+    background: white;
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 0.8rem;
+    color: #475569;
+    border-left: 3px solid #0ea5e9;
+    margin-bottom: 8px;
+}
+
+.envolvido-card .msg-tecnico .quem {
+    font-size: 0.6rem;
+    text-transform: uppercase;
+    color: #0369a1;
+    font-weight: 700;
+    margin-bottom: 3px;
+}
+
+.envolvido-card .msg-resposta {
+    background: #ecfdf5;
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 0.8rem;
+    color: #065f46;
+    border-left: 3px solid #10b981;
+    margin-bottom: 8px;
+}
+
+.envolvido-card .msg-resposta .quem {
+    font-size: 0.6rem;
+    text-transform: uppercase;
+    color: #047857;
+    font-weight: 700;
+    margin-bottom: 3px;
+}
+
+.envolvido-card .data {
+    font-size: 0.65rem;
+    color: #94a3b8;
+}
+
+.sem-contatos {
+    text-align: center;
+    padding: 20px;
+    color: #94a3b8;
+    font-size: 0.85rem;
+}
 
         .empty-state, .loading-state { text-align: center; padding: 40px; color: #94a3b8; }
         .empty-state i, .loading-state i { font-size: 40px; margin-bottom: 12px; opacity: 0.3; }
@@ -1618,14 +1698,28 @@
                 }
 
                 // CONTATOS PARA CHAMAR
-                let contatosOptionsHtml = '<option value="">-- Selecione um contato --</option>';
-                if (contatosDisponiveis.length === 0) {
-                    contatosOptionsHtml = '<option value="">Nenhum contato cadastrado</option>';
-                } else {
-                    contatosDisponiveis.forEach(c => {
-                        contatosOptionsHtml += `<option value="${c.id}">${c.nome} — ${c.email}</option>`;
-                    });
-                }
+                // CONTATOS PARA CHAMAR (CHECKBOXES)
+let contatosCheckboxesHtml = '';
+if (contatosDisponiveis.length === 0) {
+    contatosCheckboxesHtml = '<div class="sem-contatos"><i class="fas fa-info-circle"></i> Nenhum contato cadastrado ainda. Vá em <strong>Admin → Contatos</strong> pra cadastrar.</div>';
+} else {
+    contatosDisponiveis.forEach(c => {
+        // Verifica se já foi chamado e está aguardando
+        const jaAguardando = envolvidos.find(e => e.contato_id === c.id && e.status === 'aguardando');
+        const bloqueado = !!jaAguardando;
+
+        contatosCheckboxesHtml += `
+            <label class="contato-checkbox-item ${bloqueado ? 'bloqueado' : ''}">
+                <input type="checkbox" value="${c.id}" ${bloqueado ? 'disabled' : ''}>
+                <div class="info">
+                    <span class="nome">${c.nome}</span>
+                    <span class="email">${c.email}</span>
+                </div>
+                ${bloqueado ? '<span class="badge">🟡 Já convidado</span>' : ''}
+            </label>
+        `;
+    });
+}
 
                 // ENVOLVIDOS
                 const envolvidosHtml = gerarEnvolvidosHtml(envolvidos);
@@ -1670,31 +1764,27 @@
                     ${arquivosHtml}
 
                     <div class="modal-contatos">
-                        <h4><i class="fas fa-paper-plane"></i> 📤 Chamar contato para este caso</h4>
+    <h4><i class="fas fa-paper-plane"></i> 📤 Chamar contato(s) para este caso</h4>
 
-                        <div class="chamar-form">
-                            <div class="form-row">
-                                <div>
-                                    <label>Selecione o contato</label>
-                                    <select id="chamarContatoId">${contatosOptionsHtml}</select>
-                                </div>
-                            </div>
-                            <div class="form-row">
-                                <div>
-                                    <label>Mensagem (opcional)</label>
-                                    <textarea id="chamarMensagem" placeholder="Ex: Possuímos ponteira avulsa dessa vara?"></textarea>
-                                </div>
-                            </div>
-                            <button class="btn-chamar" id="btnChamarContato" onclick="chamarContato()" ${contatosDisponiveis.length === 0 ? 'disabled' : ''}>
-                                <i class="fas fa-envelope"></i> Enviar e-mail para o contato
-                            </button>
-                        </div>
+    <div class="chamar-form">
+        <label class="titulo-sec">Selecione os contatos</label>
+        <div class="contatos-checkbox-lista">
+            ${contatosCheckboxesHtml}
+        </div>
 
-                        <h4 style="margin-top:20px;"><i class="fas fa-users"></i> 👥 Envolvidos neste caso (${envolvidos.length})</h4>
-                        <div class="envolvidos-lista" id="envolvidosLista">
-                            ${envolvidosHtml}
-                        </div>
-                    </div>
+        <label class="titulo-sec">Mensagem (vai pra todos selecionados)</label>
+        <textarea id="chamarMensagem" placeholder="Ex: Possuímos ponteira avulsa dessa vara?"></textarea>
+
+        <button class="btn-chamar" id="btnChamarContato" onclick="chamarContato()" ${contatosDisponiveis.length === 0 ? 'disabled' : ''}>
+            <i class="fas fa-envelope"></i> Enviar e-mail para os selecionados
+        </button>
+    </div>
+
+    <h4 style="margin-top:20px;"><i class="fas fa-users"></i> 👥 Envolvidos neste caso (${envolvidos.length})</h4>
+    <div class="envolvidos-lista" id="envolvidosLista">
+        ${envolvidosHtml}
+    </div>
+</div>
 
                     <div class="modal-chat">
                         <h4><i class="fas fa-comment-dots"></i> Conversa com Vendedor</h4>
@@ -1733,58 +1823,93 @@
                 fecharModal();
             }
         }
+        // Atualiza contador quando marca/desmarca
+document.querySelectorAll('.contato-checkbox-item input[type="checkbox"]').forEach(cb => {
+    cb.addEventListener('change', () => {
+        const marcados = document.querySelectorAll('.contato-checkbox-item input[type="checkbox"]:checked').length;
+        const btn = document.getElementById('btnChamarContato');
+        if (btn) {
+            btn.innerHTML = marcados > 0 
+                ? `<i class="fas fa-envelope"></i> Enviar para ${marcados} contato(s)`
+                : '<i class="fas fa-envelope"></i> Selecione pelo menos 1 contato';
+        }
+    });
+});
 
         // ================================================================
         // 📤 CHAMAR CONTATO
         // ================================================================
-        async function chamarContato() {
-            const contatoId = document.getElementById('chamarContatoId')?.value;
-            const mensagem = document.getElementById('chamarMensagem')?.value.trim() || '';
+        // ================================================================
+// 📤 CHAMAR CONTATO(S)
+// ================================================================
+async function chamarContato() {
+    const checkboxes = document.querySelectorAll('.contato-checkbox-item input[type="checkbox"]:checked');
+    const contatosIds = Array.from(checkboxes).map(cb => parseInt(cb.value));
+    const mensagem = document.getElementById('chamarMensagem')?.value.trim() || '';
 
-            if (!contatoId) {
-                Swal.fire('Atenção', 'Selecione um contato', 'warning');
-                return;
-            }
+    if (contatosIds.length === 0) {
+        Swal.fire('Atenção', 'Selecione pelo menos um contato', 'warning');
+        return;
+    }
 
-            const btn = document.getElementById('btnChamarContato');
-            btn.disabled = true;
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enviando...';
+    const btn = document.getElementById('btnChamarContato');
+    btn.disabled = true;
+    btn.innerHTML = `<i class="fas fa-spinner fa-spin"></i> Enviando para ${contatosIds.length} contato(s)...`;
 
-            try {
-                const resp = await fetch(`${API_URL}/chamar-contato/${chamadoSelecionado.protocolo}`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ contato_id: parseInt(contatoId), mensagem })
+    try {
+        const resp = await fetch(`${API_URL}/chamar-contato/${chamadoSelecionado.protocolo}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ contatos_ids: contatosIds, mensagem })
+        });
+
+        const result = await resp.json();
+
+        if (result.success) {
+            let html = `<div style="text-align:left;">`;
+            if (result.enviados && result.enviados.length > 0) {
+                html += `<p><strong>✅ Enviados (${result.enviados.length}):</strong></p>`;
+                html += `<ul style="padding-left:20px;font-size:0.85rem;">`;
+                result.enviados.forEach(e => {
+                    html += `<li>${e.nome} — ${e.email}</li>`;
                 });
-
-                const result = await resp.json();
-
-                if (result.success) {
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'E-mail enviado!',
-                        text: result.mensagem,
-                        timer: 2500,
-                        showConfirmButton: false
-                    });
-                    // Reabre o modal pra atualizar a lista de envolvidos
-                    const protocolo = chamadoSelecionado.protocolo;
-                    setTimeout(() => {
-                        document.getElementById('modalDetalhes').classList.remove('active');
-                        abrirModal(protocolo);
-                    }, 800);
-                } else {
-                    Swal.fire('Erro', result.error, 'error');
-                    btn.disabled = false;
-                    btn.innerHTML = '<i class="fas fa-envelope"></i> Enviar e-mail para o contato';
-                }
-            } catch (error) {
-                Swal.fire('Erro', error.message, 'error');
-                btn.disabled = false;
-                btn.innerHTML = '<i class="fas fa-envelope"></i> Enviar e-mail para o contato';
+                html += `</ul>`;
             }
-        }
+            if (result.erros && result.erros.length > 0) {
+                html += `<p style="margin-top:12px;"><strong>⚠️ Erros (${result.erros.length}):</strong></p>`;
+                html += `<ul style="padding-left:20px;font-size:0.85rem;color:#ef4444;">`;
+                result.erros.forEach(e => {
+                    html += `<li>${e.nome || e.contato_id} — ${e.erro}</li>`;
+                });
+                html += `</ul>`;
+            }
+            html += `</div>`;
 
+            Swal.fire({
+                icon: result.erros && result.erros.length > 0 ? 'warning' : 'success',
+                title: result.erros && result.erros.length > 0 ? 'Enviado com avisos' : 'E-mails enviados!',
+                html: html,
+                confirmButtonText: 'OK',
+                confirmButtonColor: '#0d3b66'
+            });
+
+            // Reabre o modal pra atualizar a lista
+            const protocolo = chamadoSelecionado.protocolo;
+            setTimeout(() => {
+                document.getElementById('modalDetalhes').classList.remove('active');
+                abrirModal(protocolo);
+            }, 1000);
+        } else {
+            Swal.fire('Erro', result.error || 'Erro ao enviar', 'error');
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fas fa-envelope"></i> Enviar e-mail';
+        }
+    } catch (error) {
+        Swal.fire('Erro', error.message, 'error');
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fas fa-envelope"></i> Enviar e-mail';
+    }
+}
         function abrirArquivo(url, tipo) {
             if (tipo === 'pdf' || tipo === 'outro') {
                 window.open(url, '_blank');
