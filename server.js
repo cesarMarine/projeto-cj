@@ -1466,6 +1466,9 @@ app.get('/api/contato/ver/:token', async (req, res) => {
 // ================================================================
 // 💬 CONTATO — RESPONDER (via token)
 // ================================================================
+// ================================================================
+// 💬 CONTATO — RESPONDER (via token)
+// ================================================================
 app.post('/api/contato/responder/:token', async (req, res) => {
     try {
         const { token } = req.params;
@@ -1480,6 +1483,7 @@ app.post('/api/contato/responder/:token', async (req, res) => {
 
         let chamadoEncontrado = null;
         let envolvidosAtualizado = null;
+        let envolvidoAtual = null;
 
         for (const c of chamados) {
             let envolvidos = [];
@@ -1494,6 +1498,7 @@ app.post('/api/contato/responder/:token', async (req, res) => {
                 envolvidos[index].data_resposta = new Date().toISOString();
                 chamadoEncontrado = c;
                 envolvidosAtualizado = envolvidos;
+                envolvidoAtual = envolvidos[index];
                 break;
             }
         }
@@ -1502,9 +1507,33 @@ app.post('/api/contato/responder/:token', async (req, res) => {
             return res.status(404).json({ success: false, error: 'Link inválido' });
         }
 
+        // Verifica se está encerrado
+        if (chamadoEncontrado.status === 'Aprovado' || chamadoEncontrado.status === 'Recusado') {
+            return res.status(400).json({ success: false, error: 'Este chamado já foi encerrado pela equipe técnica' });
+        }
+
+        // Adiciona a resposta no histórico (conversa)
+        let conversa = [];
+        try {
+            conversa = Array.isArray(chamadoEncontrado.conversa)
+                ? [...chamadoEncontrado.conversa]
+                : JSON.parse(chamadoEncontrado.conversa || '[]');
+        } catch(e) { conversa = []; }
+
+        conversa.push({
+            id: 'msg_' + Date.now(),
+            remetente: envolvidoAtual.nome,
+            tipo: 'contato',
+            mensagem: resposta.trim(),
+            data: new Date().toLocaleString('pt-BR'),
+            timestamp: Date.now(),
+            lida: false
+        });
+
+        // Salva os dois: envolvidos + conversa
         await db.run(
-            'UPDATE chamados_cj SET envolvidos = ?, data_atualizacao = CURRENT_TIMESTAMP WHERE protocolo = ?',
-            [envolvidosAtualizado, chamadoEncontrado.protocolo]
+            'UPDATE chamados_cj SET envolvidos = ?, conversa = ?, data_atualizacao = CURRENT_TIMESTAMP WHERE protocolo = ?',
+            [envolvidosAtualizado, conversa, chamadoEncontrado.protocolo]
         );
 
         res.json({ success: true, mensagem: 'Resposta enviada com sucesso!' });
@@ -1513,6 +1542,10 @@ app.post('/api/contato/responder/:token', async (req, res) => {
         console.error('❌ Erro ao responder como contato:', error);
         res.status(500).json({ success: false, error: error.message });
     }
+});
+
+app.get('/contato', (req, res) => {
+    res.sendFile(path.join(__dirname, 'contato.html'));
 });
 
 // ================================================================

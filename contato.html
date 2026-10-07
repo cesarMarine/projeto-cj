@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Chamado | Marine Assistência</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f0f4f8;
+            color: #1a2a3a;
+            min-height: 100vh;
+            padding-bottom: 40px;
+        }
+
+        /* HEADER */
+        .main-header {
+            background: linear-gradient(135deg, #0a2a4a 0%, #0d3b66 100%);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            padding: 14px 20px;
+        }
+
+        .header-container {
+            max-width: 800px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .logo-area { display: flex; align-items: center; gap: 14px; }
+
+        .logo-img {
+            height: 48px;
+            background: white;
+            padding: 6px 12px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .brand-sub {
+            color: #ffffff;
+            font-size: 0.8rem;
+            opacity: 0.9;
+        }
+
+        .brand-sub i { color: #f8b81f; margin-right: 4px; }
+
+        .header-badge {
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(10px);
+            padding: 6px 16px;
+            border-radius: 40px;
+            color: white;
+            font-size: 0.75rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .header-badge i { color: #f8b81f; }
+
+        /* CONTAINER */
+        .container {
+            max-width: 800px;
+            margin: 24px auto;
+            padding: 0 16px;
+        }
+
+        /* STATUS BANNER */
+        .status-banner {
+            background: white;
+            border-radius: 16px;
+            padding: 16px 20px;
+            margin-bottom: 16px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .status-banner .icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: #f0f7ff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            color: #0d3b66;
+            flex-shrink: 0;
+        }
+
+        .status-banner .info { flex: 1; min-width: 0; }
+
+        .status-banner .titulo {
+            font-size: 0.7rem;
+            color: #6b7a8a;
+            text-transform: uppercase;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .status-banner .valor {
+            font-size: 1.1rem;
+            font-weight: 800;
+            color: #0d3b66;
+            word-break: break-all;
+        }
+
+        .status-banner .status-tag {
+            font-size: 0.7rem;
+            font-weight: 700;
+            padding: 4px 14px;
+            border-radius: 20px;
+            white-space: nowrap;
+        }
+
+        .status-Pendente { background: #fef3c7; color: #92400e; }
+        .status-analise { background: #dbeafe; color: #1e40af; }
+        .status-Aprovado { background: #d1fae5; color: #065f46; }
+        .status-Recusado { background: #fecaca; color: #991b1b; }
+
+        /* CARD */
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 22px;
+            margin-bottom: 16px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+        }
+
+        .card-title {
+            font-size: 0.75rem;
+            color: #6b7a8a;
+            text-transform: uppercase;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .card-title i { color: #f8b81f; }
+
+        /* INFO GRID */
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px 20px;
+        }
+
+        .info-item .label {
+            font-size: 0.65rem;
+            color: #94a3b8;
+            text-transform: uppercase;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+            margin-bottom: 3px;
+        }
+
+        .info-item .value {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #1a2a3a;
+            word-break: break-word;
+        }
+
+        .info-item.full { grid-column: 1 / -1; }
+
+        /* ARQUIVOS */
+        .arquivos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 10px;
+        }
+
+        .arquivo-item {
+            background: #f8fafc;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 2px solid #e8edf3;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .arquivo-item:hover {
+            border-color: #f8b81f;
+            transform: translateY(-2px);
+        }
+
+        .arquivo-thumb {
+            height: 90px;
+            background: #e8edf3;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .arquivo-thumb img,
+        .arquivo-thumb video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .arquivo-nome {
+            padding: 6px 8px;
+            font-size: 0.6rem;
+            color: #475569;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            background: white;
+            font-weight: 500;
+        }
+
+        /* MENSAGEM DO TÉCNICO */
+        .msg-destaque {
+            background: #f0f9ff;
+            border-left: 4px solid #0ea5e9;
+            border-radius: 12px;
+            padding: 14px 18px;
+            margin-bottom: 8px;
+        }
+
+        .msg-destaque .quem {
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            color: #0369a1;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+
+        .msg-destaque .texto {
+            font-size: 0.95rem;
+            color: #1a2a3a;
+            line-height: 1.5;
+            white-space: pre-wrap;
+        }
+
+        /* TEXTAREA RESPOSTA */
+        .resposta-area {
+            margin-top: 14px;
+        }
+
+        .resposta-area textarea {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid #e8edf3;
+            border-radius: 14px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95rem;
+            background: #fafcff;
+            color: #1a2a3a;
+            resize: vertical;
+            min-height: 100px;
+            transition: all 0.2s;
+        }
+
+        .resposta-area textarea:focus {
+            outline: none;
+            border-color: #f8b81f;
+            box-shadow: 0 0 0 4px rgba(248, 184, 31, 0.12);
+            background: white;
+        }
+
+        .btn-enviar {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+            margin-top: 12px;
+            transition: all 0.2s;
+            box-shadow: 0 4px 16px rgba(16, 185, 129, 0.2);
+        }
+
+        .btn-enviar:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(16, 185, 129, 0.3);
+        }
+
+        .btn-enviar:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* CHAMADO ENCERRADO */
+        .encerrado-box {
+            background: #f0fdf4;
+            border: 2px solid #10b981;
+            border-radius: 14px;
+            padding: 16px 20px;
+            text-align: center;
+        }
+
+        .encerrado-box i {
+            font-size: 32px;
+            color: #10b981;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .encerrado-box h3 {
+            color: #065f46;
+            font-size: 1rem;
+            margin-bottom: 4px;
+        }
+
+        .encerrado-box p {
+            color: #6b7a8a;
+            font-size: 0.85rem;
+        }
+
+        /* HISTÓRICO */
+        .historico {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .msg {
+            padding: 12px 16px;
+            border-radius: 12px;
+            background: #f8fafc;
+            border-left: 4px solid #94a3b8;
+        }
+
+        .msg.vendedor {
+            background: #fef3c7;
+            border-left-color: #f59e0b;
+        }
+
+        .msg.tecnico {
+            background: #dbeafe;
+            border-left-color: #3b82f6;
+        }
+
+        .msg.contato {
+            background: #f0fdf4;
+            border-left-color: #10b981;
+        }
+
+        .msg .top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-bottom: 6px;
+        }
+
+        .msg .quem {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: #0d3b66;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .msg .quem .tipo {
+            font-size: 0.6rem;
+            font-weight: 700;
+            padding: 2px 8px;
+            border-radius: 10px;
+            text-transform: uppercase;
+        }
+
+        .msg.vendedor .tipo { background: #fef3c7; color: #92400e; }
+        .msg.tecnico .tipo { background: #dbeafe; color: #1e40af; }
+        .msg.contato .tipo { background: #d1fae5; color: #065f46; }
+
+        .msg .data {
+            font-size: 0.65rem;
+            color: #94a3b8;
+        }
+
+        .msg .texto {
+            font-size: 0.85rem;
+            color: #2d3f4f;
+            line-height: 1.5;
+            white-space: pre-wrap;
+        }
+
+        /* LOADING */
+        .loading {
+            text-align: center;
+            padding: 60px 20px;
+            color: #94a3b8;
+        }
+
+        .loading i {
+            font-size: 40px;
+            margin-bottom: 12px;
+            color: #f8b81f;
+        }
+
+        /* ERRO */
+        .erro-box {
+            background: white;
+            border-radius: 20px;
+            padding: 40px 30px;
+            text-align: center;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+        }
+
+        .erro-box i {
+            font-size: 48px;
+            color: #ef4444;
+            margin-bottom: 16px;
+        }
+
+        .erro-box h2 {
+            color: #0d3b66;
+            margin-bottom: 8px;
+        }
+
+        .erro-box p {
+            color: #6b7a8a;
+        }
+
+        /* FOOTER */
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: #94a3b8;
+            font-size: 0.8rem;
+        }
+
+        footer i { color: #f8b81f; }
+
+        /* RESPONSIVO */
+        @media (max-width: 600px) {
+            .info-grid { grid-template-columns: 1fr; }
+            .logo-img { height: 40px; }
+            .status-banner .valor { font-size: 0.95rem; }
+            .arquivos-grid { grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- HEADER -->
+    <div class="main-header">
+        <div class="header-container">
+            <div class="logo-area">
+                <img class="logo-img"
+                     src="https://drive.google.com/thumbnail?id=1gm3KfLFEXAfSmZyDNC0QXTq0Q7adSnT2"
+                     alt="Marine Fishing"
+                     onerror="this.src='https://placehold.co/200x60?text=MARINE'">
+                <div>
+                    <span class="brand-sub"><i class="fas fa-headset"></i> Assistência Técnica</span>
+                </div>
+            </div>
+            <div class="header-badge">
+                <i class="fas fa-comments"></i> Você foi chamado
+            </div>
+        </div>
+    </div>
+
+    <div class="container" id="app">
+        <div class="loading">
+            <i class="fas fa-spinner fa-pulse"></i>
+            <p>Carregando chamado...</p>
+        </div>
+    </div>
+
+    <footer>
+        <p><i class="fas fa-fish"></i> Marine Fishing — Assistência Técnica <i class="fas fa-fish"></i></p>
+    </footer>
+
+    <script>
+        // ================================================================
+        // CONFIG
+        // ================================================================
+        const API_URL = window.location.origin + '/api';
+
+        let chamado = null;
+        let envolvido = null;
+        let token = null;
+        let protocolo = null;
+
+        // ================================================================
+        // INIT
+        // ================================================================
+        document.addEventListener('DOMContentLoaded', () => {
+            const params = new URLSearchParams(window.location.search);
+            protocolo = params.get('chamado');
+            token = params.get('token');
+
+            if (!protocolo || !token) {
+                mostrarErro('Link inválido', 'Faltam informações do chamado ou do token.');
+                return;
+            }
+
+            carregarChamado();
+        });
+
+        async function carregarChamado() {
+            try {
+                const resp = await fetch(`${API_URL}/contato/ver/${token}`);
+                const result = await resp.json();
+
+                if (!result.success) {
+                    mostrarErro('Chamado não encontrado', result.error || 'Link inválido ou expirado.');
+                    return;
+                }
+
+                chamado = result.chamado;
+                envolvido = result.envolvido;
+
+                renderizar();
+
+            } catch (error) {
+                mostrarErro('Erro ao carregar', error.message);
+            }
+        }
+
+        function mostrarErro(titulo, msg) {
+            document.getElementById('app').innerHTML = `
+                <div class="erro-box">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <h2>${titulo}</h2>
+                    <p>${msg}</p>
+                </div>
+            `;
+        }
+
+        // ================================================================
+        // RENDERIZAR
+        // ================================================================
+        function renderizar() {
+            const status = chamado.status || 'Pendente';
+            const statusClass = status === 'Em Análise' ? 'analise' : status;
+            const encerrado = status === 'Aprovado' || status === 'Recusado';
+
+            // Parse arquivos
+            let arquivos = [];
+            try {
+                arquivos = Array.isArray(chamado.arquivos_json)
+                    ? chamado.arquivos_json
+                    : JSON.parse(chamado.arquivos_json || '[]');
+            } catch(e) { arquivos = []; }
+
+            // Parse histórico (conversa)
+            let conversa = [];
+            try {
+                conversa = Array.isArray(chamado.conversa)
+                    ? chamado.conversa
+                    : JSON.parse(chamado.conversa || '[]');
+            } catch(e) { conversa = []; }
+
+            // Junta tudo no histórico: conversa + histórico desse envolvido
+            const historicoCompleto = [];
+            
+            // Histórico do chat técnico↔vendedor
+            conversa.forEach(msg => {
+                historicoCompleto.push({
+                    tipo: msg.tipo === 'vendedor' ? 'vendedor' : 'tecnico',
+                    quem: msg.remetente || (msg.tipo === 'vendedor' ? 'Vendedor' : 'Técnico'),
+                    data: msg.data || '',
+                    texto: msg.mensagem || '',
+                    ts: msg.timestamp || 0
+                });
+            });
+
+            // Ordena por data/hora (timestamp)
+            historicoCompleto.sort((a, b) => (a.ts || 0) - (b.ts || 0));
+
+            const historicoHtml = historicoCompleto.length === 0
+                ? '<p style="color:#94a3b8; text-align:center; padding:20px;">Nenhuma mensagem ainda</p>'
+                : historicoCompleto.map(m => `
+                    <div class="msg ${m.tipo}">
+                        <div class="top">
+                            <span class="quem">
+                                <i class="fas fa-user-circle"></i>
+                                ${m.quem}
+                                <span class="tipo">${m.tipo === 'vendedor' ? 'Vendedor' : m.tipo === 'contato' ? 'Contato' : 'Técnico'}</span>
+                            </span>
+                            <span class="data">${m.data}</span>
+                        </div>
+                        <div class="texto">${m.texto}</div>
+                    </div>
+                `).join('');
+
+            const arquivosHtml = arquivos.length === 0
+                ? '<p style="color:#94a3b8; text-align:center; padding:12px;">Nenhum arquivo anexado</p>'
+                : `<div class="arquivos-grid">
+                    ${arquivos.map(a => {
+                        const tipo = (a.tipo || '').toLowerCase();
+                        const nomeLower = (a.nome || '').toLowerCase();
+                        const url = a.url || a.dataUrl || '';
+
+                        const isImage = tipo.startsWith('image/') || /\.(jpg|jpeg|png|gif|webp|bmp|jfif|svg)$/i.test(nomeLower);
+                        const isVideo = tipo.startsWith('video/') || /\.(mp4|mov|avi|webm|mkv|3gp)$/i.test(nomeLower);
+                        const isPdf = tipo === 'application/pdf' || nomeLower.endsWith('.pdf');
+
+                        let thumb = '';
+                        let tipoAcao = 'outro';
+                        if (isImage) {
+                            thumb = `<img src="${url}" alt="${a.nome}" loading="lazy">`;
+                            tipoAcao = 'image';
+                        } else if (isVideo) {
+                            thumb = `<video src="${url}" muted preload="metadata"></video>`;
+                            tipoAcao = 'video';
+                        } else if (isPdf) {
+                            thumb = `<i class="fas fa-file-pdf" style="font-size:2.5rem;color:#ef4444;"></i>`;
+                            tipoAcao = 'pdf';
+                        } else {
+                            thumb = `<i class="fas fa-file" style="font-size:2.5rem;color:#94a3b8;"></i>`;
+                        }
+
+                        return `
+                            <div class="arquivo-item" onclick="abrirArquivo('${url}', '${tipoAcao}')">
+                                <div class="arquivo-thumb">${thumb}</div>
+                                <div class="arquivo-nome" title="${a.nome}">${a.nome || 'Arquivo'}</div>
+                            </div>
+                        `;
+                    }).join('')}
+                </div>`;
+
+            // Caixa de resposta (só se NÃO estiver encerrado)
+            const respostaHtml = encerrado
+                ? `<div class="encerrado-box">
+                    <i class="fas fa-check-circle"></i>
+                    <h3>Chamado encerrado</h3>
+                    <p>Este chamado foi <strong>${status.toLowerCase()}</strong> pela equipe técnica. Não é mais possível responder.</p>
+                </div>`
+                : `<div class="resposta-area">
+                    <label style="font-size:0.75rem; font-weight:600; color:#6b7a8a; text-transform:uppercase; display:block; margin-bottom:8px;">
+                        💬 Sua resposta
+                    </label>
+                    <textarea id="respostaTexto" placeholder="Digite sua resposta..." rows="4"></textarea>
+                    <button class="btn-enviar" id="btnEnviarResposta" onclick="enviarResposta()">
+                        <i class="fas fa-paper-plane"></i> Enviar Resposta
+                    </button>
+                </div>`;
+
+            // Render
+            document.getElementById('app').innerHTML = `
+                <!-- BANNER DO CHAMADO -->
+                <div class="status-banner">
+                    <div class="icon"><i class="fas fa-clipboard-list"></i></div>
+                    <div class="info">
+                        <div class="titulo">Chamado</div>
+                        <div class="valor">${chamado.protocolo}</div>
+                    </div>
+                    <span class="status-tag status-${statusClass}">${status}</span>
+                </div>
+
+                <!-- INFO DO CHAMADO -->
+                <div class="card">
+                    <div class="card-title"><i class="fas fa-box"></i> Informações do Produto</div>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <div class="label">Grupo</div>
+                            <div class="value">${chamado.produto || '—'}</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="label">Código</div>
+                            <div class="value">${chamado.codigo_produto || '—'}</div>
+                        </div>
+                        <div class="info-item full">
+                            <div class="label">Descrição</div>
+                            <div class="value">${chamado.descricao_produto || '—'}</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CLIENTE -->
+                <div class="card">
+                    <div class="card-title"><i class="fas fa-user"></i> Cliente</div>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <div class="label">ID Cliente</div>
+                            <div class="value">${chamado.id_cliente || '—'}</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="label">Nome</div>
+                            <div class="value">${chamado.cliente_nome || '—'}</div>
+                        </div>
+                        <div class="info-item full">
+                            <div class="label">Cidade / UF</div>
+                            <div class="value">${chamado.cidade_uf || '—'}</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- DEFEITO -->
+                <div class="card">
+                    <div class="card-title"><i class="fas fa-tools"></i> Defeito Relatado</div>
+                    <div class="msg-destaque" style="background:#fef3c7; border-left-color:#f59e0b;">
+                        <div class="texto">${chamado.descricao_defeito || 'Não informado'}</div>
+                    </div>
+                </div>
+
+                <!-- ARQUIVOS -->
+                <div class="card">
+                    <div class="card-title"><i class="fas fa-paperclip"></i> Arquivos Anexados (${arquivos.length})</div>
+                    ${arquivosHtml}
+                </div>
+
+                <!-- MENSAGEM DO TÉCNICO -->
+                <div class="card" style="border: 2px solid #0ea5e9;">
+                    <div class="card-title"><i class="fas fa-paper-plane"></i> 📩 Mensagem do Técnico</div>
+                    <div class="msg-destaque">
+                        <div class="quem">Enviada para ${envolvido.nome}</div>
+                        <div class="texto">"${envolvido.mensagem}"</div>
+                    </div>
+                </div>
+
+                <!-- CAIXA DE RESPOSTA -->
+                <div class="card">
+                    ${respostaHtml}
+                </div>
+
+                <!-- HISTÓRICO -->
+                <div class="card">
+                    <div class="card-title"><i class="fas fa-history"></i> Histórico Completo</div>
+                    <div class="historico">
+                        ${historicoHtml}
+                    </div>
+                </div>
+            `;
+        }
+
+        // ================================================================
+        // ENVIAR RESPOSTA
+        // ================================================================
+        async function enviarResposta() {
+            const texto = document.getElementById('respostaTexto')?.value.trim();
+
+            if (!texto) {
+                Swal.fire('Atenção', 'Digite uma resposta antes de enviar', 'warning');
+                return;
+            }
+
+            const btn = document.getElementById('btnEnviarResposta');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enviando...';
+
+            try {
+                const resp = await fetch(`${API_URL}/contato/responder/${token}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ resposta: texto })
+                });
+
+                const result = await resp.json();
+
+                if (result.success) {
+                    await Swal.fire({
+                        icon: 'success',
+                        title: 'Resposta enviada!',
+                        text: 'O técnico foi notificado. Obrigado!',
+                        timer: 2500,
+                        showConfirmButton: false
+                    });
+                    // Recarrega a tela
+                    carregarChamado();
+                } else {
+                    Swal.fire('Erro', result.error || 'Erro ao enviar', 'error');
+                    btn.disabled = false;
+                    btn.innerHTML = '<i class="fas fa-paper-plane"></i> Enviar Resposta';
+                }
+            } catch (error) {
+                Swal.fire('Erro', error.message, 'error');
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-paper-plane"></i> Enviar Resposta';
+            }
+        }
+
+        // ================================================================
+        // VISUALIZAR ARQUIVO
+        // ================================================================
+        function abrirArquivo(url, tipo) {
+            if (tipo === 'pdf' || tipo === 'outro') {
+                window.open(url, '_blank');
+                return;
+            }
+            if (tipo === 'image') {
+                Swal.fire({
+                    imageUrl: url,
+                    imageAlt: 'Anexo do chamado',
+                    width: '90%',
+                    showConfirmButton: true,
+                    confirmButtonText: 'Fechar',
+                    confirmButtonColor: '#0d3b66',
+                    background: '#1a1a1a'
+                });
+                return;
+            }
+            if (tipo === 'video') {
+                Swal.fire({
+                    html: `<video controls autoplay style="width:100%; max-height:80vh; border-radius:12px; background:#000;">
+                        <source src="${url}">
+                    </video>`,
+                    width: '90%',
+                    showConfirmButton: true,
+                    confirmButtonText: 'Fechar',
+                    confirmButtonColor: '#0d3b66',
+                    background: '#1a1a1a'
+                });
+            }
+        }
+    </script>
+
+</body>
+</html>
