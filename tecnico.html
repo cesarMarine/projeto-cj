@@ -108,7 +108,6 @@
 
         .top-bar i { color: #f8b81f; }
 
-        /* SUB-ABAS (EMPRESAS) */
         .subtabs {
             display: flex;
             gap: 8px;
@@ -162,7 +161,6 @@
         .subtab-btn.active .count-badge { background: rgba(255, 255, 255, 0.25); }
         .subtab-btn.casajapon.active .count-badge { background: rgba(0, 0, 0, 0.15); }
 
-        /* FILTROS */
         .filtros-section {
             background: white;
             border-radius: 24px;
@@ -228,7 +226,6 @@
         .btn-filtrar.limpar { background: #e8edf3; color: #1a2a3a; }
         .btn-filtrar.limpar:hover { background: #d5dce6; }
 
-        /* STATS */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(6, 1fr);
@@ -298,7 +295,6 @@
             box-shadow: 0 4px 20px rgba(13, 59, 102, 0.15);
         }
 
-        /* CHAMADOS */
         .chamados-section {
             background: white;
             border-radius: 24px;
@@ -363,6 +359,7 @@
             display: flex;
             align-items: center;
             gap: 8px;
+            flex-wrap: wrap;
         }
 
         .chamado-card .status {
@@ -397,7 +394,17 @@
             font-size: 0.55rem;
             padding: 2px 10px;
             border-radius: 12px;
-            margin-left: 6px;
+        }
+
+        .chamado-card .badge-envolvidos {
+            background: #0ea5e9;
+            color: white;
+            font-size: 0.55rem;
+            padding: 2px 10px;
+            border-radius: 12px;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
         }
 
         .chamado-card .info-grid {
@@ -465,7 +472,7 @@
         .modal-content {
             background: white;
             border-radius: 28px;
-            max-width: 900px;
+            max-width: 950px;
             width: 100%;
             max-height: 95vh;
             overflow-y: auto;
@@ -551,9 +558,7 @@
             gap: 8px;
         }
 
-        .arquivos-grupo {
-            margin-bottom: 16px;
-        }
+        .arquivos-grupo { margin-bottom: 16px; }
 
         .arquivos-grupo h5 {
             font-size: 0.75rem;
@@ -580,7 +585,6 @@
             border: 2px solid #e8edf3;
             transition: all 0.3s ease;
             cursor: pointer;
-            position: relative;
         }
 
         .arquivo-item-modal:hover {
@@ -603,31 +607,14 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
-            cursor: pointer;
             transition: transform 0.3s ease;
         }
 
-        .arquivo-item-modal:hover .arquivo-thumb-modal img,
-        .arquivo-item-modal:hover .arquivo-thumb-modal video {
+        .arquivo-item-modal:hover .arquivo-thumb-modal img {
             transform: scale(1.05);
         }
 
-        .arquivo-thumb-modal i {
-            cursor: pointer;
-            transition: transform 0.3s ease;
-        }
-
-        .arquivo-item-modal:hover .arquivo-thumb-modal i {
-            transform: scale(1.1);
-        }
-
-        .arquivo-info-modal {
-            padding: 8px 10px;
-            background: white;
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-        }
+        .arquivo-info-modal { padding: 8px 10px; background: white; }
 
         .arquivo-nome {
             font-size: 0.65rem;
@@ -643,7 +630,8 @@
             color: #94a3b8;
             text-transform: uppercase;
             font-weight: 600;
-            letter-spacing: 0.3px;
+            margin-top: 4px;
+            display: block;
         }
 
         .swal-image-preview {
@@ -855,6 +843,186 @@
 
         .btn-salvar-decisao:hover { transform: translateY(-2px); box-shadow: 0 4px 16px rgba(13, 59, 102, 0.4); }
 
+        /* ============================================================ */
+        /* 📤 CHAMAR CONTATO */
+        /* ============================================================ */
+        .modal-contatos {
+            grid-column: 1 / -1;
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 2px solid #e8edf3;
+        }
+
+        .modal-contatos h4 {
+            font-size: 0.85rem;
+            color: #0d3b66;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .chamar-form {
+            background: #f0f9ff;
+            border-radius: 14px;
+            padding: 16px 18px;
+            border-left: 4px solid #0ea5e9;
+            margin-bottom: 16px;
+        }
+
+        .chamar-form .form-row {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .chamar-form label {
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: #0369a1;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .chamar-form select,
+        .chamar-form textarea {
+            width: 100%;
+            padding: 10px 14px;
+            border: 2px solid #bae6fd;
+            border-radius: 10px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.85rem;
+            background: white;
+            color: #1a2a3a;
+        }
+
+        .chamar-form select:focus,
+        .chamar-form textarea:focus {
+            outline: none;
+            border-color: #0ea5e9;
+            box-shadow: 0 0 0 4px rgba(14, 165, 233, 0.12);
+        }
+
+        .chamar-form textarea {
+            resize: vertical;
+            min-height: 60px;
+        }
+
+        .chamar-form .btn-chamar {
+            background: linear-gradient(135deg, #0ea5e9, #0284c7);
+            color: white;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s;
+        }
+
+        .chamar-form .btn-chamar:hover { transform: translateY(-2px); box-shadow: 0 4px 16px rgba(14, 165, 233, 0.4); }
+        .chamar-form .btn-chamar:disabled { opacity: 0.5; cursor: not-allowed; transform: none !important; }
+
+        /* LISTA DE ENVOLVIDOS */
+        .envolvidos-lista {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .envolvido-card {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 14px 18px;
+            border-left: 4px solid #94a3b8;
+            transition: all 0.3s;
+        }
+
+        .envolvido-card.aguardando { border-left-color: #f59e0b; background: #fffbeb; }
+        .envolvido-card.respondeu { border-left-color: #10b981; background: #f0fdf4; }
+
+        .envolvido-card .top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+
+        .envolvido-card .nome {
+            font-weight: 700;
+            color: #0d3b66;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .envolvido-card .badge-status {
+            font-size: 0.65rem;
+            font-weight: 700;
+            padding: 3px 10px;
+            border-radius: 12px;
+        }
+
+        .badge-status.aguardando { background: #fef3c7; color: #92400e; }
+        .badge-status.respondeu { background: #d1fae5; color: #065f46; }
+
+        .envolvido-card .msg-tecnico {
+            background: white;
+            border-radius: 8px;
+            padding: 10px 14px;
+            font-size: 0.8rem;
+            color: #475569;
+            border-left: 3px solid #0ea5e9;
+            margin-bottom: 8px;
+        }
+
+        .envolvido-card .msg-tecnico .quem {
+            font-size: 0.6rem;
+            text-transform: uppercase;
+            color: #0369a1;
+            font-weight: 700;
+            margin-bottom: 3px;
+        }
+
+        .envolvido-card .msg-resposta {
+            background: #ecfdf5;
+            border-radius: 8px;
+            padding: 10px 14px;
+            font-size: 0.8rem;
+            color: #065f46;
+            border-left: 3px solid #10b981;
+            margin-bottom: 8px;
+        }
+
+        .envolvido-card .msg-resposta .quem {
+            font-size: 0.6rem;
+            text-transform: uppercase;
+            color: #047857;
+            font-weight: 700;
+            margin-bottom: 3px;
+        }
+
+        .envolvido-card .data {
+            font-size: 0.65rem;
+            color: #94a3b8;
+        }
+
+        .sem-contatos {
+            text-align: center;
+            padding: 20px;
+            color: #94a3b8;
+            font-size: 0.85rem;
+        }
+
         .empty-state, .loading-state { text-align: center; padding: 40px; color: #94a3b8; }
         .empty-state i, .loading-state i { font-size: 40px; margin-bottom: 12px; opacity: 0.3; }
         .loading-state i { color: #f8b81f; opacity: 1; }
@@ -1039,6 +1207,7 @@
 
     <script>
         const API_URL = window.location.origin + '/api/garantia';
+        const API_ADMIN = window.location.origin + '/api/admin';
 
         const VENDEDORES = [
             'MARCIO', 'FELIPO', 'LEANDRO', 'JUNIOR', 'FABIO',
@@ -1053,6 +1222,7 @@
         let chamadoSelecionado = null;
         let filtroStatusAtual = '';
         let subAbaAtual = 'CJ';
+        let contatosDisponiveis = [];
 
         function renderVendedores() {
             const select = document.getElementById('filtroVendedor');
@@ -1109,6 +1279,18 @@
             document.getElementById('filtroVendedor').value = '';
             document.getElementById('filtroBusca').value = '';
             aplicarFiltros();
+        }
+
+        async function carregarContatos() {
+            try {
+                const resp = await fetch(`${API_ADMIN}/contatos`);
+                const data = await resp.json();
+                if (data.success) {
+                    contatosDisponiveis = (data.contatos || []).filter(c => c.ativo);
+                }
+            } catch(e) {
+                console.error('Erro ao carregar contatos:', e);
+            }
         }
 
         async function carregarChamados() {
@@ -1205,14 +1387,18 @@
                 } catch(e) {}
 
                 const codigoProduto = c.codigo_produto || '—';
-                const descricaoProduto = c.descricao_produto || c.produto || '—';
                 const reaberto = c.reaberto || 0;
 
-                // Conta arquivos
                 let qtdArquivos = 0;
                 try {
                     const arqs = Array.isArray(c.arquivos_json) ? c.arquivos_json : JSON.parse(c.arquivos_json || '[]');
                     qtdArquivos = arqs.length;
+                } catch(e) {}
+
+                let qtdEnvolvidos = 0;
+                try {
+                    const envs = Array.isArray(c.envolvidos) ? c.envolvidos : JSON.parse(c.envolvidos || '[]');
+                    qtdEnvolvidos = envs.length;
                 } catch(e) {}
 
                 return `
@@ -1222,7 +1408,8 @@
                                 <i class="fas fa-hashtag"></i> ${c.protocolo}
                                 ${naoLidas > 0 ? `<span class="badge-msg">${naoLidas}</span>` : ''}
                                 ${reaberto > 0 ? `<span class="badge-reaberto"><i class="fas fa-undo"></i> ${reaberto}x</span>` : ''}
-                                ${qtdArquivos > 0 ? `<span style="font-size:0.7rem; color:#6b7a8a; margin-left:6px;"><i class="fas fa-paperclip"></i> ${qtdArquivos}</span>` : ''}
+                                ${qtdArquivos > 0 ? `<span style="font-size:0.7rem; color:#6b7a8a;"><i class="fas fa-paperclip"></i> ${qtdArquivos}</span>` : ''}
+                                ${qtdEnvolvidos > 0 ? `<span class="badge-envolvidos"><i class="fas fa-users"></i> ${qtdEnvolvidos}</span>` : ''}
                             </span>
                             <span class="status ${getStatusClass(c.status)}">${c.status}</span>
                         </div>
@@ -1272,6 +1459,53 @@
             }).join('');
         }
 
+        function gerarEnvolvidosHtml(envolvidos) {
+            if (!envolvidos || envolvidos.length === 0) {
+                return `
+                    <div class="sem-contatos">
+                        <i class="fas fa-users" style="font-size:24px;opacity:0.3;margin-bottom:8px;display:block;"></i>
+                        Nenhum contato chamado ainda
+                    </div>
+                `;
+            }
+
+            return envolvidos.map(e => {
+                const statusClass = e.status === 'respondeu' ? 'respondeu' : 'aguardando';
+                const badge = e.status === 'respondeu' 
+                    ? '<span class="badge-status respondeu"><i class="fas fa-check"></i> Respondeu</span>'
+                    : '<span class="badge-status aguardando"><i class="fas fa-clock"></i> Aguardando</span>';
+
+                const dataEnvio = e.data_envio ? new Date(e.data_envio).toLocaleString('pt-BR') : '';
+                const dataResp = e.data_resposta ? new Date(e.data_resposta).toLocaleString('pt-BR') : '';
+
+                return `
+                    <div class="envolvido-card ${statusClass}">
+                        <div class="top">
+                            <div class="nome">
+                                <i class="fas fa-user-circle"></i> ${e.nome}
+                                <small style="font-weight: 400; color: #6b7a8a; font-size: 0.7rem;">${e.email}</small>
+                            </div>
+                            ${badge}
+                        </div>
+
+                        <div class="msg-tecnico">
+                            <div class="quem">📤 Mensagem do Técnico</div>
+                            ${e.mensagem}
+                            <div class="data" style="margin-top:6px;">Enviado em ${dataEnvio}</div>
+                        </div>
+
+                        ${e.resposta ? `
+                            <div class="msg-resposta">
+                                <div class="quem">📥 Resposta do ${e.nome}</div>
+                                ${e.resposta}
+                                <div class="data" style="margin-top:6px;">Respondido em ${dataResp}</div>
+                            </div>
+                        ` : ''}
+                    </div>
+                `;
+            }).join('');
+        }
+
         async function abrirModal(protocolo) {
             const modal = document.getElementById('modalDetalhes');
             modal.classList.add('active');
@@ -1289,6 +1523,13 @@
                 chamadoSelecionado = data.garantia;
                 const arquivos = data.arquivos || [];
 
+                let envolvidos = [];
+                try {
+                    envolvidos = Array.isArray(chamadoSelecionado.envolvidos)
+                        ? chamadoSelecionado.envolvidos
+                        : JSON.parse(chamadoSelecionado.envolvidos || '[]');
+                } catch(e) { envolvidos = []; }
+
                 document.getElementById('modalProtocolo').textContent = chamadoSelecionado.protocolo;
                 const statusEl = document.getElementById('modalStatus');
                 statusEl.textContent = chamadoSelecionado.status;
@@ -1301,9 +1542,7 @@
                 const grupoProduto = chamadoSelecionado.produto || '—';
                 const reaberto = chamadoSelecionado.reaberto || 0;
 
-                // ============================================================
-                // MONTA HTML DOS ARQUIVOS
-                // ============================================================
+                // ARQUIVOS
                 let arquivosHtml = '';
                 if (arquivos.length > 0) {
                     const fotosVideos = arquivos.filter(a => a.categoria === 'foto_video' || !a.categoria);
@@ -1318,25 +1557,18 @@
                         const isVideo = tipo.startsWith('video/') || /\.(mp4|mov|avi|webm|mkv|3gp)$/i.test(nomeLower);
                         const isPdf = tipo === 'application/pdf' || nomeLower.endsWith('.pdf');
 
-                        let thumb = '';
-                        let badge = '📎';
-                        let tipoAcao = 'outro';
-
+                        let thumb = '', badge = '📎', tipoAcao = 'outro';
                         if (isImage) {
                             thumb = `<img src="${url}" alt="${a.nome}" loading="lazy">`;
-                            badge = '🖼️ Foto';
-                            tipoAcao = 'image';
+                            badge = '🖼️ Foto'; tipoAcao = 'image';
                         } else if (isVideo) {
                             thumb = `<video src="${url}" muted preload="metadata"></video>`;
-                            badge = '🎥 Vídeo';
-                            tipoAcao = 'video';
+                            badge = '🎥 Vídeo'; tipoAcao = 'video';
                         } else if (isPdf) {
                             thumb = `<i class="fas fa-file-pdf" style="font-size:3rem;color:#ef4444;"></i>`;
-                            badge = '📄 PDF';
-                            tipoAcao = 'pdf';
+                            badge = '📄 PDF'; tipoAcao = 'pdf';
                         } else {
                             thumb = `<i class="fas fa-file" style="font-size:3rem;color:#94a3b8;"></i>`;
-                            badge = '📎 Arquivo';
                         }
 
                         return `
@@ -1351,25 +1583,19 @@
                     };
 
                     let secoesHtml = '';
-
                     if (fotosVideos.length > 0) {
                         secoesHtml += `
                             <div class="arquivos-grupo">
                                 <h5><i class="fas fa-camera"></i> Fotos / Vídeos (${fotosVideos.length})</h5>
-                                <div class="arquivos-grid-modal">
-                                    ${fotosVideos.map(renderizarArquivo).join('')}
-                                </div>
+                                <div class="arquivos-grid-modal">${fotosVideos.map(renderizarArquivo).join('')}</div>
                             </div>
                         `;
                     }
-
                     if (notas.length > 0) {
                         secoesHtml += `
                             <div class="arquivos-grupo">
                                 <h5><i class="fas fa-file-invoice"></i> Notas do Cliente (${notas.length})</h5>
-                                <div class="arquivos-grid-modal">
-                                    ${notas.map(renderizarArquivo).join('')}
-                                </div>
+                                <div class="arquivos-grid-modal">${notas.map(renderizarArquivo).join('')}</div>
                             </div>
                         `;
                     }
@@ -1390,6 +1616,19 @@
                         </div>
                     `;
                 }
+
+                // CONTATOS PARA CHAMAR
+                let contatosOptionsHtml = '<option value="">-- Selecione um contato --</option>';
+                if (contatosDisponiveis.length === 0) {
+                    contatosOptionsHtml = '<option value="">Nenhum contato cadastrado</option>';
+                } else {
+                    contatosDisponiveis.forEach(c => {
+                        contatosOptionsHtml += `<option value="${c.id}">${c.nome} — ${c.email}</option>`;
+                    });
+                }
+
+                // ENVOLVIDOS
+                const envolvidosHtml = gerarEnvolvidosHtml(envolvidos);
 
                 let conversa = [];
                 try { conversa = Array.isArray(chamadoSelecionado.conversa) ? chamadoSelecionado.conversa : JSON.parse(chamadoSelecionado.conversa || '[]'); } catch(e) {}
@@ -1430,6 +1669,33 @@
 
                     ${arquivosHtml}
 
+                    <div class="modal-contatos">
+                        <h4><i class="fas fa-paper-plane"></i> 📤 Chamar contato para este caso</h4>
+
+                        <div class="chamar-form">
+                            <div class="form-row">
+                                <div>
+                                    <label>Selecione o contato</label>
+                                    <select id="chamarContatoId">${contatosOptionsHtml}</select>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div>
+                                    <label>Mensagem (opcional)</label>
+                                    <textarea id="chamarMensagem" placeholder="Ex: Possuímos ponteira avulsa dessa vara?"></textarea>
+                                </div>
+                            </div>
+                            <button class="btn-chamar" id="btnChamarContato" onclick="chamarContato()" ${contatosDisponiveis.length === 0 ? 'disabled' : ''}>
+                                <i class="fas fa-envelope"></i> Enviar e-mail para o contato
+                            </button>
+                        </div>
+
+                        <h4 style="margin-top:20px;"><i class="fas fa-users"></i> 👥 Envolvidos neste caso (${envolvidos.length})</h4>
+                        <div class="envolvidos-lista" id="envolvidosLista">
+                            ${envolvidosHtml}
+                        </div>
+                    </div>
+
                     <div class="modal-chat">
                         <h4><i class="fas fa-comment-dots"></i> Conversa com Vendedor</h4>
                         <div class="chat-messages" id="chatMessages">${gerarChatHtml(conversa)}</div>
@@ -1465,6 +1731,57 @@
             } catch (error) {
                 Swal.fire('Erro', 'Erro ao carregar detalhes: ' + error.message, 'error');
                 fecharModal();
+            }
+        }
+
+        // ================================================================
+        // 📤 CHAMAR CONTATO
+        // ================================================================
+        async function chamarContato() {
+            const contatoId = document.getElementById('chamarContatoId')?.value;
+            const mensagem = document.getElementById('chamarMensagem')?.value.trim() || '';
+
+            if (!contatoId) {
+                Swal.fire('Atenção', 'Selecione um contato', 'warning');
+                return;
+            }
+
+            const btn = document.getElementById('btnChamarContato');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enviando...';
+
+            try {
+                const resp = await fetch(`${API_URL}/chamar-contato/${chamadoSelecionado.protocolo}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ contato_id: parseInt(contatoId), mensagem })
+                });
+
+                const result = await resp.json();
+
+                if (result.success) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'E-mail enviado!',
+                        text: result.mensagem,
+                        timer: 2500,
+                        showConfirmButton: false
+                    });
+                    // Reabre o modal pra atualizar a lista de envolvidos
+                    const protocolo = chamadoSelecionado.protocolo;
+                    setTimeout(() => {
+                        document.getElementById('modalDetalhes').classList.remove('active');
+                        abrirModal(protocolo);
+                    }, 800);
+                } else {
+                    Swal.fire('Erro', result.error, 'error');
+                    btn.disabled = false;
+                    btn.innerHTML = '<i class="fas fa-envelope"></i> Enviar e-mail para o contato';
+                }
+            } catch (error) {
+                Swal.fire('Erro', error.message, 'error');
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-envelope"></i> Enviar e-mail para o contato';
             }
         }
 
@@ -1622,6 +1939,7 @@
 
         document.addEventListener('DOMContentLoaded', () => {
             renderVendedores();
+            carregarContatos();
             carregarChamados();
             setInterval(() => carregarChamados(), 30000);
         });
