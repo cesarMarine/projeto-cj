@@ -1567,6 +1567,57 @@ app.get('/api/garantia/vendedores-ativos', async (req, res) => {
         res.status(500).json({ success: false, error: error.message });
     }
 });
+
+// ================================================================
+// 🔐 LOGIN DO VENDEDOR (valida senha cadastrada no admin)
+// ================================================================
+app.post('/api/garantia/login', async (req, res) => {
+    try {
+        const { nome, senha } = req.body;
+
+        if (!nome || !senha) {
+            return res.status(400).json({ success: false, error: 'Informe o nome e a senha' });
+        }
+
+        const db = await openDb();
+
+        const vendedor = await db.get(`
+            SELECT id, nome
+            FROM pessoas_cj
+            WHERE tipo = 'vendedor'
+              AND ativo = TRUE
+              AND UPPER(nome) = UPPER(?)
+        `, [nome.trim()]);
+
+        if (!vendedor) {
+            return res.status(401).json({ success: false, error: 'Vendedor não encontrado ou inativo' });
+        }
+
+        // Verifica a senha (case-sensitive)
+        const senhaCorreta = await db.get(`
+            SELECT id
+            FROM pessoas_cj
+            WHERE id = ? AND senha = ?
+        `, [vendedor.id, senha]);
+
+        if (!senhaCorreta) {
+            return res.status(401).json({ success: false, error: 'Senha incorreta' });
+        }
+
+        // Login OK
+        res.json({
+            success: true,
+            vendedor: {
+                id: vendedor.id,
+                nome: vendedor.nome
+            }
+        });
+
+    } catch (error) {
+        console.error('❌ Erro no login:', error);
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
 // ================================================================
 // 🚀 INICIALIZAÇÃO
 // ================================================================

@@ -1109,9 +1109,226 @@
             .product-info h3 { font-size: 0.75rem; }
             .upload-grid { grid-template-columns: repeat(2, 1fr); }
         }
+        /* ============================================================ */
+/* TELA DE LOGIN */
+/* ============================================================ */
+.login-overlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: linear-gradient(135deg, #0a2a4a 0%, #0d3b66 100%);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.login-overlay.hidden { display: none; }
+
+.login-box {
+    background: white;
+    border-radius: 28px;
+    padding: 40px 36px;
+    max-width: 420px;
+    width: 100%;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    animation: fadeIn 0.4s ease;
+}
+
+.login-logo {
+    text-align: center;
+    margin-bottom: 24px;
+}
+
+.login-logo img {
+    height: 70px;
+    background: white;
+    padding: 6px 14px;
+    border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+}
+
+.login-title {
+    text-align: center;
+    color: #0d3b66;
+    font-size: 1.3rem;
+    font-weight: 800;
+    margin-bottom: 6px;
+}
+
+.login-sub {
+    text-align: center;
+    color: #6b7a8a;
+    font-size: 0.85rem;
+    margin-bottom: 28px;
+}
+
+.login-form-group {
+    margin-bottom: 18px;
+}
+
+.login-form-group label {
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #6b7a8a;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 6px;
+}
+
+.login-form-group select,
+.login-form-group input {
+    width: 100%;
+    padding: 14px 16px;
+    border: 2px solid #e8edf3;
+    border-radius: 14px;
+    font-family: 'Inter', sans-serif;
+    font-size: 1rem;
+    background: #fafcff;
+    color: #1a2a3a;
+    transition: all 0.2s;
+}
+
+.login-form-group select:focus,
+.login-form-group input:focus {
+    outline: none;
+    border-color: #f8b81f;
+    box-shadow: 0 0 0 4px rgba(248, 184, 31, 0.15);
+    background: white;
+}
+
+.login-btn {
+    width: 100%;
+    padding: 16px;
+    background: linear-gradient(135deg, #0d3b66, #1a5276);
+    color: white;
+    border: none;
+    border-radius: 14px;
+    font-family: 'Inter', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 8px;
+    box-shadow: 0 4px 16px rgba(13, 59, 102, 0.2);
+}
+
+.login-btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(13, 59, 102, 0.3);
+}
+
+.login-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.login-erro {
+    background: #fecaca;
+    color: #991b1b;
+    padding: 12px 16px;
+    border-radius: 12px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-bottom: 16px;
+    display: none;
+    align-items: center;
+    gap: 8px;
+    border-left: 4px solid #ef4444;
+}
+
+.login-erro.show { display: flex; }
+
+.login-erro i { font-size: 1rem; }
+
+/* BOTÃO SAIR NO HEADER */
+.btn-sair {
+    background: rgba(255, 255, 255, 0.12);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 8px 16px;
+    border-radius: 40px;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.2s;
+}
+
+.btn-sair:hover {
+    background: #ef4444;
+    border-color: #ef4444;
+}
+
+.btn-sair i { color: #f8b81f; }
+.btn-sair:hover i { color: white; }
+
+.vendedor-badge {
+    background: rgba(255, 255, 255, 0.12);
+    padding: 8px 16px;
+    border-radius: 40px;
+    color: white;
+    font-size: 0.8rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.vendedor-badge i { color: #f8b81f; }
     </style>
 </head>
 <body>
+    <body>
+
+    <!-- ============================================ -->
+    <!-- TELA DE LOGIN (aparece antes de tudo) -->
+    <!-- ============================================ -->
+    <div class="login-overlay" id="loginOverlay">
+        <div class="login-box">
+            <div class="login-logo">
+                <img src="https://drive.google.com/thumbnail?id=1gm3KfLFEXAfSmZyDNC0QXTq0Q7adSnT2"
+                     alt="Marine Fishing"
+                     onerror="this.src='https://placehold.co/300x100?text=MARINE'">
+            </div>
+
+            <h1 class="login-title">Assistência Técnica</h1>
+            <p class="login-sub">Identifique-se para abrir um chamado</p>
+
+            <div class="login-erro" id="loginErro">
+                <i class="fas fa-exclamation-circle"></i>
+                <span id="loginErroTexto">Erro</span>
+            </div>
+
+            <div class="login-form-group">
+                <label><i class="fas fa-user"></i> Selecione seu nome</label>
+                <select id="loginVendedor">
+                    <option value="">Carregando...</option>
+                </select>
+            </div>
+
+            <div class="login-form-group">
+                <label><i class="fas fa-lock"></i> Digite sua senha</label>
+                <input type="password" id="loginSenha" placeholder="••••••••" autocomplete="current-password">
+            </div>
+
+            <button class="login-btn" id="btnLogin" onclick="fazerLogin()">
+                <i class="fas fa-sign-in-alt"></i> Entrar
+            </button>
+        </div>
+    </div>
+
+    <!-- HEADER -->
 
     <!-- HEADER -->
     <div class="main-header">
@@ -1122,7 +1339,16 @@
                     <span class="brand-sub"><i class="fas fa-wrench"></i> <span data-i18n="subtitulo_header">Garantia - Vendedor</span></span>
                 </div>
             </div>
-            <div class="header-right">
+                       <div class="header-right">
+                <div class="vendedor-badge" id="vendedorBadge" style="display:none;">
+                    <i class="fas fa-user-circle"></i>
+                    <span id="vendedorNome">—</span>
+                </div>
+
+                <button class="btn-sair" id="btnSair" onclick="fazerLogout()" style="display:none;">
+                    <i class="fas fa-sign-out-alt"></i> Sair
+                </button>
+
                 <div class="header-badge">
                     <i class="fas fa-store"></i> <span data-i18n="atendimento">Atendimento ao Cliente</span>
                     <span id="notificacaoBadge" style="display:none; background:#ef4444; color:white; border-radius:50%; padding:2px 8px; font-size:0.65rem; font-weight:700; margin-left:6px;">0</span>
@@ -1178,12 +1404,12 @@
                 <i class="fas fa-user"></i> <span data-i18n="titulo_identificar">Identificar Cliente e Produto</span>
                 <span class="badge-step" data-i18n="passo_2_de_5">Passo 2 de 5</span>
             </div>
-
+            <!-- Vendedor agora é mostrado como info (não editável) -->
             <div class="form-group">
-                <label><span data-i18n="label_vendedor">Vendedor</span> <span class="required">*</span></label>
-                <select id="selectVendedor">
-                    <option value="" data-i18n="selecione">-- Selecione --</option>
-                </select>
+                <label>Vendedor</label>
+                <div style="padding:12px 16px; background:#f0f7ff; border-radius:14px; border-left:4px solid #0d3b66; font-weight:700; color:#0d3b66;">
+                    <i class="fas fa-user-circle"></i> <span id="vendedorStep2">—</span>
+                </div>
             </div>
 
             <div class="form-group">
@@ -1942,91 +2168,6 @@ let VENDEDORES = [];
         // ================================================================
         // RENDER VENDEDORES
         // ================================================================
-        async function renderVendedores() {
-    const select = document.getElementById('selectVendedor');
-    if (!select) return;
-
-    // Mostra "Carregando..." enquanto busca
-    select.innerHTML = `<option value="">Carregando...</option>`;
-    select.disabled = true;
-
-    try {
-        // Busca vendedores ativos do banco
-        const resp = await fetch(`${window.location.origin}/api/garantia/vendedores-ativos`);
-        const data = await resp.json();
-
-        if (!data.success) {
-            throw new Error(data.error || 'Erro ao carregar vendedores');
-        }
-
-        // Atualiza a lista global
-        VENDEDORES = (data.vendedores || []).map(v => v.nome);
-
-        // Monta o select
-        select.innerHTML = `<option value="">${t('selecione')}</option>`;
-        VENDEDORES.forEach(nome => {
-            const option = document.createElement('option');
-            option.value = nome;
-            option.textContent = nome;
-            select.appendChild(option);
-        });
-
-        select.disabled = false;
-
-        // Se não tiver vendedores cadastrados, mostra aviso
-        if (VENDEDORES.length === 0) {
-            select.innerHTML = `<option value="">Nenhum vendedor cadastrado</option>`;
-            select.disabled = true;
-            document.getElementById('chamadosList').innerHTML = `
-                <div class="empty-state">
-                    <i class="fas fa-user-slash"></i>
-                    <p>Nenhum vendedor cadastrado. Peça ao admin para cadastrar.</p>
-                </div>
-            `;
-            return;
-        }
-
-        // Restaura vendedor salvo (se ainda existir na lista)
-        const vendedorSalvo = localStorage.getItem(VENDEDOR_STORAGE_KEY);
-        if (vendedorSalvo && VENDEDORES.includes(vendedorSalvo)) {
-            select.value = vendedorSalvo;
-            vendedorAtual = vendedorSalvo;
-            carregarChamadosVendedor(vendedorSalvo);
-        }
-
-        // Evento de troca de vendedor
-        select.addEventListener('change', function() {
-            if (this.value) {
-                localStorage.setItem(VENDEDOR_STORAGE_KEY, this.value);
-                vendedorAtual = this.value;
-                carregarChamadosVendedor(this.value);
-            } else {
-                localStorage.removeItem(VENDEDOR_STORAGE_KEY);
-                document.getElementById('chamadosList').innerHTML = `
-                    <div class="empty-state">
-                        <i class="fas fa-inbox"></i>
-                        <p>${t('selecione_vendedor_msg')}</p>
-                    </div>
-                `;
-                document.getElementById('qtdChamados').textContent = '0';
-            }
-        });
-
-    } catch (error) {
-        console.error('❌ Erro ao carregar vendedores:', error);
-        select.innerHTML = `<option value="">Erro ao carregar</option>`;
-        select.disabled = true;
-        document.getElementById('chamadosList').innerHTML = `
-            <div class="empty-state">
-                <i class="fas fa-exclamation-triangle"></i>
-                <p>Erro ao carregar vendedores: ${error.message}</p>
-                <button class="btn btn-back" onclick="renderVendedores()" style="margin-top:12px;">
-                    <i class="fas fa-sync-alt"></i> Tentar novamente
-                </button>
-            </div>
-        `;
-    }
-}
 
         // ================================================================
         // UPLOAD NOTA CLIENTE (ABERTURA)
@@ -3279,6 +3420,133 @@ function carregarMensagens(conversa) {
         });
 
         // ================================================================
+// 🔐 LOGIN
+// ================================================================
+let vendedorLogado = null;
+let listaVendedoresLogin = [];
+
+async function carregarVendedoresLogin() {
+    const select = document.getElementById('loginVendedor');
+    if (!select) return;
+
+    try {
+        const resp = await fetch(`${window.location.origin}/api/garantia/vendedores-ativos`);
+        const data = await resp.json();
+
+        if (!data.success) throw new Error(data.error || 'Erro');
+
+        listaVendedoresLogin = data.vendedores || [];
+
+        if (listaVendedoresLogin.length === 0) {
+            select.innerHTML = '<option value="">Nenhum vendedor cadastrado</option>';
+            select.disabled = true;
+            return;
+        }
+
+        select.innerHTML = '<option value="">-- Selecione seu nome --</option>' +
+            listaVendedoresLogin.map(v => `<option value="${v.nome}">${v.nome}</option>`).join('');
+
+    } catch (error) {
+        select.innerHTML = '<option value="">Erro ao carregar</option>';
+        mostrarErroLogin('Erro ao carregar vendedores: ' + error.message);
+    }
+}
+
+async function fazerLogin() {
+    const nome = document.getElementById('loginVendedor').value;
+    const senha = document.getElementById('loginSenha').value;
+    const btn = document.getElementById('btnLogin');
+
+    // Esconde erro anterior
+    document.getElementById('loginErro').classList.remove('show');
+
+    if (!nome) {
+        mostrarErroLogin('Selecione seu nome');
+        return;
+    }
+    if (!senha) {
+        mostrarErroLogin('Digite sua senha');
+        return;
+    }
+
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Entrando...';
+
+    try {
+        const resp = await fetch(`${window.location.origin}/api/garantia/login`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ nome, senha })
+        });
+
+        const result = await resp.json();
+
+        if (result.success) {
+            // Login OK
+            vendedorLogado = result.vendedor;
+            liberarTela();
+        } else {
+            mostrarErroLogin(result.error || 'Erro ao fazer login');
+            document.getElementById('loginSenha').value = '';
+            document.getElementById('loginSenha').focus();
+        }
+    } catch (error) {
+        mostrarErroLogin('Erro de conexão: ' + error.message);
+    } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Entrar';
+    }
+}
+
+function mostrarErroLogin(msg) {
+    document.getElementById('loginErroTexto').textContent = msg;
+    document.getElementById('loginErro').classList.add('show');
+}
+
+function liberarTela() {
+    // Esconde login
+    document.getElementById('loginOverlay').classList.add('hidden');
+
+    // Mostra badge do vendedor + botão sair
+    document.getElementById('vendedorBadge').style.display = 'flex';
+    document.getElementById('vendedorNome').textContent = vendedorLogado.nome;
+    document.getElementById('btnSair').style.display = 'flex';
+
+    // Mostra no Step 2
+    const step2 = document.getElementById('vendedorStep2');
+    if (step2) step2.textContent = vendedorLogado.nome;
+
+    // Atualiza vendedorAtual (usado no chat, listas, etc)
+    vendedorAtual = vendedorLogado.nome;
+
+    // Carrega os chamados do vendedor logado
+    carregarChamadosVendedor(vendedorLogado.nome);
+}
+
+function fazerLogout() {
+    Swal.fire({
+        title: 'Sair do sistema?',
+        text: 'Você precisará digitar a senha novamente para entrar.',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Sim, sair',
+        cancelButtonText: 'Cancelar',
+        confirmButtonColor: '#ef4444',
+        cancelButtonColor: '#6b7a8a'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // Limpa tudo
+            vendedorLogado = null;
+            vendedorAtual = null;
+            localStorage.removeItem(VENDEDOR_STORAGE_KEY);
+
+            // Recarrega a página (volta pra tela de login)
+            window.location.reload();
+        }
+    });
+}
+
+        // ================================================================
         // INICIALIZAÇÃO
         // ================================================================
 document.addEventListener('DOMContentLoaded', async () => {
@@ -3288,9 +3556,23 @@ document.addEventListener('DOMContentLoaded', async () => {
     const idiomaInicial = idiomaSalvo || idiomaNavegador;
 
     trocarIdioma(idiomaInicial);
-
     renderUploads();
-    await renderVendedores();  // ← AGORA COM await
+
+    // Carrega a lista de vendedores pro LOGIN
+    await carregarVendedoresLogin();
+
+    // Foca no campo de senha se já tiver nome selecionado
+    document.getElementById('loginVendedor')?.addEventListener('change', () => {
+        document.getElementById('loginSenha')?.focus();
+    });
+
+    // Permite Enter no campo de senha
+    document.getElementById('loginSenha')?.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            fazerLogin();
+        }
+    });
 });
     </script>
 
