@@ -2634,7 +2634,7 @@ let VENDEDORES = [];
         function nextStep(step) {
             if (step === 1 && !selectedProduct) { showAlert('error', t('selecione_grupo_produto')); return; }
             if (step === 2) {
-                const vendedor = document.getElementById('selectVendedor').value;
+                const vendedor = vendedorLogado ? vendedorLogado.nome : null;
                 const notaMarine = document.getElementById('numeroNotaMarine').value.trim();
                 if (!vendedor) { showAlert('error', t('selecione_vendedor')); return; }
                 if (!clienteEncontrado) { showAlert('error', t('busque_cliente')); return; }
@@ -2674,7 +2674,7 @@ let VENDEDORES = [];
         // REVISÃO
         // ================================================================
         function updateReview() {
-            const vendedor = document.getElementById('selectVendedor').value || 'N/A';
+            const vendedor = vendedorLogado ? vendedorLogado.nome : 'N/A';
             const grupoProduto = selectedProduct ? t(selectedProduct.tKey) : 'N/A';
             const codigoProduto = produtoEncontrado ? produtoEncontrado.codigo : 'N/A';
             const descricaoProduto = produtoEncontrado ? produtoEncontrado.descricao : 'N/A';
@@ -2761,7 +2761,7 @@ let VENDEDORES = [];
         const formData = new FormData();
 
         // Campos de texto
-        formData.append('vendedor', document.getElementById('selectVendedor').value);
+        formData.append('vendedor', vendedorLogado ? vendedorLogado.nome : '');
         formData.append('produto', selectedProduct ? selectedProduct.id : '');
         formData.append('codigo_produto', produtoEncontrado ? produtoEncontrado.codigo : '');
         formData.append('descricao_produto', produtoEncontrado ? produtoEncontrado.descricao : '');
@@ -2793,7 +2793,7 @@ let VENDEDORES = [];
         const result = await response.json();
 
         if (result.success) {
-            const vendedor = document.getElementById('selectVendedor').value;
+            const vendedor = vendedorLogado ? vendedorLogado.nome : '';
             if (vendedor) await carregarChamadosVendedor(vendedor);
 
             Swal.fire({
