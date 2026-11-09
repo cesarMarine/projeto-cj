@@ -275,32 +275,6 @@
         }
         .btn-link-file:hover { background: var(--navy-light); }
 
-        /* JSON RAW VIEWER */
-        .json-viewer {
-            background: #0f172a;
-            color: #38bdf8;
-            padding: 18px;
-            border-radius: 14px;
-            font-family: Consolas, 'Courier New', monospace;
-            font-size: 0.82rem;
-            line-height: 1.5;
-            overflow: auto;
-            max-height: 450px;
-            white-space: pre-wrap;
-            word-break: break-all;
-        }
-        .btn-copy {
-            background: var(--gold);
-            color: var(--navy);
-            border: none;
-            padding: 8px 18px;
-            border-radius: 10px;
-            font-weight: 700;
-            cursor: pointer;
-            float: right;
-            margin-top: 10px;
-        }
-
         .empty-placeholder {
             text-align: center;
             padding: 40px;
@@ -382,15 +356,6 @@
                 <div class="files-grid" id="arquivosList"></div>
             </div>
 
-            <!-- JSON COMPLETO (RAW) -->
-            <div class="card">
-                <div class="card-header">
-                    <h2><i class="fas fa-code"></i> JSON Completo da Ocorrência</h2>
-                    <button class="btn-copy" onclick="copiarJson()"><i class="fas fa-copy"></i> Copiar JSON</button>
-                </div>
-                <pre class="json-viewer" id="jsonViewer"></pre>
-            </div>
-
         </div>
 
         <div id="loading" class="empty-placeholder" style="display:none;">
@@ -400,9 +365,6 @@
     </div>
 
     <script>
-        let jsonCompletoAtual = null;
-
-        // Se passar ?protocolo=XYZ na URL, faz a busca automática
         window.addEventListener('DOMContentLoaded', () => {
             const params = new URLSearchParams(window.location.search);
             const proto = params.get('protocolo');
@@ -422,7 +384,6 @@
             document.getElementById('resultadoContainer').style.display = 'none';
 
             try {
-                // Endpoint sugerido da sua API (ajuste conforme a sua rota de backend)
                 const res = await fetch(`/api/garantia/detalhe/${encodeURIComponent(protocolo)}`);
                 const data = await res.json();
 
@@ -447,7 +408,6 @@
         }
 
         function renderizarDados(c) {
-            jsonCompletoAtual = c;
             document.getElementById('resultadoContainer').style.display = 'block';
 
             // Dados Básicos
@@ -519,23 +479,6 @@
             } else {
                 containerFiles.innerHTML = '<p style="color:var(--muted); font-size:0.9rem;">Nenhum arquivo anexado.</p>';
             }
-
-            // Exibir o JSON Formatado
-            document.getElementById('jsonViewer').innerText = JSON.stringify(c, null, 2);
-        }
-
-        function copiarJson() {
-            if (!jsonCompletoAtual) return;
-            const jsonText = JSON.stringify(jsonCompletoAtual, null, 2);
-            navigator.clipboard.writeText(jsonText).then(() => {
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Copiado!',
-                    text: 'O JSON completo foi copiado para sua área de transferência.',
-                    timer: 1500,
-                    showConfirmButton: false
-                });
-            });
         }
     </script>
 </body>
