@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Resumo do Chamado</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            --bg: #f3f7fb;
+            --card: #ffffff;
+            --line: #e8edf3;
+            --text: #1a2a3a;
+            --muted: #6b7a8a;
+            --navy: #0d3b66;
+            --navy-2: #1a5276;
+            --gold: #f8b81f;
+            --green: #10b981;
+            --red: #ef4444;
+            --blue: #3b82f6;
+            --shadow: 0 10px 30px rgba(13, 59, 102, 0.12);
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(180deg, #eef5fb 0%, #f8fafc 100%);
+            color: var(--text);
+        }
+
+        .topbar {
+            background: linear-gradient(135deg, var(--navy) 0%, var(--navy-2) 100%);
+            color: #fff;
+            padding: 18px 24px;
+            box-shadow: var(--shadow);
+        }
+
+        .topbar-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 800;
+            letter-spacing: 0.02em;
+        }
+
+        .brand .icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            background: rgba(255,255,255,0.12);
+            display: grid;
+            place-items: center;
+            color: var(--gold);
+            font-size: 1.2rem;
+        }
+
+        .chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255,255,255,0.12);
+            border: 1px solid rgba(255,255,255,0.2);
+            padding: 8px 14px;
+            border-radius: 999px;
+            color: #fff;
+            font-size: 0.82rem;
+            font-weight: 600;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 30px auto 60px;
+            padding: 0 20px;
+        }
+
+        .card {
+            background: var(--card);
+            border: 1px solid var(--line);
+            border-radius: 22px;
+            box-shadow: var(--shadow);
+            padding: 22px 24px;
+            margin-bottom: 22px;
+        }
+
+        .header-case {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            flex-wrap: wrap;
+            margin-bottom: 18px;
+        }
+
+        .header-case h1 {
+            margin: 0;
+            font-size: clamp(1.5rem, 2vw, 2.2rem);
+            color: var(--navy);
+        }
+
+        .status-tag {
+            display: inline-block;
+            padding: 8px 14px;
+            border-radius: 999px;
+            font-size: 0.72rem;
+            font-weight: 800;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+
+        .status-Pendente { background: #fef3c7; color: #92400e; }
+        .status-Em-Análise { background: #dbeafe; color: #1e40af; }
+        .status-Aprovado { background: #d1fae5; color: #065f46; }
+        .status-Recusado { background: #fecaca; color: #991b1b; }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+            gap: 16px;
+        }
+
+        .info-item {
+            background: #f8fafc;
+            border: 1px solid var(--line);
+            border-radius: 14px;
+            padding: 12px 14px;
+        }
+
+        .info-item .label {
+            display: block;
+            color: var(--muted);
+            font-size: 0.68rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-bottom: 6px;
+        }
+
+        .info-item .value {
+            font-weight: 700;
+            color: var(--text);
+            line-height: 1.5;
+        }
+
+        .full { grid-column: 1 / -1; }
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 16px;
+            color: var(--navy);
+            font-size: 1.05rem;
+            font-weight: 800;
+        }
+
+        .timeline {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .msg {
+            border-radius: 16px;
+            border: 1px solid var(--line);
+            background: #f8fafc;
+            padding: 14px 16px;
+        }
+
+        .msg.tecnico { border-left: 4px solid var(--blue); }
+        .msg.vendedor { border-left: 4px solid var(--gold); }
+        .msg.contato { border-left: 4px solid var(--green); }
+        .msg.sistema { border-left: 4px solid var(--muted); }
+
+        .msg-top {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-bottom: 8px;
+        }
+
+        .msg-author {
+            font-weight: 800;
+            color: var(--navy);
+        }
+
+        .msg-type {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            border-radius: 999px;
+            padding: 4px 8px;
+            font-size: 0.68rem;
+            font-weight: 700;
+            background: rgba(13,59,102,0.06);
+            color: var(--navy);
+            text-transform: uppercase;
+        }
+
+        .msg-time {
+            font-size: 0.72rem;
+            color: var(--muted);
+        }
+
+        .msg-text {
+            white-space: pre-wrap;
+            line-height: 1.6;
+            color: var(--text);
+        }
+
+        .files-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 14px;
+        }
+
+        .file-card {
+            background: #f8fafc;
+            border: 1px solid var(--line);
+            border-radius: 14px;
+            overflow: hidden;
+            transition: transform 0.15s ease;
+        }
+
+        .file-card:hover { transform: translateY(-2px); }
+
+        .file-thumb {
+            height: 120px;
+            display: grid;
+            place-items: center;
+            background: #edf3fb;
+            color: var(--navy);
+            font-size: 2rem;
+        }
+
+        .file-thumb img, .file-thumb video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .file-caption {
+            padding: 10px 12px;
+            font-size: 0.76rem;
+            color: var(--text);
+            font-weight: 600;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .file-caption small {
+            display: block;
+            margin-top: 4px;
+            color: var(--muted);
+            font-weight: 500;
+        }
+
+        .participantes {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+            gap: 12px;
+        }
+
+        .envolvido {
+            background: #f8fafc;
+            border: 1px solid var(--line);
+            border-radius: 16px;
+            padding: 14px;
+        }
+
+        .envolvido .nome {
+            font-weight: 800;
+            color: var(--navy);
+            margin-bottom: 8px;
+        }
+
+        .envolvido .meta {
+            font-size: 0.75rem;
+            color: var(--muted);
+            margin-bottom: 8px;
+        }
+
+        .envolvido .status {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 999px;
+            font-size: 0.68rem;
+            font-weight: 800;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+        }
+
+        .status-aguardando { background: #fef3c7; color: #92400e; }
+        .status-respondeu { background: #d1fae5; color: #065f46; }
+
+        .json-wrap {
+            background: #0f172a;
+            color: #e2e8f0;
+            border-radius: 16px;
+            padding: 16px;
+            overflow: auto;
+            font-family: Consolas, monospace;
+            font-size: 0.78rem;
+            line-height: 1.5;
+        }
+
+        .empty {
+            text-align: center;
+            padding: 28px 18px;
+            color: var(--muted);
+            border: 1px dashed var(--line);
+            border-radius: 14px;
+            background: #fafcff;
+        }
+
+        .actions {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 16px;
+        }
+
+        .button {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--navy);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 10px 16px;
+            font-family: 'Inter', sans-serif;
+            font-weight: 700;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .button:hover { opacity: 0.96; }
+
+        @media (max-width: 640px) {
+            .card { padding: 18px 16px; }
+            .header-case { align-items: flex-start; }
+            .section-title { font-size: 0.95rem; }
+            .info-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="topbar">
+        <div class="topbar-inner">
+            <div class="brand">
+                <div class="icon"><i class="fas fa-file-alt"></i></div>
+                <span>Resumo do Chamado</span>
+            </div>
+            <div class="chip"><i class="fas fa-key"></i> Chave por protocolo</div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div id="app"></div>
+    </div>
+
+    <script>
+        const app = document.getElementById('app');
+
+        function getProtocoloFromUrl() {
+            const params = new URLSearchParams(window.location.search);
+            if (params.get('protocolo')) return params.get('protocolo').trim();
+
+            const pathParts = window.location.pathname.split('/').filter(Boolean);
+            const lastPart = pathParts[pathParts.length - 1];
+            return decodeURIComponent(lastPart || '');
+        }
+
+        function formatStatus(status) {
+            return status || 'Pendente';
+        }
+
+        function escapeHtml(value) {
+            return String(value ?? '').replace(/[&<>"']/g, (ch) => ({
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                '"': '&quot;',
+                "'": '&#39;'
+            }[ch]));
+        }
+
+        function renderEmpty(message) {
+            app.innerHTML = `
+                <div class="card">
+                    <div class="empty">
+                        <i class="fas fa-exclamation-triangle" style="font-size: 1.5rem; margin-bottom: 10px; display:block;"></i>
+                        <strong>${message}</strong>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderArquivo(arquivo) {
+            const nome = arquivo?.nome || 'Arquivo';
+            const url = arquivo?.url || '#';
+            const tipo = (arquivo?.tipo || '').toLowerCase();
+            const nomeLower = nome.toLowerCase();
+            const isImage = tipo.startsWith('image/') || /\.(jpg|jpeg|png|gif|webp|bmp|jfif|svg)$/i.test(nomeLower);
+            const isVideo = tipo.startsWith('video/') || /\.(mp4|mov|avi|webm|mkv|3gp)$/i.test(nomeLower);
+            const isPdf = tipo.includes('pdf') || nomeLower.endsWith('.pdf');
+
+            let thumb = '<div class="file-thumb"><i class="fas fa-file"></i></div>';
+            if (isImage) {
+                thumb = `<div class="file-thumb"><img src="${url}" alt="${escapeHtml(nome)}"></div>`;
+            } else if (isVideo) {
+                thumb = `<div class="file-thumb"><video src="${url}" controls preload="metadata"></video></div>`;
+            } else if (isPdf) {
+                thumb = '<div class="file-thumb"><i class="fas fa-file-pdf" style="color:#ef4444;"></i></div>';
+            }
+
+            return `
+                <div class="file-card">
+                    ${thumb}
+                    <div class="file-caption">
+                        ${escapeHtml(nome)}
+                        <small>${escapeHtml(arquivo?.categoria || 'Anexo')}</small>
+                    </div>
+                </div>
+            `;
+        }
+
+        async function carregarResumo() {
+            const protocolo = getProtocoloFromUrl();
+            if (!protocolo) {
+                renderEmpty('Informe o protocolo na URL, por exemplo: /resumo/GAR-20261022-3570');
+                return;
+            }
+
+            try {
+                const response = await fetch(`/api/contato/resumo/${encodeURIComponent(protocolo)}`);
+                const result = await response.json();
+
+                if (!result.success) {
+                    renderEmpty(result.error || 'Chamado não encontrado.');
+                    return;
+                }
+
+                const chamado = result.chamado || {};
+                const conversa = Array.isArray(result.conversa) ? result.conversa : [];
+                const arquivos = Array.isArray(result.arquivos) ? result.arquivos : [];
+                const envolvidos = Array.isArray(result.envolvidos) ? result.envolvidos : [];
+
+                const conversaHtml = conversa.length
+                    ? conversa.map(msg => {
+                        const tipo = (msg.tipo || 'sistema').toLowerCase();
+                        const nome = msg.remetente || 'Sistema';
+                        const data = msg.data || '';
+                        const texto = msg.mensagem || '';
+                        return `
+                            <div class="msg ${tipo}">
+                                <div class="msg-top">
+                                    <div class="msg-author">${escapeHtml(nome)}</div>
+                                    <div class="msg-type">${escapeHtml(tipo)}</div>
+                                </div>
+                                <div class="msg-time">${escapeHtml(data)}</div>
+                                <div class="msg-text">${escapeHtml(texto)}</div>
+                            </div>
+                        `;
+                    }).join('')
+                    : '<div class="empty">Nenhuma mensagem registrada neste caso.</div>';
+
+                const arquivosHtml = arquivos.length
+                    ? `<div class="files-grid">${arquivos.map(renderArquivo).join('')}</div>`
+                    : '<div class="empty">Nenhum arquivo anexado.</div>';
+
+                const envolvidosHtml = envolvidos.length
+                    ? `<div class="participantes">${envolvidos.map(env => `
+                        <div class="envolvido">
+                            <div class="nome">${escapeHtml(env.nome || 'Contato')}</div>
+                            <div class="meta">${escapeHtml(env.email || 'Sem e-mail')}</div>
+                            <div class="status status-${escapeHtml(env.status || 'aguardando')}">${escapeHtml(env.status || 'aguardando')}</div>
+                            <div style="font-size:0.76rem;color:#475569;line-height:1.6;white-space:pre-wrap;">${escapeHtml(env.mensagem || 'Sem mensagem')}</div>
+                            ${env.resposta ? `<div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--line);font-size:0.76rem;color:#1f2937;white-space:pre-wrap;"><strong>Resposta:</strong><br>${escapeHtml(env.resposta)}</div>` : ''}
+                        </div>
+                    `).join('')}</div>`
+                    : '<div class="empty">Nenhum contato envolvido neste caso.</div>';
+
+                const rawJson = JSON.stringify({
+                    chamado,
+                    conversa,
+                    arquivos,
+                    envolvidos
+                }, null, 2);
+                const statusClass = (formatStatus(chamado.status) || 'Pendente').replace(/\s+/g, '-');
+
+                app.innerHTML = `
+                    <div class="card">
+                        <div class="header-case">
+                            <h1>Chamado ${escapeHtml(chamado.protocolo || protocolo)}</h1>
+                            <span class="status-tag status-${statusClass}">${escapeHtml(formatStatus(chamado.status))}</span>
+                        </div>
+
+                        <div class="info-grid">
+                            <div class="info-item"><span class="label">Cliente</span><span class="value">${escapeHtml(chamado.cliente_nome || '—')}</span></div>
+                            <div class="info-item"><span class="label">ID Cliente</span><span class="value">${escapeHtml(chamado.id_cliente || '—')}</span></div>
+                            <div class="info-item"><span class="label">Vendedor</span><span class="value">${escapeHtml(chamado.vendedor || '—')}</span></div>
+                            <div class="info-item"><span class="label">Origem</span><span class="value">${escapeHtml(chamado.origem || '—')}</span></div>
+                            <div class="info-item"><span class="label">Produto</span><span class="value">${escapeHtml(chamado.produto || '—')}</span></div>
+                            <div class="info-item"><span class="label">Código</span><span class="value">${escapeHtml(chamado.codigo_produto || '—')}</span></div>
+                            <div class="info-item full"><span class="label">Descrição do Produto</span><span class="value">${escapeHtml(chamado.descricao_produto || '—')}</span></div>
+                            <div class="info-item"><span class="label">Nota Marine</span><span class="value">${escapeHtml(chamado.nota_marine || '—')}</span></div>
+                            <div class="info-item"><span class="label">Teste Receber</span><span class="value">${escapeHtml(chamado.teste_receber || '—')}</span></div>
+                            <div class="info-item"><span class="label">Teste Venda</span><span class="value">${escapeHtml(chamado.teste_venda || '—')}</span></div>
+                            <div class="info-item"><span class="label">Tempo de Uso</span><span class="value">${escapeHtml(chamado.tempo_uso || '—')}</span></div>
+                            <div class="info-item"><span class="label">Capacidade da Loja</span><span class="value">${escapeHtml(chamado.capacidade_loja || '—')}</span></div>
+                            <div class="info-item full"><span class="label">Defeito Relatado</span><span class="value">${escapeHtml(chamado.descricao_defeito || '—')}</span></div>
+                            <div class="info-item full"><span class="label">Decisão do Técnico</span><span class="value">${escapeHtml(chamado.decisao_tecnico || '—')}</span></div>
+                            <div class="info-item"><span class="label">Data Criação</span><span class="value">${escapeHtml(chamado.data_criacao || '—')}</span></div>
+                            <div class="info-item"><span class="label">Última Atualização</span><span class="value">${escapeHtml(chamado.data_atualizacao || '—')}</span></div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="section-title"><i class="fas fa-comments"></i> Conversa do caso</div>
+                        <div class="timeline">${conversaHtml}</div>
+                    </div>
+
+                    <div class="card">
+                        <div class="section-title"><i class="fas fa-paperclip"></i> Arquivos anexados</div>
+                        ${arquivosHtml}
+                    </div>
+
+                    <div class="card">
+                        <div class="section-title"><i class="fas fa-user-friends"></i> Contatos envolvidos</div>
+                        ${envolvidosHtml}
+                    </div>
+
+                    <div class="card">
+                        <div class="section-title"><i class="fas fa-code"></i> JSON da conversa e do caso</div>
+                        <pre class="json-wrap">${escapeHtml(rawJson)}</pre>
+                        <div class="actions">
+                            <button id="copiarJsonBtn" class="button" type="button">
+                                <i class="fas fa-copy"></i> Copiar JSON
+                            </button>
+                        </div>
+                    </div>
+                `;
+
+                const btn = document.getElementById('copiarJsonBtn');
+                if (btn) {
+                    btn.addEventListener('click', async () => {
+                        try {
+                            await navigator.clipboard.writeText(rawJson);
+                            btn.innerHTML = '<i class="fas fa-check"></i> JSON copiado';
+                            setTimeout(() => {
+                                btn.innerHTML = '<i class="fas fa-copy"></i> Copiar JSON';
+                            }, 1500);
+                        } catch (error) {
+                            console.error(error);
+                            btn.innerHTML = '<i class="fas fa-times"></i> Não foi possível copiar';
+                        }
+                    });
+                }
+
+            } catch (error) {
+                console.error(error);
+                renderEmpty('Erro ao carregar o resumo do chamado.');
+            }
+        }
+
+        carregarResumo();
+    </script>
+</body>
+</html>
