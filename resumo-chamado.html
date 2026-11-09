@@ -3,586 +3,540 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Resumo do Chamado</title>
+    <title>Consulta de Chamado | Marine</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         :root {
-            --bg: #f3f7fb;
+            --bg: #f0f4f8;
             --card: #ffffff;
-            --line: #e8edf3;
+            --line: #e2e8f0;
             --text: #1a2a3a;
-            --muted: #6b7a8a;
+            --muted: #64748b;
             --navy: #0d3b66;
-            --navy-2: #1a5276;
+            --navy-light: #1a5276;
             --gold: #f8b81f;
             --green: #10b981;
             --red: #ef4444;
             --blue: #3b82f6;
-            --shadow: 0 10px 30px rgba(13, 59, 102, 0.12);
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
         }
 
-        * { box-sizing: border-box; }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            margin: 0;
             font-family: 'Inter', sans-serif;
-            background: linear-gradient(180deg, #eef5fb 0%, #f8fafc 100%);
+            background: var(--bg);
             color: var(--text);
+            min-height: 100vh;
         }
 
-        .topbar {
-            background: linear-gradient(135deg, var(--navy) 0%, var(--navy-2) 100%);
-            color: #fff;
+        /* HEADER */
+        .header {
+            background: linear-gradient(135deg, #0a2a4a 0%, #0d3b66 100%);
+            color: white;
             padding: 18px 24px;
-            box-shadow: var(--shadow);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
         }
-
-        .topbar-inner {
+        .header-content {
             max-width: 1200px;
             margin: 0 auto;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            gap: 16px;
             flex-wrap: wrap;
+            gap: 12px;
         }
-
-        .brand {
+        .header-title {
             display: flex;
             align-items: center;
             gap: 12px;
-            font-weight: 800;
-            letter-spacing: 0.02em;
-        }
-
-        .brand .icon {
-            width: 44px;
-            height: 44px;
-            border-radius: 12px;
-            background: rgba(255,255,255,0.12);
-            display: grid;
-            place-items: center;
-            color: var(--gold);
-            font-size: 1.2rem;
-        }
-
-        .chip {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background: rgba(255,255,255,0.12);
-            border: 1px solid rgba(255,255,255,0.2);
-            padding: 8px 14px;
-            border-radius: 999px;
-            color: #fff;
-            font-size: 0.82rem;
-            font-weight: 600;
+            font-size: 1.15rem;
+            font-weight: 700;
         }
 
         .container {
             max-width: 1200px;
-            margin: 30px auto 60px;
+            margin: 30px auto;
             padding: 0 20px;
         }
 
-        .card {
-            background: var(--card);
-            border: 1px solid var(--line);
-            border-radius: 22px;
+        /* CAIXA DE BUSCA */
+        .search-card {
+            background: white;
+            padding: 22px 28px;
+            border-radius: 20px;
             box-shadow: var(--shadow);
-            padding: 22px 24px;
-            margin-bottom: 22px;
-        }
-
-        .header-case {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 16px;
-            flex-wrap: wrap;
-            margin-bottom: 18px;
-        }
-
-        .header-case h1 {
-            margin: 0;
-            font-size: clamp(1.5rem, 2vw, 2.2rem);
-            color: var(--navy);
-        }
-
-        .status-tag {
-            display: inline-block;
-            padding: 8px 14px;
-            border-radius: 999px;
-            font-size: 0.72rem;
-            font-weight: 800;
-            letter-spacing: 0.05em;
-            text-transform: uppercase;
-        }
-
-        .status-Pendente { background: #fef3c7; color: #92400e; }
-        .status-Em-Análise { background: #dbeafe; color: #1e40af; }
-        .status-Aprovado { background: #d1fae5; color: #065f46; }
-        .status-Recusado { background: #fecaca; color: #991b1b; }
-
-        .info-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
-            gap: 16px;
-        }
-
-        .info-item {
-            background: #f8fafc;
+            margin-bottom: 24px;
             border: 1px solid var(--line);
-            border-radius: 14px;
-            padding: 12px 14px;
         }
-
-        .info-item .label {
-            display: block;
-            color: var(--muted);
-            font-size: 0.68rem;
-            font-weight: 700;
+        .search-box {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .search-box input {
+            flex: 1;
+            min-width: 250px;
+            padding: 12px 18px;
+            border: 2px solid var(--line);
+            border-radius: 12px;
+            font-size: 1rem;
+            font-family: inherit;
             text-transform: uppercase;
-            letter-spacing: 0.08em;
-            margin-bottom: 6px;
+            font-weight: 600;
+            outline: none;
+            transition: all 0.2s;
         }
-
-        .info-item .value {
+        .search-box input:focus {
+            border-color: var(--gold);
+            box-shadow: 0 0 0 4px rgba(248, 184, 31, 0.15);
+        }
+        .btn-busca {
+            background: var(--navy);
+            color: white;
+            border: none;
+            padding: 12px 26px;
+            border-radius: 12px;
             font-weight: 700;
-            color: var(--text);
-            line-height: 1.5;
-        }
-
-        .full { grid-column: 1 / -1; }
-
-        .section-title {
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.2s;
             display: flex;
             align-items: center;
             gap: 8px;
-            margin-bottom: 16px;
-            color: var(--navy);
-            font-size: 1.05rem;
-            font-weight: 800;
+        }
+        .btn-busca:hover {
+            background: var(--navy-light);
+            transform: translateY(-2px);
         }
 
+        /* CARD GERAL */
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 26px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--line);
+            margin-bottom: 24px;
+        }
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #f1f5f9;
+            padding-bottom: 16px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .card-header h2 {
+            font-size: 1.3rem;
+            color: var(--navy);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* STATUS BADGE */
+        .status-badge {
+            font-size: 0.75rem;
+            font-weight: 800;
+            padding: 6px 16px;
+            border-radius: 30px;
+            text-transform: uppercase;
+        }
+        .status-Aprovado { background: #d1fae5; color: #065f46; border: 1px solid #10b981; }
+        .status-Pendente { background: #fef3c7; color: #92400e; border: 1px solid #f59e0b; }
+        .status-Recusado { background: #fee2e2; color: #991b1b; border: 1px solid #ef4444; }
+        .status-Em-Analise { background: #dbeafe; color: #1e40af; border: 1px solid #3b82f6; }
+
+        /* GRID DE INFORMAÇÕES */
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 16px;
+        }
+        .info-box {
+            background: #f8fafc;
+            padding: 12px 16px;
+            border-radius: 12px;
+            border: 1px solid var(--line);
+        }
+        .info-box .lbl {
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: var(--muted);
+            text-transform: uppercase;
+            margin-bottom: 4px;
+            display: block;
+        }
+        .info-box .val {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--text);
+            word-break: break-word;
+        }
+        .col-span-all { grid-column: 1 / -1; }
+
+        /* DESTAQUE DECISÃO */
+        .decisao-box {
+            background: #f0fdf4;
+            border: 2px dashed #10b981;
+            padding: 16px;
+            border-radius: 14px;
+            margin-top: 14px;
+        }
+
+        /* CONVERSA / CHAT */
         .timeline {
             display: flex;
             flex-direction: column;
             gap: 12px;
+            max-height: 400px;
+            overflow-y: auto;
+            padding-right: 6px;
         }
-
-        .msg {
-            border-radius: 16px;
-            border: 1px solid var(--line);
+        .timeline-msg {
             background: #f8fafc;
+            border: 1px solid var(--line);
+            border-left: 5px solid var(--muted);
+            border-radius: 12px;
             padding: 14px 16px;
         }
-
-        .msg.tecnico { border-left: 4px solid var(--blue); }
-        .msg.vendedor { border-left: 4px solid var(--gold); }
-        .msg.contato { border-left: 4px solid var(--green); }
-        .msg.sistema { border-left: 4px solid var(--muted); }
-
-        .msg-top {
+        .timeline-msg.tecnico { border-left-color: var(--blue); }
+        .timeline-msg.contato { border-left-color: var(--green); }
+        .timeline-msg.vendedor { border-left-color: var(--gold); }
+        
+        .timeline-meta {
             display: flex;
             justify-content: space-between;
-            gap: 12px;
-            align-items: center;
-            flex-wrap: wrap;
-            margin-bottom: 8px;
-        }
-
-        .msg-author {
-            font-weight: 800;
-            color: var(--navy);
-        }
-
-        .msg-type {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            border-radius: 999px;
-            padding: 4px 8px;
-            font-size: 0.68rem;
-            font-weight: 700;
-            background: rgba(13,59,102,0.06);
-            color: var(--navy);
-            text-transform: uppercase;
-        }
-
-        .msg-time {
-            font-size: 0.72rem;
+            font-size: 0.75rem;
+            margin-bottom: 6px;
             color: var(--muted);
+            font-weight: 600;
         }
-
-        .msg-text {
-            white-space: pre-wrap;
-            line-height: 1.6;
+        .timeline-body {
+            font-size: 0.9rem;
+            line-height: 1.5;
             color: var(--text);
         }
 
+        /* GALERIA DE ARQUIVOS */
         .files-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 14px;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 16px;
         }
-
-        .file-card {
+        .file-item {
             background: #f8fafc;
             border: 1px solid var(--line);
             border-radius: 14px;
             overflow: hidden;
-            transition: transform 0.15s ease;
+            text-align: center;
         }
-
-        .file-card:hover { transform: translateY(-2px); }
-
-        .file-thumb {
-            height: 120px;
-            display: grid;
-            place-items: center;
-            background: #edf3fb;
-            color: var(--navy);
-            font-size: 2rem;
+        .file-media {
+            height: 140px;
+            background: #e2e8f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
         }
-
-        .file-thumb img, .file-thumb video {
+        .file-media img, .file-media video {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            display: block;
         }
-
-        .file-caption {
+        .file-info {
             padding: 10px 12px;
-            font-size: 0.76rem;
-            color: var(--text);
-            font-weight: 600;
+        }
+        .file-nome {
+            font-size: 0.8rem;
+            font-weight: 700;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
-        }
-
-        .file-caption small {
-            display: block;
-            margin-top: 4px;
-            color: var(--muted);
-            font-weight: 500;
-        }
-
-        .participantes {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-            gap: 12px;
-        }
-
-        .envolvido {
-            background: #f8fafc;
-            border: 1px solid var(--line);
-            border-radius: 16px;
-            padding: 14px;
-        }
-
-        .envolvido .nome {
-            font-weight: 800;
-            color: var(--navy);
             margin-bottom: 8px;
         }
-
-        .envolvido .meta {
-            font-size: 0.75rem;
-            color: var(--muted);
-            margin-bottom: 8px;
-        }
-
-        .envolvido .status {
+        .btn-link-file {
             display: inline-block;
-            padding: 4px 10px;
-            border-radius: 999px;
-            font-size: 0.68rem;
-            font-weight: 800;
-            margin-bottom: 8px;
-            text-transform: uppercase;
-        }
-
-        .status-aguardando { background: #fef3c7; color: #92400e; }
-        .status-respondeu { background: #d1fae5; color: #065f46; }
-
-        .json-wrap {
-            background: #0f172a;
-            color: #e2e8f0;
-            border-radius: 16px;
-            padding: 16px;
-            overflow: auto;
-            font-family: Consolas, monospace;
-            font-size: 0.78rem;
-            line-height: 1.5;
-        }
-
-        .empty {
-            text-align: center;
-            padding: 28px 18px;
-            color: var(--muted);
-            border: 1px dashed var(--line);
-            border-radius: 14px;
-            background: #fafcff;
-        }
-
-        .actions {
-            display: flex;
-            justify-content: flex-end;
-            margin-top: 16px;
-        }
-
-        .button {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
             background: var(--navy);
             color: white;
+            text-decoration: none;
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 6px 14px;
+            border-radius: 8px;
+            transition: 0.2s;
+        }
+        .btn-link-file:hover { background: var(--navy-light); }
+
+        /* JSON RAW VIEWER */
+        .json-viewer {
+            background: #0f172a;
+            color: #38bdf8;
+            padding: 18px;
+            border-radius: 14px;
+            font-family: Consolas, 'Courier New', monospace;
+            font-size: 0.82rem;
+            line-height: 1.5;
+            overflow: auto;
+            max-height: 450px;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+        .btn-copy {
+            background: var(--gold);
+            color: var(--navy);
             border: none;
-            border-radius: 12px;
-            padding: 10px 16px;
-            font-family: 'Inter', sans-serif;
+            padding: 8px 18px;
+            border-radius: 10px;
             font-weight: 700;
             cursor: pointer;
-            text-decoration: none;
+            float: right;
+            margin-top: 10px;
         }
 
-        .button:hover { opacity: 0.96; }
-
-        @media (max-width: 640px) {
-            .card { padding: 18px 16px; }
-            .header-case { align-items: flex-start; }
-            .section-title { font-size: 0.95rem; }
-            .info-grid { grid-template-columns: 1fr; }
+        .empty-placeholder {
+            text-align: center;
+            padding: 40px;
+            color: var(--muted);
         }
     </style>
 </head>
 <body>
-    <div class="topbar">
-        <div class="topbar-inner">
-            <div class="brand">
-                <div class="icon"><i class="fas fa-file-alt"></i></div>
-                <span>Resumo do Chamado</span>
+
+    <div class="header">
+        <div class="header-content">
+            <div class="header-title">
+                <i class="fas fa-search-plus"></i> Consulta de Ocorrência & Protocolo
             </div>
-            <div class="chip"><i class="fas fa-key"></i> Chave por protocolo</div>
+            <span style="font-size:0.8rem; opacity:0.85;">Assistência e Garantia</span>
         </div>
     </div>
 
     <div class="container">
-        <div id="app"></div>
+        <!-- BUSCA -->
+        <div class="search-card">
+            <div class="search-box">
+                <input type="text" id="inputProtocolo" placeholder="Digite o protocolo (Ex: GAR-20261022-3570)" onkeypress="if(event.key === 'Enter') buscarChamado()">
+                <button class="btn-busca" onclick="buscarChamado()">
+                    <i class="fas fa-search"></i> Consultar
+                </button>
+            </div>
+        </div>
+
+        <div id="resultadoContainer" style="display:none;">
+
+            <!-- RESUMO GERAL -->
+            <div class="card">
+                <div class="card-header">
+                    <h2><i class="fas fa-file-invoice"></i> Protocolo: <span id="txtProtocolo">-</span></h2>
+                    <span id="txtStatus" class="status-badge">-</span>
+                </div>
+
+                <div class="info-grid">
+                    <div class="info-box"><span class="lbl">Cliente</span><span class="val" id="txtCliente">-</span></div>
+                    <div class="info-box"><span class="lbl">ID do Cliente</span><span class="val" id="txtIdCliente">-</span></div>
+                    <div class="info-box"><span class="lbl">Vendedor</span><span class="val" id="txtVendedor">-</span></div>
+                    <div class="info-box"><span class="lbl">Nota Marine</span><span class="val" id="txtNotaMarine">-</span></div>
+
+                    <div class="info-box"><span class="lbl">Produto</span><span class="val" id="txtProduto">-</span></div>
+                    <div class="info-box"><span class="lbl">Código Produto</span><span class="val" id="txtCodProduto">-</span></div>
+                    <div class="info-box col-span-all"><span class="lbl">Descrição do Produto</span><span class="val" id="txtDescProduto">-</span></div>
+
+                    <div class="info-box"><span class="lbl">Testou ao Receber?</span><span class="val" id="txtTesteReceber">-</span></div>
+                    <div class="info-box"><span class="lbl">Testou na Venda?</span><span class="val" id="txtTesteVenda">-</span></div>
+                    <div class="info-box"><span class="lbl">Tempo de Uso</span><span class="val" id="txtTempoUso">-</span></div>
+                    <div class="info-box"><span class="lbl">Loja Pode Arrumar?</span><span class="val" id="txtCapacidadeLoja">-</span></div>
+
+                    <div class="info-box col-span-all" style="background:#fff7ed; border-color:#fed7aa;">
+                        <span class="lbl" style="color:#c2410c;">Defeito / Ocorrência Relatada</span>
+                        <span class="val" id="txtDefeito" style="color:#9a3412;">-</span>
+                    </div>
+
+                    <div class="info-box col-span-all decisao-box">
+                        <span class="lbl" style="color:#15803d;"><i class="fas fa-check-circle"></i> Parecer / Decisão do Técnico</span>
+                        <span class="val" id="txtDecisao" style="color:#166534; font-size: 1.05rem;">-</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CHAT / MURAL DA CONVERSA -->
+            <div class="card">
+                <div class="card-header">
+                    <h2><i class="fas fa-comments"></i> Histórico da Conversa</h2>
+                </div>
+                <div class="timeline" id="conversaList"></div>
+            </div>
+
+            <!-- ANEXOS (FOTOS / VÍDEOS / NOTAS) -->
+            <div class="card">
+                <div class="card-header">
+                    <h2><i class="fas fa-paperclip"></i> Arquivos e Anexos</h2>
+                </div>
+                <div class="files-grid" id="arquivosList"></div>
+            </div>
+
+            <!-- JSON COMPLETO (RAW) -->
+            <div class="card">
+                <div class="card-header">
+                    <h2><i class="fas fa-code"></i> JSON Completo da Ocorrência</h2>
+                    <button class="btn-copy" onclick="copiarJson()"><i class="fas fa-copy"></i> Copiar JSON</button>
+                </div>
+                <pre class="json-viewer" id="jsonViewer"></pre>
+            </div>
+
+        </div>
+
+        <div id="loading" class="empty-placeholder" style="display:none;">
+            <i class="fas fa-spinner fa-spin fa-2x"></i>
+            <p style="margin-top:10px;">Buscando ocorrência no banco...</p>
+        </div>
     </div>
 
     <script>
-        const app = document.getElementById('app');
+        let jsonCompletoAtual = null;
 
-        function getProtocoloFromUrl() {
+        // Se passar ?protocolo=XYZ na URL, faz a busca automática
+        window.addEventListener('DOMContentLoaded', () => {
             const params = new URLSearchParams(window.location.search);
-            if (params.get('protocolo')) return params.get('protocolo').trim();
-
-            const pathParts = window.location.pathname.split('/').filter(Boolean);
-            const lastPart = pathParts[pathParts.length - 1];
-            return decodeURIComponent(lastPart || '');
-        }
-
-        function formatStatus(status) {
-            return status || 'Pendente';
-        }
-
-        function escapeHtml(value) {
-            return String(value ?? '').replace(/[&<>"']/g, (ch) => ({
-                '&': '&amp;',
-                '<': '&lt;',
-                '>': '&gt;',
-                '"': '&quot;',
-                "'": '&#39;'
-            }[ch]));
-        }
-
-        function renderEmpty(message) {
-            app.innerHTML = `
-                <div class="card">
-                    <div class="empty">
-                        <i class="fas fa-exclamation-triangle" style="font-size: 1.5rem; margin-bottom: 10px; display:block;"></i>
-                        <strong>${message}</strong>
-                    </div>
-                </div>
-            `;
-        }
-
-        function renderArquivo(arquivo) {
-            const nome = arquivo?.nome || 'Arquivo';
-            const url = arquivo?.url || '#';
-            const tipo = (arquivo?.tipo || '').toLowerCase();
-            const nomeLower = nome.toLowerCase();
-            const isImage = tipo.startsWith('image/') || /\.(jpg|jpeg|png|gif|webp|bmp|jfif|svg)$/i.test(nomeLower);
-            const isVideo = tipo.startsWith('video/') || /\.(mp4|mov|avi|webm|mkv|3gp)$/i.test(nomeLower);
-            const isPdf = tipo.includes('pdf') || nomeLower.endsWith('.pdf');
-
-            let thumb = '<div class="file-thumb"><i class="fas fa-file"></i></div>';
-            if (isImage) {
-                thumb = `<div class="file-thumb"><img src="${url}" alt="${escapeHtml(nome)}"></div>`;
-            } else if (isVideo) {
-                thumb = `<div class="file-thumb"><video src="${url}" controls preload="metadata"></video></div>`;
-            } else if (isPdf) {
-                thumb = '<div class="file-thumb"><i class="fas fa-file-pdf" style="color:#ef4444;"></i></div>';
+            const proto = params.get('protocolo');
+            if (proto) {
+                document.getElementById('inputProtocolo').value = proto;
+                buscarChamado();
             }
+        });
 
-            return `
-                <div class="file-card">
-                    ${thumb}
-                    <div class="file-caption">
-                        ${escapeHtml(nome)}
-                        <small>${escapeHtml(arquivo?.categoria || 'Anexo')}</small>
-                    </div>
-                </div>
-            `;
-        }
-
-        async function carregarResumo() {
-            const protocolo = getProtocoloFromUrl();
+        async function buscarChamado() {
+            const protocolo = document.getElementById('inputProtocolo').value.trim();
             if (!protocolo) {
-                renderEmpty('Informe o protocolo na URL, por exemplo: /resumo/GAR-20261022-3570');
-                return;
+                return Swal.fire('Atenção', 'Informe o protocolo para consulta.', 'warning');
             }
+
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('resultadoContainer').style.display = 'none';
 
             try {
-                const response = await fetch(`/api/contato/resumo/${encodeURIComponent(protocolo)}`);
-                const result = await response.json();
+                // Endpoint sugerido da sua API (ajuste conforme a sua rota de backend)
+                const res = await fetch(`/api/garantia/detalhe/${encodeURIComponent(protocolo)}`);
+                const data = await res.json();
 
-                if (!result.success) {
-                    renderEmpty(result.error || 'Chamado não encontrado.');
-                    return;
+                document.getElementById('loading').style.display = 'none';
+
+                if (data.success && (data.garantia || data.chamado)) {
+                    const c = data.garantia || data.chamado;
+                    renderizarDados(c);
+                } else {
+                    Swal.fire('Não Encontrado', 'Nenhuma ocorrência encontrada com este protocolo.', 'info');
                 }
-
-                const chamado = result.chamado || {};
-                const conversa = Array.isArray(result.conversa) ? result.conversa : [];
-                const arquivos = Array.isArray(result.arquivos) ? result.arquivos : [];
-                const envolvidos = Array.isArray(result.envolvidos) ? result.envolvidos : [];
-
-                const conversaHtml = conversa.length
-                    ? conversa.map(msg => {
-                        const tipo = (msg.tipo || 'sistema').toLowerCase();
-                        const nome = msg.remetente || 'Sistema';
-                        const data = msg.data || '';
-                        const texto = msg.mensagem || '';
-                        return `
-                            <div class="msg ${tipo}">
-                                <div class="msg-top">
-                                    <div class="msg-author">${escapeHtml(nome)}</div>
-                                    <div class="msg-type">${escapeHtml(tipo)}</div>
-                                </div>
-                                <div class="msg-time">${escapeHtml(data)}</div>
-                                <div class="msg-text">${escapeHtml(texto)}</div>
-                            </div>
-                        `;
-                    }).join('')
-                    : '<div class="empty">Nenhuma mensagem registrada neste caso.</div>';
-
-                const arquivosHtml = arquivos.length
-                    ? `<div class="files-grid">${arquivos.map(renderArquivo).join('')}</div>`
-                    : '<div class="empty">Nenhum arquivo anexado.</div>';
-
-                const envolvidosHtml = envolvidos.length
-                    ? `<div class="participantes">${envolvidos.map(env => `
-                        <div class="envolvido">
-                            <div class="nome">${escapeHtml(env.nome || 'Contato')}</div>
-                            <div class="meta">${escapeHtml(env.email || 'Sem e-mail')}</div>
-                            <div class="status status-${escapeHtml(env.status || 'aguardando')}">${escapeHtml(env.status || 'aguardando')}</div>
-                            <div style="font-size:0.76rem;color:#475569;line-height:1.6;white-space:pre-wrap;">${escapeHtml(env.mensagem || 'Sem mensagem')}</div>
-                            ${env.resposta ? `<div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--line);font-size:0.76rem;color:#1f2937;white-space:pre-wrap;"><strong>Resposta:</strong><br>${escapeHtml(env.resposta)}</div>` : ''}
-                        </div>
-                    `).join('')}</div>`
-                    : '<div class="empty">Nenhum contato envolvido neste caso.</div>';
-
-                const rawJson = JSON.stringify({
-                    chamado,
-                    conversa,
-                    arquivos,
-                    envolvidos
-                }, null, 2);
-                const statusClass = (formatStatus(chamado.status) || 'Pendente').replace(/\s+/g, '-');
-
-                app.innerHTML = `
-                    <div class="card">
-                        <div class="header-case">
-                            <h1>Chamado ${escapeHtml(chamado.protocolo || protocolo)}</h1>
-                            <span class="status-tag status-${statusClass}">${escapeHtml(formatStatus(chamado.status))}</span>
-                        </div>
-
-                        <div class="info-grid">
-                            <div class="info-item"><span class="label">Cliente</span><span class="value">${escapeHtml(chamado.cliente_nome || '—')}</span></div>
-                            <div class="info-item"><span class="label">ID Cliente</span><span class="value">${escapeHtml(chamado.id_cliente || '—')}</span></div>
-                            <div class="info-item"><span class="label">Vendedor</span><span class="value">${escapeHtml(chamado.vendedor || '—')}</span></div>
-                            <div class="info-item"><span class="label">Origem</span><span class="value">${escapeHtml(chamado.origem || '—')}</span></div>
-                            <div class="info-item"><span class="label">Produto</span><span class="value">${escapeHtml(chamado.produto || '—')}</span></div>
-                            <div class="info-item"><span class="label">Código</span><span class="value">${escapeHtml(chamado.codigo_produto || '—')}</span></div>
-                            <div class="info-item full"><span class="label">Descrição do Produto</span><span class="value">${escapeHtml(chamado.descricao_produto || '—')}</span></div>
-                            <div class="info-item"><span class="label">Nota Marine</span><span class="value">${escapeHtml(chamado.nota_marine || '—')}</span></div>
-                            <div class="info-item"><span class="label">Teste Receber</span><span class="value">${escapeHtml(chamado.teste_receber || '—')}</span></div>
-                            <div class="info-item"><span class="label">Teste Venda</span><span class="value">${escapeHtml(chamado.teste_venda || '—')}</span></div>
-                            <div class="info-item"><span class="label">Tempo de Uso</span><span class="value">${escapeHtml(chamado.tempo_uso || '—')}</span></div>
-                            <div class="info-item"><span class="label">Capacidade da Loja</span><span class="value">${escapeHtml(chamado.capacidade_loja || '—')}</span></div>
-                            <div class="info-item full"><span class="label">Defeito Relatado</span><span class="value">${escapeHtml(chamado.descricao_defeito || '—')}</span></div>
-                            <div class="info-item full"><span class="label">Decisão do Técnico</span><span class="value">${escapeHtml(chamado.decisao_tecnico || '—')}</span></div>
-                            <div class="info-item"><span class="label">Data Criação</span><span class="value">${escapeHtml(chamado.data_criacao || '—')}</span></div>
-                            <div class="info-item"><span class="label">Última Atualização</span><span class="value">${escapeHtml(chamado.data_atualizacao || '—')}</span></div>
-                        </div>
-                    </div>
-
-                    <div class="card">
-                        <div class="section-title"><i class="fas fa-comments"></i> Conversa do caso</div>
-                        <div class="timeline">${conversaHtml}</div>
-                    </div>
-
-                    <div class="card">
-                        <div class="section-title"><i class="fas fa-paperclip"></i> Arquivos anexados</div>
-                        ${arquivosHtml}
-                    </div>
-
-                    <div class="card">
-                        <div class="section-title"><i class="fas fa-user-friends"></i> Contatos envolvidos</div>
-                        ${envolvidosHtml}
-                    </div>
-
-                    <div class="card">
-                        <div class="section-title"><i class="fas fa-code"></i> JSON da conversa e do caso</div>
-                        <pre class="json-wrap">${escapeHtml(rawJson)}</pre>
-                        <div class="actions">
-                            <button id="copiarJsonBtn" class="button" type="button">
-                                <i class="fas fa-copy"></i> Copiar JSON
-                            </button>
-                        </div>
-                    </div>
-                `;
-
-                const btn = document.getElementById('copiarJsonBtn');
-                if (btn) {
-                    btn.addEventListener('click', async () => {
-                        try {
-                            await navigator.clipboard.writeText(rawJson);
-                            btn.innerHTML = '<i class="fas fa-check"></i> JSON copiado';
-                            setTimeout(() => {
-                                btn.innerHTML = '<i class="fas fa-copy"></i> Copiar JSON';
-                            }, 1500);
-                        } catch (error) {
-                            console.error(error);
-                            btn.innerHTML = '<i class="fas fa-times"></i> Não foi possível copiar';
-                        }
-                    });
-                }
-
-            } catch (error) {
-                console.error(error);
-                renderEmpty('Erro ao carregar o resumo do chamado.');
+            } catch (err) {
+                document.getElementById('loading').style.display = 'none';
+                Swal.fire('Erro', 'Falha ao buscar os dados da ocorrência no servidor.', 'error');
             }
         }
 
-        carregarResumo();
+        function parseJsonField(field) {
+            if (!field) return [];
+            if (typeof field === 'object') return field;
+            try { return JSON.parse(field); } catch(e) { return []; }
+        }
+
+        function renderizarDados(c) {
+            jsonCompletoAtual = c;
+            document.getElementById('resultadoContainer').style.display = 'block';
+
+            // Dados Básicos
+            document.getElementById('txtProtocolo').innerText = c.protocolo || '-';
+            const statusEl = document.getElementById('txtStatus');
+            statusEl.innerText = c.status || 'Pendente';
+            statusEl.className = `status-badge status-${(c.status || 'Pendente').replace(/\s+/g, '-')}`;
+
+            document.getElementById('txtCliente').innerText = c.cliente_nome || '-';
+            document.getElementById('txtIdCliente').innerText = c.id_cliente || '-';
+            document.getElementById('txtVendedor').innerText = c.vendedor || '-';
+            document.getElementById('txtNotaMarine').innerText = c.nota_marine || '-';
+
+            document.getElementById('txtProduto').innerText = c.produto || '-';
+            document.getElementById('txtCodProduto').innerText = c.codigo_produto || '-';
+            document.getElementById('txtDescProduto').innerText = c.descricao_produto || '-';
+
+            document.getElementById('txtTesteReceber').innerText = c.teste_receber || '-';
+            document.getElementById('txtTesteVenda').innerText = c.teste_venda || '-';
+            document.getElementById('txtTempoUso').innerText = c.tempo_uso || '-';
+            document.getElementById('txtCapacidadeLoja').innerText = c.capacidade_loja || '-';
+            document.getElementById('txtDefeito').innerText = c.descricao_defeito || '-';
+            document.getElementById('txtDecisao').innerText = c.decisao_tecnico || 'Nenhuma decisão técnica registrada até o momento.';
+
+            // Renderizar Conversas
+            const conversas = parseJsonField(c.conversa);
+            const containerChat = document.getElementById('conversaList');
+            if (conversas.length > 0) {
+                containerChat.innerHTML = conversas.map(m => `
+                    <div class="timeline-msg ${m.tipo || 'tecnico'}">
+                        <div class="timeline-meta">
+                            <span><strong>${m.remetente || 'Usuário'}</strong> [${(m.tipo || '').toUpperCase()}]</span>
+                            <span>${m.data || ''}</span>
+                        </div>
+                        <div class="timeline-body">${m.mensagem || ''}</div>
+                    </div>
+                `).join('');
+            } else {
+                containerChat.innerHTML = '<p style="color:var(--muted); font-size:0.9rem;">Nenhuma mensagem registrada.</p>';
+            }
+
+            // Renderizar Arquivos
+            const arquivos = parseJsonField(c.arquivos_json);
+            const containerFiles = document.getElementById('arquivosList');
+            if (arquivos.length > 0) {
+                containerFiles.innerHTML = arquivos.map(arq => {
+                    const isVideo = arq.tipo && arq.tipo.includes('video');
+                    const isImg = arq.tipo && arq.tipo.includes('image');
+                    let preview = '<i class="fas fa-file-alt fa-2x" style="color:var(--muted)"></i>';
+
+                    if (isImg) {
+                        preview = `<img src="${arq.url}" alt="${arq.nome}">`;
+                    } else if (isVideo) {
+                        preview = `<video src="${arq.url}"></video>`;
+                    }
+
+                    return `
+                        <div class="file-item">
+                            <div class="file-media">${preview}</div>
+                            <div class="file-info">
+                                <div class="file-nome" title="${arq.nome}">${arq.nome}</div>
+                                <a href="${arq.url}" target="_blank" class="btn-link-file">
+                                    <i class="fas fa-external-link-alt"></i> Visualizar
+                                </a>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            } else {
+                containerFiles.innerHTML = '<p style="color:var(--muted); font-size:0.9rem;">Nenhum arquivo anexado.</p>';
+            }
+
+            // Exibir o JSON Formatado
+            document.getElementById('jsonViewer').innerText = JSON.stringify(c, null, 2);
+        }
+
+        function copiarJson() {
+            if (!jsonCompletoAtual) return;
+            const jsonText = JSON.stringify(jsonCompletoAtual, null, 2);
+            navigator.clipboard.writeText(jsonText).then(() => {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Copiado!',
+                    text: 'O JSON completo foi copiado para sua área de transferência.',
+                    timer: 1500,
+                    showConfirmButton: false
+                });
+            });
+        }
     </script>
 </body>
 </html>
