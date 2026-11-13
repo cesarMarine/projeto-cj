@@ -578,10 +578,11 @@
             // Histórico do chat técnico↔vendedor
             conversa.forEach(msg => {
                 historicoCompleto.push({
-                    tipo: msg.tipo === 'vendedor' ? 'vendedor' : 'tecnico',
+                    tipo: msg.tipo === 'contato' ? 'contato' : msg.tipo === 'vendedor' ? 'vendedor' : 'tecnico',
                     quem: msg.remetente || (msg.tipo === 'vendedor' ? 'Vendedor' : 'Técnico'),
                     data: msg.data || '',
                     texto: msg.mensagem || '',
+                    anexos: msg.anexos,
                     ts: msg.timestamp || 0
                 });
             });
@@ -601,7 +602,7 @@
                             </span>
                             <span class="data">${m.data}</span>
                         </div>
-                        <div class="texto">${m.texto}</div>
+                        <div class="texto">${textoSeguroResposta(m.texto)}${documentosResposta(m.anexos)}</div>
                     </div>
                 `).join('');
 
@@ -652,7 +653,7 @@
                     <label style="font-size:0.75rem; font-weight:600; color:#6b7a8a; text-transform:uppercase; display:block; margin-bottom:8px;">
                         💬 Sua resposta
                     </label>
-                    <textarea id="respostaTexto" placeholder="Digite sua resposta..." rows="4"></textarea>
+                    ${envolvido.pode_vendedor?'<label>Enviar para <select id="destinoResposta"><option value="tecnico">Técnico</option><option value="vendedor">Vendedor (técnico acompanha)</option></select></label>':''}<p><label>📎 Anexar documento <input id="anexosRespostaContato" type="file" multiple accept=".pdf,.jpg,.jpeg,.png,.webp"></label><small> Até 3 arquivos de 10 MB.</small></p><textarea id="respostaTexto" placeholder="Digite sua resposta..." rows="4"></textarea>
                     <button class="btn-enviar" id="btnEnviarResposta" onclick="enviarResposta()">
                         <i class="fas fa-paper-plane"></i> Enviar Resposta
                     </button>
@@ -727,7 +728,7 @@
                     <div class="card-title"><i class="fas fa-paper-plane"></i> 📩 Mensagem do Técnico</div>
                     <div class="msg-destaque">
                         <div class="quem">Enviada para ${envolvido.nome}</div>
-                        <div class="texto">"${envolvido.mensagem}"</div>
+                        <div class="texto">"${textoSeguroResposta(envolvido.mensagem)}"${documentosResposta(envolvido.anexos)}</div>
                     </div>
                 </div>
 
@@ -752,7 +753,7 @@
         async function enviarResposta() {
             const texto = document.getElementById('respostaTexto')?.value.trim();
 
-            if (!texto) {
+            if (!texto && !document.getElementById('anexosRespostaContato')?.files.length) {
                 Swal.fire('Atenção', 'Digite uma resposta antes de enviar', 'warning');
                 return;
             }
@@ -765,7 +766,7 @@
                 const resp = await fetch(`${API_URL}/contato/responder/${token}`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ resposta: texto })
+                    body: JSON.stringify({ resposta: texto, anexos: await lerAnexosResposta('anexosRespostaContato'), destino: document.getElementById('destinoResposta')?.value || 'tecnico' })
                 });
 
                 const result = await resp.json();
@@ -774,7 +775,7 @@
                     await Swal.fire({
                         icon: 'success',
                         title: 'Resposta enviada!',
-                        text: 'O técnico foi notificado. Obrigado!',
+                        text: 'Sua resposta foi registrada no chamado. Obrigado!',
                         timer: 2500,
                         showConfirmButton: false
                     });
@@ -825,7 +826,15 @@
                 });
             }
         }
-    </script>
+    
+        function textoSeguroResposta(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+        function documentosResposta(anexos){return (Array.isArray(anexos)?anexos:[]).filter(a=>/^https:\/\//.test(a.url||'')).map(a=>`<div><a href="${textoSeguroResposta(a.url)}" target="_blank" rel="noopener noreferrer">📎 ${textoSeguroResposta(a.nome)}</a></div>`).join('');}
+        async function lerAnexosResposta(id){
+            const arquivos=Array.from(document.getElementById(id)?.files||[]);
+            if(arquivos.length>3)throw new Error('Selecione até 3 arquivos.');
+            for(const a of arquivos)if(a.size>10*1024*1024||! /\.(pdf|jpe?g|png|webp)$/i.test(a.name))throw new Error('Use PDF ou imagens de até 10 MB cada.');
+            return Promise.all(arquivos.map(a=>new Promise((resolve,reject)=>{const r=new FileReader();r.onload=()=>resolve({nome:a.name,base64:String(r.result).split(',')[1]});r.onerror=()=>reject(new Error('Não foi possível ler o arquivo.'));r.readAsDataURL(a);})));}
+</script>
 
 </body>
 </html>

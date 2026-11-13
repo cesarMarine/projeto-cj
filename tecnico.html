@@ -1406,7 +1406,7 @@
             chamadosAtuais.forEach(c => {
                 try {
                     const conversa = Array.isArray(c.conversa) ? c.conversa : JSON.parse(c.conversa || '[]');
-                    const naoLidas = conversa.filter(msg => msg.tipo === 'vendedor' && !msg.lida).length;
+                    const naoLidas = conversa.filter(msg => (msg.tipo === 'vendedor'||msg.tipo==='contato') && !msg.lida).length;
                     totalNaoLidas += naoLidas;
                 } catch(e) {}
             });
@@ -1463,7 +1463,7 @@
                 let naoLidas = 0;
                 try {
                     const conversa = Array.isArray(c.conversa) ? c.conversa : JSON.parse(c.conversa || '[]');
-                    naoLidas = conversa.filter(msg => msg.tipo === 'vendedor' && !msg.lida).length;
+                    naoLidas = conversa.filter(msg => (msg.tipo === 'vendedor'||msg.tipo==='contato') && !msg.lida).length;
                 } catch(e) {}
 
                 const codigoProduto = c.codigo_produto || '—';
@@ -1528,11 +1528,11 @@
             return conversa.map(msg => {
                 const isVendedor = msg.tipo === 'vendedor';
                 const classe = isVendedor ? 'vendedor' : 'tecnico';
-                const remetenteNome = isVendedor ? (msg.remetente || 'Vendedor') : 'Você';
+                const remetenteNome = msg.tipo==='contato' ? textoSeguroResposta(msg.remetente || 'Contato') : isVendedor ? (msg.remetente || 'Vendedor') : 'Você';
                 return `
                     <div class="mensagem ${classe}">
                         <div class="remetente">${remetenteNome}</div>
-                        <div class="bubble">${msg.mensagem}${!msg.lida && isVendedor ? '<span class="badge-nao-lida">Nova</span>' : ''}</div>
+                        <div class="bubble">${textoSeguroResposta(msg.mensagem)}${documentosResposta(msg.anexos)}${!msg.lida && (isVendedor||msg.tipo==='contato') ? '<span class="badge-nao-lida">Nova</span>' : ''}</div>
                         <div class="hora">${msg.data || ''}</div>
                     </div>
                 `;
@@ -1774,6 +1774,8 @@ if (contatosDisponiveis.length === 0) {
 
         <label class="titulo-sec">Mensagem (vai pra todos selecionados)</label>
         <textarea id="chamarMensagem" placeholder="Ex: Possuímos ponteira avulsa dessa vara?"></textarea>
+        <p><label>📎 Anexar documento <input id="anexosConviteContato" type="file" multiple accept=".pdf,.jpg,.jpeg,.png,.webp"></label><small> Até 3 arquivos de 10 MB.</small></p>
+        <p><label><input id="permitirVendedorConvite" type="checkbox"> Permitir que estes contatos conversem com o vendedor neste chamado</label></p>
 
         <button class="btn-chamar" id="btnChamarContato" onclick="chamarContato()" ${contatosDisponiveis.length === 0 ? 'disabled' : ''}>
             <i class="fas fa-envelope"></i> Enviar e-mail para os selecionados
@@ -1789,7 +1791,8 @@ if (contatosDisponiveis.length === 0) {
                     <div class="modal-chat">
                         <h4><i class="fas fa-comment-dots"></i> Conversa com Vendedor</h4>
                         <div class="chat-messages" id="chatMessages">${gerarChatHtml(conversa)}</div>
-                        <div class="chat-input-area">
+                        <div class="chat-input-area" style="flex-wrap:wrap">
+                            <div style="flex-basis:100%;font-size:12px"><label>📎 Anexar documento <input id="anexosRespostaTecnico" type="file" multiple accept=".pdf,.jpg,.jpeg,.png,.webp"></label><small> Até 3 arquivos de 10 MB.</small><details><summary>Compartilhar resposta também com contato</summary>${[...new Map(envolvidos.map(e=>[e.contato_id,e])).values()].map(e=>`<label style="display:block"><input type="checkbox" class="compartilhar-contato" value="${Number(e.contato_id)}"> ${textoSeguroResposta(e.nome)}</label>`).join('')}<label><input id="autorizarConversaVendedor" type="checkbox"> Permitir que os contatos selecionados conversem com o vendedor</label></details></div>
                             <textarea id="chatInputTecnico" placeholder="Digite sua resposta..." rows="1"></textarea>
                             <button class="btn-enviar-msg" onclick="enviarMensagemTecnico()"><i class="fas fa-paper-plane"></i> Enviar</button>
                         </div>
@@ -1860,7 +1863,7 @@ async function chamarContato() {
         const resp = await fetch(`${API_URL}/chamar-contato/${chamadoSelecionado.protocolo}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ contatos_ids: contatosIds, mensagem })
+            body: JSON.stringify({ contatos_ids: contatosIds, mensagem, anexos: await lerAnexosResposta('anexosConviteContato'), permitir_vendedor: document.getElementById('permitirVendedorConvite').checked })
         });
 
         const result = await resp.json();
@@ -1955,7 +1958,7 @@ async function chamarContato() {
             if (!chamadoSelecionado) return;
             const input = document.getElementById('chatInputTecnico');
             const mensagem = input.value.trim();
-            if (!mensagem) { Swal.fire('Atenção', 'Digite uma mensagem', 'warning'); return; }
+            if (!mensagem && !document.getElementById('anexosRespostaTecnico')?.files.length) { Swal.fire('Atenção', 'Digite uma mensagem', 'warning'); return; }
 
             const btn = document.querySelector('.chat-input-area .btn-enviar-msg');
             btn.disabled = true;
@@ -1965,14 +1968,15 @@ async function chamarContato() {
                 const response = await fetch(`${API_URL}/mensagem/${chamadoSelecionado.protocolo}`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ mensagem, remetente: 'Técnico', tipo: 'tecnico' })
+                    body: JSON.stringify({ mensagem, remetente: 'Técnico', tipo: 'tecnico', anexos: await lerAnexosResposta('anexosRespostaTecnico'), contatos_ids: Array.from(document.querySelectorAll('.compartilhar-contato:checked')).map(c=>Number(c.value)), autorizar_vendedor: document.getElementById('autorizarConversaVendedor').checked })
                 });
                 const data = await response.json();
                 if (data.success) {
                     const container = document.getElementById('chatMessages');
-                    container.innerHTML += `<div class="mensagem tecnico"><div class="remetente">Você</div><div class="bubble">${mensagem}</div><div class="hora">${new Date().toLocaleString('pt-BR')}</div></div>`;
+                    container.innerHTML += `<div class="mensagem tecnico"><div class="remetente">Você</div><div class="bubble">${textoSeguroResposta(mensagem)}${documentosResposta(data.novaMensagem?.anexos)}</div><div class="hora">${new Date().toLocaleString('pt-BR')}</div></div>`;
                     container.scrollTop = container.scrollHeight;
                     input.value = '';
+                    document.getElementById('anexosRespostaTecnico').value='';
                     input.focus();
                     carregarChamados();
                 } else Swal.fire('Erro', data.error, 'error');
@@ -2068,7 +2072,15 @@ async function chamarContato() {
             carregarChamados();
             setInterval(() => carregarChamados(), 30000);
         });
-    </script>
+    
+        function textoSeguroResposta(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+        function documentosResposta(anexos){return (Array.isArray(anexos)?anexos:[]).filter(a=>/^https:\/\//.test(a.url||'')).map(a=>`<div><a href="${textoSeguroResposta(a.url)}" target="_blank" rel="noopener noreferrer">📎 ${textoSeguroResposta(a.nome)}</a></div>`).join('');}
+        async function lerAnexosResposta(id){
+            const arquivos=Array.from(document.getElementById(id)?.files||[]);
+            if(arquivos.length>3)throw new Error('Selecione até 3 arquivos.');
+            for(const a of arquivos)if(a.size>10*1024*1024||! /\.(pdf|jpe?g|png|webp)$/i.test(a.name))throw new Error('Use PDF ou imagens de até 10 MB cada.');
+            return Promise.all(arquivos.map(a=>new Promise((resolve,reject)=>{const r=new FileReader();r.onload=()=>resolve({nome:a.name,base64:String(r.result).split(',')[1]});r.onerror=()=>reject(new Error('Não foi possível ler o arquivo.'));r.readAsDataURL(a);})));}
+</script>
 
 </body>
 </html>

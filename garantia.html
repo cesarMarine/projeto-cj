@@ -1587,8 +1587,8 @@
                 <div class="decisao-label"><i class="fas fa-gavel"></i> <span data-i18n="label_decisao_tecnico">Decisão do Técnico</span></div>
                 <div id="decisaoTecnicoDisplay"></div>
             </div>
-            <div class="chat-input-area">
-                <textarea id="chatInput" placeholder="Digite sua mensagem..." data-i18n-placeholder="placeholder_chat" rows="1"></textarea>
+            <div class="chat-input-area" style="flex-wrap:wrap">
+                <label style="display:block;font-size:12px">📎 Anexar documento <input id="anexosRespostaVendedor" type="file" multiple accept=".pdf,.jpg,.jpeg,.png,.webp"></label><textarea id="chatInput" placeholder="Digite sua mensagem..." data-i18n-placeholder="placeholder_chat" rows="1"></textarea>
                 <button class="btn-enviar-msg" onclick="enviarMensagem()">
                     <i class="fas fa-paper-plane"></i> <span data-i18n="botao_enviar">Enviar</span>
                 </button>
@@ -2865,7 +2865,7 @@ let VENDEDORES = [];
             modal.classList.add('active');
 
             try {
-                const response = await fetch(`${API_URL}/detalhe/${protocolo}`);
+                const response = await fetch(`${API_URL}/detalhe/${protocolo}?visao=vendedor`);
                 const data = await response.json();
                 if (!data.success) {
                     Swal.fire(t('erro'), data.error || t('erro_carregar_chat'), 'error');
@@ -2900,7 +2900,7 @@ await marcarMensagensLidas(protocolo, 'vendedor');
 
 // Recarrega os detalhes pra pegar o 'lida: true' atualizado
 try {
-    const respAtual = await fetch(`${API_URL}/detalhe/${protocolo}`);
+    const respAtual = await fetch(`${API_URL}/detalhe/${protocolo}?visao=vendedor`);
     const dataAtual = await respAtual.json();
     if (dataAtual.success) {
         chamadoAtualChat = dataAtual.garantia;
@@ -2955,7 +2955,7 @@ function carregarMensagens(conversa) {
         const hora = msg.data || (msg.timestamp ? new Date(msg.timestamp).toLocaleString(idiomaAtual === 'es' ? 'es-PY' : 'pt-BR') : '');
         return `<div class="mensagem ${classe}">
             <div class="remetente">${remetenteNome}</div>
-            <div class="bubble">${msg.mensagem}${!msg.lida && !isVendedor ? `<span class="badge-nao-lida">${t('nova')}</span>` : ''}</div>
+            <div class="bubble">${textoSeguroResposta(msg.mensagem)}${documentosResposta(msg.anexos)}${!msg.lida && !isVendedor ? `<span class="badge-nao-lida">${t('nova')}</span>` : ''}</div>
             <div class="hora">${hora}</div>
         </div>`;
     }).join('');
@@ -2973,7 +2973,7 @@ function carregarMensagens(conversa) {
             if (!chamadoAtualChat) { showAlert('error', t('erro')); return; }
             const input = document.getElementById('chatInput');
             const mensagem = input.value.trim();
-            if (!mensagem) { showAlert('error', t('erro')); return; }
+            if (!mensagem && !document.getElementById('anexosRespostaVendedor')?.files.length) { showAlert('error', t('erro')); return; }
 
             const btn = document.querySelector('.chat-input-area .btn-enviar-msg');
             btn.disabled = true;
@@ -2983,7 +2983,7 @@ function carregarMensagens(conversa) {
                 const response = await fetch(`${API_URL}/mensagem/${chamadoAtualChat.protocolo}`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ mensagem, remetente: vendedorAtual || 'Vendedor', tipo: 'vendedor' })
+                    body: JSON.stringify({ mensagem, remetente: vendedorAtual || 'Vendedor', tipo: 'vendedor', anexos: await lerAnexosResposta('anexosRespostaVendedor') })
                 });
                 const data = await response.json();
                 if (data.success) {
@@ -2998,6 +2998,7 @@ function carregarMensagens(conversa) {
     chamadoAtualChat.conversa = conversaAtual;
     carregarMensagens(conversaAtual);
                     input.value = '';
+                    document.getElementById('anexosRespostaVendedor').value='';
                     input.focus();
                     if (vendedorAtual) carregarChamadosVendedor(vendedorAtual);
                 } else showAlert('error', data.error || t('erro'));
@@ -3076,7 +3077,7 @@ function carregarMensagens(conversa) {
         // ================================================================
         async function reabrirChamado(protocolo) {
             try {
-                const response = await fetch(`${API_URL}/detalhe/${protocolo}`);
+                const response = await fetch(`${API_URL}/detalhe/${protocolo}?visao=vendedor`);
                 const data = await response.json();
                 if (!data.success) {
                     Swal.fire(t('erro'), data.error || t('erro_carregar_chamado'), 'error');
@@ -3574,7 +3575,15 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     });
 });
-    </script>
+    
+        function textoSeguroResposta(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+        function documentosResposta(anexos){return (Array.isArray(anexos)?anexos:[]).filter(a=>/^https:\/\//.test(a.url||'')).map(a=>`<div><a href="${textoSeguroResposta(a.url)}" target="_blank" rel="noopener noreferrer">📎 ${textoSeguroResposta(a.nome)}</a></div>`).join('');}
+        async function lerAnexosResposta(id){
+            const arquivos=Array.from(document.getElementById(id)?.files||[]);
+            if(arquivos.length>3)throw new Error('Selecione até 3 arquivos.');
+            for(const a of arquivos)if(a.size>10*1024*1024||! /\.(pdf|jpe?g|png|webp)$/i.test(a.name))throw new Error('Use PDF ou imagens de até 10 MB cada.');
+            return Promise.all(arquivos.map(a=>new Promise((resolve,reject)=>{const r=new FileReader();r.onload=()=>resolve({nome:a.name,base64:String(r.result).split(',')[1]});r.onerror=()=>reject(new Error('Não foi possível ler o arquivo.'));r.readAsDataURL(a);})));}
+</script>
 
 </body>
 </html>

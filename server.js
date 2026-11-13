@@ -532,10 +532,11 @@ app.get('/api/garantia/vendedor/:vendedor', async (req, res) => {
         `, [vendedor]);
 
         const chamadosComNaoLidas = chamados.map(c => {
+            c.conversa=conversaDoVendedor(c.conversa);
             let naoLidas = 0;
             try {
                 const conversa = Array.isArray(c.conversa) ? c.conversa : JSON.parse(c.conversa || '[]');
-                naoLidas = conversa.filter(m => m.tipo === 'tecnico' && !m.lida).length;
+                naoLidas = conversa.filter(m => (m.tipo === 'tecnico'||(m.tipo==='contato'&&m.destino==='vendedor')) && !m.lida).length;
             } catch(e) {}
             return { ...c, msg_nao_lidas: naoLidas };
         });
@@ -602,6 +603,7 @@ app.get('/api/garantia/detalhe/:protocolo', async (req, res) => {
                 : JSON.parse(chamado.arquivos_json || '[]');
         } catch(e) { arquivos = []; }
 
+        if(req.query.visao==='vendedor')chamado.conversa=conversaDoVendedor(chamado.conversa);
         res.json({ success: true, garantia: chamado, arquivos: arquivos });
     } catch (error) {
         res.status(500).json({ success: false, error: error.message });
@@ -709,16 +711,38 @@ app.put('/api/garantia/reabrir', async (req, res) => {
 // 💬 CHAT
 // ================================================================
 
+function conversaDoVendedor(valor){
+    const mensagens=Array.isArray(valor)?valor:JSON.parse(valor||'[]');
+    return mensagens.filter(m=>!(m.tipo==='contato'&&m.destino==='tecnico'));
+}
+// Anexos nas respostas: usa o mesmo armazenamento já utilizado pelos chamados.
+async function anexosDaResposta(arquivos) {
+    if (arquivos === undefined) return [];
+    if (!Array.isArray(arquivos) || arquivos.length > 3) throw new Error('Selecione até 3 arquivos.');
+    const tipos={pdf:'application/pdf',jpg:'image/jpeg',jpeg:'image/jpeg',png:'image/png',webp:'image/webp'};
+    const preparados=arquivos.map(a=>{
+        const ext=String(a.nome||'').split('.').pop().toLowerCase();
+        if(!tipos[ext]||typeof a.base64!=='string'||a.base64.length>14000000||!/^[A-Za-z0-9+/]*={0,2}$/.test(a.base64))throw new Error('Use PDF ou imagens de até 10 MB.');
+        const buffer=Buffer.from(a.base64,'base64');
+        const valido=ext==='pdf'?buffer.subarray(0,5).toString()==='%PDF-':/jpe?g/.test(ext)?buffer[0]===255&&buffer[1]===216:ext==='png'?buffer.subarray(0,8).equals(Buffer.from([137,80,78,71,13,10,26,10])):buffer.subarray(0,4).toString()==='RIFF'&&buffer.subarray(8,12).toString()==='WEBP';
+        if(!valido||!buffer.length||buffer.length>10*1024*1024)throw new Error('Arquivo inválido ou maior que 10 MB.');
+        return {buffer,nome:String(a.nome).slice(0,180),tipo:tipos[ext]};
+    });
+    const anexos=[];
+    for(const a of preparados)anexos.push({nome:a.nome,url:await uploadArquivoSupabase(a.buffer,a.nome,a.tipo,'respostas/'+crypto.randomBytes(24).toString('hex'))});
+    return anexos;
+}
+
 app.post('/api/garantia/mensagem/:protocolo', async (req, res) => {
     try {
         const db = await openDb();
-        const { mensagem, remetente, tipo } = req.body;
+        const { mensagem, remetente, tipo, anexos, contatos_ids, autorizar_vendedor } = req.body;
 
-        if (!mensagem?.trim()) {
+        if (!mensagem?.trim() && !anexos?.length) {
             return res.status(400).json({ success: false, error: 'Mensagem vazia' });
         }
 
-        const result = await db.get('SELECT conversa FROM chamados_cj WHERE protocolo = ?', [req.params.protocolo]);
+        const result = await db.get('SELECT conversa,envolvidos FROM chamados_cj WHERE protocolo = ?', [req.params.protocolo]);
         if (!result) {
             return res.status(404).json({ success: false, error: 'Chamado não encontrado' });
         }
@@ -728,22 +752,30 @@ app.post('/api/garantia/mensagem/:protocolo', async (req, res) => {
             conversa = Array.isArray(result.conversa) ? result.conversa : JSON.parse(result.conversa || '[]');
         } catch (e) { conversa = []; }
 
+        let envolvidos=Array.isArray(result.envolvidos)?result.envolvidos:JSON.parse(result.envolvidos||'[]');
+        const ids=tipo==='tecnico'&&Array.isArray(contatos_ids)?[...new Set(contatos_ids.map(Number))]:[];
+        if(ids.some(id=>!envolvidos.some(e=>Number(e.contato_id)===id)))return res.status(400).json({success:false,error:'Contato não convidado neste chamado.'});
+        const documentos=await anexosDaResposta(anexos);
+        if(tipo==='tecnico'&&autorizar_vendedor===true)envolvidos=envolvidos.map(e=>ids.includes(Number(e.contato_id))?{...e,pode_vendedor:true,data_autorizacao:e.data_autorizacao||Date.now()}:e);
         const novaMensagem = {
             id: 'msg_' + Date.now(),
             remetente,
             tipo: tipo || (remetente === 'Técnico' ? 'tecnico' : 'vendedor'),
-            mensagem: mensagem.trim(),
+            mensagem: mensagem?.trim() || '',
+            anexos: documentos,
+            contatos_ids: ids,
             data: new Date().toLocaleString('pt-BR'),
             timestamp: Date.now(),
             lida: false
         };
 
-        conversa.push(novaMensagem);
-
-        await db.run(`
-            UPDATE chamados_cj SET conversa = ?, data_atualizacao = CURRENT_TIMESTAMP
-            WHERE protocolo = ?
-        `, [conversa, req.params.protocolo]);
+        if(tipo==='tecnico'&&autorizar_vendedor===true&&ids.length){
+            await db.run(`UPDATE chamados_cj SET conversa = COALESCE(conversa::jsonb,'[]'::jsonb) || ?::jsonb,
+                envolvidos = ?, data_atualizacao = CURRENT_TIMESTAMP WHERE protocolo = ?`, [[novaMensagem],envolvidos,req.params.protocolo]);
+        }else{
+            await db.run(`UPDATE chamados_cj SET conversa = COALESCE(conversa::jsonb,'[]'::jsonb) || ?::jsonb,
+                data_atualizacao = CURRENT_TIMESTAMP WHERE protocolo = ?`, [[novaMensagem],req.params.protocolo]);
+        }
 
         res.json({ success: true, novaMensagem });
     } catch (error) {
@@ -766,7 +798,7 @@ app.put('/api/garantia/mensagens-lidas/:protocolo', async (req, res) => {
 
         const tipoOp = tipoUsuario === 'vendedor' ? 'tecnico' : 'vendedor';
         conversa = conversa.map(msg => {
-            if (msg.tipo === tipoOp && !msg.lida) return { ...msg, lida: true };
+            if ((msg.tipo === tipoOp || (msg.tipo==='contato' && (tipoUsuario==='vendedor'?msg.destino==='vendedor':true))) && !msg.lida) return { ...msg, lida: true };
             return msg;
         });
 
@@ -791,7 +823,7 @@ app.get('/api/garantia/notificacoes/:vendedor', async (req, res) => {
             try {
                 conversa = Array.isArray(c.conversa) ? c.conversa : JSON.parse(c.conversa || '[]');
             } catch (e) {}
-            const naoLidas = conversa.filter(m => m.tipo === 'tecnico' && !m.lida).length;
+            const naoLidas = conversa.filter(m => (m.tipo === 'tecnico'||(m.tipo==='contato'&&m.destino==='vendedor')) && !m.lida).length;
             return { ...c, nao_lidas: naoLidas };
         }).filter(c => c.nao_lidas > 0);
 
@@ -1235,7 +1267,7 @@ app.delete('/api/admin/contatos/:id', async (req, res) => {
 app.post('/api/garantia/chamar-contato/:protocolo', async (req, res) => {
     try {
         const { protocolo } = req.params;
-        const { contatos_ids, mensagem } = req.body;
+        const { contatos_ids, mensagem, anexos, permitir_vendedor } = req.body;
 
         // Validação — aceita array
         if (!Array.isArray(contatos_ids) || contatos_ids.length === 0) {
@@ -1261,6 +1293,7 @@ app.post('/api/garantia/chamar-contato/:protocolo', async (req, res) => {
         const mensagemFinal = mensagem?.trim() || 'Você foi chamado para dar sua opinião neste caso.';
         const baseUrl = process.env.BASE_URL || 'https://projeto-cj.onrender.com';
 
+        const documentos=await anexosDaResposta(anexos);
         const enviados = [];
         const erros = [];
 
@@ -1297,6 +1330,9 @@ app.post('/api/garantia/chamar-contato/:protocolo', async (req, res) => {
                     email: contato.email,
                     token,
                     mensagem: mensagemFinal,
+                    anexos: documentos,
+                    pode_vendedor: permitir_vendedor===true,
+                    data_autorizacao: permitir_vendedor===true?Date.now():null,
                     resposta: null,
                     status: 'aguardando',
                     data_envio: new Date().toISOString(),
@@ -1452,7 +1488,11 @@ app.get('/api/contato/ver/:token', async (req, res) => {
                 descricao_defeito: chamadoEncontrado.descricao_defeito,
                 data_criacao: chamadoEncontrado.data_criacao,
                 status: chamadoEncontrado.status,
-                arquivos_json: chamadoEncontrado.arquivos_json
+                arquivos_json: chamadoEncontrado.arquivos_json,
+                conversa: (Array.isArray(chamadoEncontrado.conversa)?chamadoEncontrado.conversa:JSON.parse(chamadoEncontrado.conversa||'[]')).filter(m=>
+                    (m.tipo==='contato'&&Number(m.contato_id)===Number(envolvidoEncontrado.contato_id))||
+                    (m.tipo==='tecnico'&&Array.isArray(m.contatos_ids)&&m.contatos_ids.map(Number).includes(Number(envolvidoEncontrado.contato_id)))||
+                    (m.tipo==='vendedor'&&envolvidoEncontrado.pode_vendedor===true&&Number(m.timestamp)>=Number(envolvidoEncontrado.data_autorizacao||Date.now())))
             },
             envolvido: envolvidoEncontrado
         });
@@ -1472,9 +1512,9 @@ app.get('/api/contato/ver/:token', async (req, res) => {
 app.post('/api/contato/responder/:token', async (req, res) => {
     try {
         const { token } = req.params;
-        const { resposta } = req.body;
+        const { resposta, anexos, destino } = req.body;
 
-        if (!resposta?.trim()) {
+        if (!resposta?.trim() && !anexos?.length) {
             return res.status(400).json({ success: false, error: 'Digite uma resposta' });
         }
 
@@ -1493,7 +1533,7 @@ app.post('/api/contato/responder/:token', async (req, res) => {
 
             const index = envolvidos.findIndex(e => e.token === token);
             if (index > -1) {
-                envolvidos[index].resposta = resposta.trim();
+                envolvidos[index].resposta = (resposta?.trim() || '');
                 envolvidos[index].status = 'respondeu';
                 envolvidos[index].data_resposta = new Date().toISOString();
                 chamadoEncontrado = c;
@@ -1512,6 +1552,8 @@ app.post('/api/contato/responder/:token', async (req, res) => {
             return res.status(400).json({ success: false, error: 'Este chamado já foi encerrado pela equipe técnica' });
         }
 
+        if(destino==='vendedor'&&envolvidoAtual.pode_vendedor!==true)return res.status(403).json({success:false,error:'O técnico ainda não autorizou a conversa com o vendedor.'});
+        const documentos=await anexosDaResposta(anexos);
         // Adiciona a resposta no histórico (conversa)
         let conversa = [];
         try {
@@ -1520,20 +1562,23 @@ app.post('/api/contato/responder/:token', async (req, res) => {
                 : JSON.parse(chamadoEncontrado.conversa || '[]');
         } catch(e) { conversa = []; }
 
-        conversa.push({
+        const novaMensagem = {
             id: 'msg_' + Date.now(),
             remetente: envolvidoAtual.nome,
             tipo: 'contato',
-            mensagem: resposta.trim(),
+            contato_id: envolvidoAtual.contato_id,
+            destino: destino==='vendedor'?'vendedor':'tecnico',
+            anexos: documentos,
+            mensagem: (resposta?.trim() || ''),
             data: new Date().toLocaleString('pt-BR'),
             timestamp: Date.now(),
             lida: false
-        });
+        };
 
         // Salva os dois: envolvidos + conversa
         await db.run(
-            'UPDATE chamados_cj SET envolvidos = ?, conversa = ?, data_atualizacao = CURRENT_TIMESTAMP WHERE protocolo = ?',
-            [envolvidosAtualizado, conversa, chamadoEncontrado.protocolo]
+            "UPDATE chamados_cj SET envolvidos = ?, conversa = COALESCE(conversa::jsonb,'[]'::jsonb) || ?::jsonb, data_atualizacao = CURRENT_TIMESTAMP WHERE protocolo = ?",
+            [envolvidosAtualizado, [novaMensagem], chamadoEncontrado.protocolo]
         );
 
         res.json({ success: true, mensagem: 'Resposta enviada com sucesso!' });
